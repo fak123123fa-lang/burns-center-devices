@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.21.1308"</script>
+<script>window.APP_VERSION="2026.11.21.1312"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -987,6 +987,8 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 #updBar.show{transform:none}#updBar>i{font-style:normal;font-size:24px}#updBar>div{flex:1;min-width:0;display:flex;flex-direction:column}#updBar span{font-size:12.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #updBar button{border:0;border-radius:12px;padding:10px 14px;background:#14b8a6;color:#fff;font:inherit;font-weight:800;white-space:nowrap}#updBar button.x{background:#ffffff22;padding:10px 12px}
 .ma-ver{color:var(--ma-mut,#6b7a89);margin:-6px 0 10px;font-size:13px}.ma-notes{margin:0;padding-inline-start:20px;line-height:2;font-size:14.5px}
+.ma-first{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:40px 18px;margin-top:20px;background:var(--ma-card);border-radius:26px}
+.ma-first>i{font-style:normal;font-size:56px}.ma-first h2{margin:4px 0;font-size:21px}.ma-first p{margin:0 0 6px;color:var(--ma-mut);line-height:1.8;font-size:14px}
 
 </style>
 </head><body>
@@ -3309,7 +3311,7 @@ window.restoreJSON=function(e){const f=e.target.files&&e.target.files[0];if(!f)r
  if(!confirm('سيتم استبدال البيانات الحالية بمحتويات النسخة ('+x.devices.length+' جهاز). هل تريد المتابعة؟'))return;const books=x.books;delete x.books;
  const photos={};(db.devices||[]).forEach(d=>{if(d._photos&&d._photos.length)photos[d._uid]=d._photos});x.devices.forEach(d=>{if(!d._photos&&photos[d._uid])d._photos=photos[d._uid]});
  db=x;if(Array.isArray(books)){try{const cur=JSON.parse(localStorage.getItem('medtech_electronic_books_v1')||'[]'),img={};cur.forEach(b=>{if(b.image)img[b.id]=b.image});localStorage.setItem('medtech_electronic_books_v1',JSON.stringify(books.map(b=>{const c={...b};delete c.hasImage;if(img[b.id])c.image=img[b.id];return c})))}catch(_){}}
- saveDB();try{renderView(currentView)}catch(_){}toast('✓ تمت استعادة النسخة')}catch(err){toast('تعذرت الاستعادة: '+err.message,true)}finally{e.target.value=''}};r.readAsText(f)};
+ saveDB();db.mohSync={base:now(),done:{}};saveDB();try{renderView(currentView)}catch(_){}toast('✓ تمت استعادة النسخة — '+x.devices.length+' جهاز')}catch(err){toast('تعذرت الاستعادة: '+err.message,true)}finally{e.target.value=''}};r.readAsText(f)};
 window.backupToTelegram=async function(){try{const SB='https://fifjajthuoczaykefjuj.supabase.co',K='sb_publishable_yx010nGnVM-ohHy5QFXBag_VFdLjMxi';const m=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'{}');if(!m.session||m.role!=='owner'){toast('سجّل الدخول كمالك في ☁️ أولًا',true);return}
  toast('⏳ جاري الإرسال…');const r=await fetch(SB+'/functions/v1/burns-bot?action=backup',{method:'POST',headers:{apikey:K,Authorization:'Bearer '+m.session.access_token,'Content-Type':'application/json'},body:'{}'});const j=await r.json().catch(()=>({}));
  if(r.ok&&j.sent)toast('✅ وصلت النسخة إلى تلغرام ('+j.sent+')');else toast(j.error==='not_owner'?'للمالك فقط':r.ok?'لا يوجد حساب مالك مربوط بالبوت':'تعذّر الإرسال',true)}catch(e){toast('لا يوجد اتصال بالإنترنت',true)}};
@@ -3656,7 +3658,8 @@ const openFaults=()=>(db.faults||[]).filter(f=>!CLOSED.test(String(f.status||'')
 const pmDue=()=>{const wk=new Date(Date.now()+7*864e5).toISOString().slice(0,10);return (db.preventive||[]).filter(p=>p.status!=='منجزة'&&p.date&&p.date<=wk).sort((a,b)=>String(a.date).localeCompare(String(b.date)))};
 
 /* ---------------- الرئيسية ---------------- */
-function renderHome2(){const D=db.devices||[],c={ok:0,bad:0,warn:0};D.forEach(d=>c[stc(ST(d))]++);const F=openFaults(),P=pmDue(),t=todayS();
+function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div class="ma-first"><i>📥</i><h2>حمّل بيانات أجهزتك</h2><p>هذه النسخة فارغة. اختر ملف البيانات (بيانات_الأجهزة….json) الذي أرسلته لك، أو سجّل الدخول للحفظ الأونلاين.</p><button class="ma-save" onclick="maImport()">📂 اختيار ملف البيانات</button><button class="ma-link" onclick="maCloud()">☁️ تسجيل الدخول للحفظ الأونلاين</button></div>`;return}
+ const D=db.devices||[],c={ok:0,bad:0,warn:0};D.forEach(d=>c[stc(ST(d))]++);const F=openFaults(),P=pmDue(),t=todayS();
  const h=new Date().getHours(),g=h<12?'صباح الخير':h<17?'نهارك سعيد':'مساء الخير';const B=(window.getBranding&&getBranding())||{};
  let pend=0;try{pend=window.MORE?MORE.pending().length:0}catch(e){}
  const items=[...F.slice(-5).reverse().map(f=>({c:'bad',i:'🚨',t:f.deviceName||'بلاغ عطل',s:(cl(f.location)||'')+' • منذ '+daysAgo(f.date)+' يوم',a:`maFix('${f.id}')`,b:'✓ أُصلح'})),
@@ -3670,6 +3673,9 @@ function renderHome2(){const D=db.devices||[],c={ok:0,bad:0,warn:0};D.forEach(d=
  <section class="ma-quick">${[['🚨','بلاغ عطل','maFault()','#c0392b'],['🔧','صيانة','maMaint()','#0f8a7e'],['📷','مسح QR','maScan()','#7451c9'],['📋','الجرد','maInv()','#1d7a45']].map(([i,t,f,col])=>`<button onclick="${f}" style="--c:${col}"><i>${i}</i><span>${t}</span></button>`).join('')}</section>
  <h3 class="ma-h">يحتاج انتباهك ${items.length?`<em>${items.length}</em>`:''}</h3>
  ${items.length?`<div class="ma-list">${items.map(x=>`<div class="ma-item ${x.c}"><i>${x.i}</i><div><b>${E(x.t)}</b><small>${E(x.s)}</small></div><button onclick="${x.a}">${x.b}</button></div>`).join('')}</div>`:`<div class="ma-empty"><i>✅</i><b>كل شيء تمام</b><span>لا بلاغات مفتوحة ولا صيانة مستحقة.</span></div>`}`}
+window.maImport=function(){let i=document.getElementById('maImpIn');if(!i){i=document.createElement('input');i.type='file';i.id='maImpIn';i.accept='.json,application/json';i.hidden=true;i.onchange=e=>{try{restoreJSON(e)}catch(x){toast('تعذّر قراءة الملف',true)}setTimeout(()=>{tab='home';render()},700)};document.body.appendChild(i)}i.value='';i.click()};
+window.maExport=function(){try{const books=JSON.parse(localStorage.getItem('medtech_electronic_books_v1')||'[]').map(b=>{const c={...b};delete c.image;return c});const data=JSON.parse(JSON.stringify(db));(data.devices||[]).forEach(d=>{delete d._photos});data.books=books;
+ const blob=new Blob([JSON.stringify({app:'medtech_system_v3',exportedAt:new Date().toISOString(),data})],{type:'application/json'});X.__ctx={title:'نسخة البيانات'};downloadBlob(blob,'بيانات_الأجهزة_'+todayS()+'.json')}catch(e){toast('تعذّر التصدير',true)}};
 window.maGoSt=function(s){fSt=s;fDept='';q='';maTab('devices')};
 
 /* ---------------- الأجهزة ---------------- */
@@ -3772,6 +3778,7 @@ function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}ca
  $('maBody').innerHTML=G('تنزيل الملفات',[['📊','الجرد العام — Excel',"maInv()"],['📄','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['🗓️','تقرير الشهر','openMonthly()'],['🏷️','ملصقات QR للطباعة',"maFull('labels')"]])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
  G('التحديثات',[['🔄','حدّث التطبيق','appCheckUpdate(true)','الإصدار '+E(window.APP_VERSION||'')],['✨','ما الجديد','appWhatsNew()'],['⚙️','التحديث التلقائي عند الفتح','maAutoUpd()',LS.get('app_autoupd','1')!=='0'?'مفعّل':'متوقف']])+
+ G('البيانات',[['📥','استيراد بيانات من ملف','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()']])+
  G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
  `<button class="ma-full" onclick="setMapp(false)">🧩 فتح النظام الكامل (كل الأقسام)</button><p class="ma-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
 window.maAutoUpd=function(){const on=LS.get('app_autoupd','1')!=='0';LS.set('app_autoupd',on?'0':'1');toast(on?'التحديث التلقائي متوقف — سيظهر لك زر «حدّث الآن» فقط':'✓ التحديث التلقائي مفعّل');renderMore()};
