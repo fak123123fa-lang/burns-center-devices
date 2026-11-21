@@ -949,6 +949,38 @@ body.mapp .undobar{bottom:calc(96px + env(safe-area-inset-bottom));z-index:96}
 body.mapp #quickDL{bottom:calc(92px + env(safe-area-inset-bottom))}
 body.mapp #savedDot{bottom:auto;top:calc(20px + env(safe-area-inset-top));inset-inline-start:50%;transform:translate(50%,-8px)}
 body.mapp #savedDot.show{transform:translate(50%,0)}
+/* ===== التطبيق: ثيمات + بطاقة رئيسية ===== */
+body.mapp #mApp{--ma-pri:#0f8a7e;--ma-pri2:#14b8a6;--ma-pri3:#0e5f68}
+body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-mut:#8ea0b3;--ma-line:#233347}
+#mApp.ma-dark .ma-pill.ok,#mApp.ma-dark .ma-item>button{background:#123a2c;color:#5fd39a}#mApp.ma-dark .ma-pill.bad{background:#3d1c1c;color:#ff8a80}#mApp.ma-dark .ma-pill.warn{background:#3a2c12;color:#f3c063}
+#mApp.ma-dark .ma-note{background:#3d1c1c;color:#ffb4ab}#mApp.ma-dark .ma-grab{background:#33475c}
+.ma-tabs button.on{color:var(--ma-pri)}
+.ma-fab{background:linear-gradient(135deg,var(--ma-pri2),var(--ma-pri3))!important;box-shadow:0 10px 24px color-mix(in srgb,var(--ma-pri) 45%,transparent)!important}
+.ma-save{background:linear-gradient(135deg,var(--ma-pri2),var(--ma-pri3));box-shadow:0 8px 20px color-mix(in srgb,var(--ma-pri) 35%,transparent)}
+.ma-hero{position:relative;overflow:hidden;border-radius:26px;padding:18px;margin:4px 0 14px;color:#fff;background:linear-gradient(135deg,var(--ma-pri2),var(--ma-pri) 55%,var(--ma-pri3));box-shadow:0 14px 34px color-mix(in srgb,var(--ma-pri) 35%,transparent)}
+.ma-hero::before{content:'';position:absolute;width:220px;height:220px;border-radius:50%;background:#ffffff14;top:-90px;inset-inline-start:-60px}
+.ma-hero::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;background:#ffffff10;bottom:-60px;inset-inline-end:30%}
+.ma-hero-t{position:relative;display:flex;align-items:center;gap:12px}.ma-hero-t>div:first-child{flex:1}
+.ma-hero small{opacity:.9;font-weight:700}.ma-hero h2{margin:2px 0;font-size:21px}.ma-hero p{margin:0;opacity:.85;font-size:13px}
+.ma-ring{flex:none;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;align-content:center;background:conic-gradient(#fff calc(var(--p)*1%),#ffffff33 0);position:relative}
+.ma-ring::before{content:'';position:absolute;inset:8px;border-radius:50%;background:color-mix(in srgb,var(--ma-pri) 88%,#000)}
+.ma-ring b,.ma-ring span{position:relative}.ma-ring b{font-size:22px;line-height:1}.ma-ring span{font-size:11px;opacity:.85}
+.ma-hero-s{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.ma-hero-s button{border:0;border-radius:16px;padding:10px 6px;background:#ffffff22;color:#fff;font:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;backdrop-filter:blur(4px)}
+.ma-hero-s b{font-size:22px}.ma-hero-s span{font-size:12px;display:flex;align-items:center;gap:5px;opacity:.95}.ma-hero-s i{width:8px;height:8px;border-radius:50%}
+.ma-hero-s i.ok{background:#7dffb6}.ma-hero-s i.bad{background:#ff9b91}.ma-hero-s i.warn{background:#ffd479}
+.ma-week{background:var(--ma-card);border-radius:20px;padding:14px;margin-bottom:14px}
+.ma-week-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.ma-week-h span{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ma-mut)}
+.ma-week-h i{width:9px;height:9px;border-radius:3px;display:inline-block}.ma-week-h i.f,.ma-bars i.f{background:#e5624f}.ma-week-h i.m,.ma-bars i.m{background:var(--ma-pri2)}
+.ma-bars{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;height:96px}.ma-bars>div{display:flex;flex-direction:column;align-items:center;gap:4px}
+.ma-bars span{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:3px;background:var(--ma-bg);border-radius:9px;padding:3px}
+.ma-bars i{width:40%;min-height:3px;border-radius:4px;transition:height .5s}.ma-bars small{font-size:10.5px;color:var(--ma-mut)}
+.ma-themes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ma-themes button{border:2px solid var(--ma-line);background:var(--ma-card);border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font:inherit;font-size:12.5px;font-weight:700;color:inherit}
+.ma-themes button.on{border-color:var(--ma-pri)}.ma-themes i{width:38px;height:38px;border-radius:12px}
+.ma-head .ma-ic+.ma-ic{margin-inline-start:-2px}
+.ma-dev{transition:transform .12s}.ma-chips button.on{background:var(--ma-pri);color:#fff}
+.ma-chips.seg3 button.on{background:var(--ma-pri);color:#fff}
 
 </style>
 </head><body>
@@ -3587,11 +3619,18 @@ const stc=s=>s==='صالح'?'ok':s==='عاطل'?'bad':'warn';
 const devBy=u=>(db.devices||[]).find(x=>x._uid===u);
 const daysAgo=d=>{const t=Date.parse(d);return isNaN(t)?0:Math.max(0,Math.floor((Date.now()-t)/864e5))};
 const vib=()=>{try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}};
+const THEMES={teal:['فيروزي','#0f8a7e','#14b8a6','#0e5f68'],blue:['أزرق ملكي','#2557d6','#4f8cff','#1b3a8a'],violet:['بنفسجي','#6d4ad6','#9b7bff','#43308f'],rose:['وردي هادئ','#d14d7a','#f08aab','#8e2f55'],gold:['ذهبي','#b7791f','#e0a83a','#7a4f12'],green:['أخضر طبي','#1d8a4e','#3cc47a','#145c35']};
+function applyTheme(){const el=$('mApp');if(!el)return;const t=THEMES[LS.get('ma_theme','teal')]||THEMES.teal;el.style.setProperty('--ma-pri',t[1]);el.style.setProperty('--ma-pri2',t[2]);el.style.setProperty('--ma-pri3',t[3]);
+ const dk=LS.get('ma_dark','auto');const dark=dk==='1'||(dk==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);el.classList.toggle('ma-dark',dark);
+ const m=document.querySelector('meta[name=theme-color]');if(m)m.content=dark?'#0e1620':'#f3f5f7'}
+window.maTheme=function(){const cur=LS.get('ma_theme','teal'),dk=LS.get('ma_dark','auto');sheet(`<h3 class="ma-st">🎨 الألوان والمظهر</h3><label class="ma-lbl">لون التطبيق</label><div class="ma-themes">${Object.entries(THEMES).map(([k,[n,a,b]])=>`<button class="${k===cur?'on':''}" onclick="localStorage.setItem('ma_theme','${k}');maApplyTheme();maTheme()"><i style="background:linear-gradient(135deg,${b},${a})"></i><span>${n}</span></button>`).join('')}</div>
+ <label class="ma-lbl">الوضع</label><div class="ma-seg">${[['auto','🌗 تلقائي'],['0','☀️ فاتح'],['1','🌙 داكن']].map(([v,l])=>`<button class="${dk===v?'on':''}" onclick="localStorage.setItem('ma_dark','${v}');maApplyTheme();maTheme()">${l}</button>`).join('')}</div>`)};
+window.maApplyTheme=()=>{applyTheme();render()};
 let tab=LS.get('mapp_tab','home'),fDept='',fSt='',q='',shown=40,workSeg='faults';
 
 /* ---------------- الهيكل ---------------- */
 function shell(){if($('mApp'))return;const el=document.createElement('div');el.id='mApp';el.innerHTML=`
- <header class="ma-head"><div class="ma-title"><b id="maTitle">الرئيسية</b><small id="maSub"></small></div><button class="ma-ic" onclick="maCloud()" id="maCloud" title="الحفظ الأونلاين">☁️</button></header>
+ <header class="ma-head"><div class="ma-title"><b id="maTitle">الرئيسية</b><small id="maSub"></small></div><button class="ma-ic" onclick="maTheme()" title="الألوان">🎨</button><button class="ma-ic" onclick="maCloud()" id="maCloud" title="الحفظ الأونلاين">☁️</button></header>
  <main class="ma-body" id="maBody"></main>
  <nav class="ma-tabs">${[['home','🏠','الرئيسية'],['devices','🏥','الأجهزة'],['add','＋',''],['work','🔧','العمل'],['more','☰','المزيد']].map(([k,i,t])=>k==='add'?`<button class="ma-fab" onclick="maAdd()" aria-label="إضافة">＋</button>`:`<button data-t="${k}" onclick="maTab('${k}')"><i>${i}</i><span>${t}</span><em class="ma-badge" id="mb-${k}" hidden></em></button>`).join('')}</nav>
  <div class="ma-sheet-back" id="maBack" onclick="if(event.target===this)maClose()"><div class="ma-sheet" id="maSheet"><div class="ma-grab"></div><div id="maSheetIn"></div></div></div>`;
@@ -3616,8 +3655,11 @@ function renderHome2(){const D=db.devices||[],c={ok:0,bad:0,warn:0};D.forEach(d=
  const items=[...F.slice(-5).reverse().map(f=>({c:'bad',i:'🚨',t:f.deviceName||'بلاغ عطل',s:(cl(f.location)||'')+' • منذ '+daysAgo(f.date)+' يوم',a:`maFix('${f.id}')`,b:'✓ أُصلح'})),
   ...P.slice(0,4).map(p=>({c:p.date<t?'bad':'warn',i:p.date<t?'⏰':'📅',t:p.deviceName||'صيانة وقائية',s:(cl(p.location)||'')+' • '+(p.date<t?'متأخرة':'موعدها '+p.date),a:`maPM('${p.id}')`,b:'✓ أنجزت'})),
   ...(pend?[{c:'info',i:'📌',t:pend+' تعديل لنقله للوزاري',s:'افتح القائمة وانقلها',a:`maFull('mohq')`,b:'فتح'}]:[])];
- $('maBody').innerHTML=`<section class="ma-hello"><h2>${g}${B.engineer?' ، '+E(String(B.engineer).split(' ').slice(0,2).join(' ')):''} 👋</h2><p>${D.length} جهاز في المركز</p></section>
- <section class="ma-stats">${[['ok','🟢','صالح',c.ok],['bad','🔴','عاطل',c.bad],['warn','🟡','صيانة',c.warn]].map(([k,i,l,n])=>`<button class="ma-stat ${k}" onclick="maGoSt('${l==='صيانة'?'قيد الصيانة':l}')"><b>${n}</b><span>${i} ${l}</span></button>`).join('')}</section>
+ const pct=D.length?Math.round(c.ok/D.length*100):0;const wk=[...Array(7)].map((_,i)=>{const d=new Date(Date.now()-(6-i)*864e5).toISOString().slice(0,10);return {d,n:(db.faults||[]).filter(f=>f.date===d).length,m:(db.maintenance||[]).filter(m=>m.date===d).length}});const mx=Math.max(1,...wk.map(x=>Math.max(x.n,x.m)));const dn=['أحد','اثن','ثلا','أرب','خمي','جمع','سبت'];
+ $('maBody').innerHTML=`<section class="ma-hero"><div class="ma-hero-t"><div><small>${g} 👋</small><h2>${B.engineer?E(String(B.engineer).split(' ').slice(0,2).join(' ')):'وحدة الأجهزة الطبية'}</h2><p>${D.length} جهاز • ${new Set(D.map(LOC)).size} قسم</p></div>
+ <div class="ma-ring" style="--p:${pct}"><b>${pct}%</b><span>جاهزية</span></div></div>
+ <div class="ma-hero-s">${[['ok','صالح',c.ok,'صالح'],['bad','عاطل',c.bad,'عاطل'],['warn','صيانة',c.warn,'قيد الصيانة']].map(([k,l,n,f])=>`<button onclick="maGoSt('${f}')"><b data-n="${n}">${n}</b><span><i class="${k}"></i>${l}</span></button>`).join('')}</div></section>
+ <section class="ma-week"><div class="ma-week-h"><b>آخر 7 أيام</b><span><i class="f"></i>أعطال <i class="m"></i>صيانات</span></div><div class="ma-bars">${wk.map((x,i)=>`<div><span><i class="f" style="height:${Math.round(x.n/mx*100)}%"></i><i class="m" style="height:${Math.round(x.m/mx*100)}%"></i></span><small>${dn[new Date(x.d).getDay()]}</small></div>`).join('')}</div></section>
  <section class="ma-quick">${[['🚨','بلاغ عطل','maFault()','#c0392b'],['🔧','صيانة','maMaint()','#0f8a7e'],['📷','مسح QR','maScan()','#7451c9'],['📋','الجرد','maInv()','#1d7a45']].map(([i,t,f,col])=>`<button onclick="${f}" style="--c:${col}"><i>${i}</i><span>${t}</span></button>`).join('')}</section>
  <h3 class="ma-h">يحتاج انتباهك ${items.length?`<em>${items.length}</em>`:''}</h3>
  ${items.length?`<div class="ma-list">${items.map(x=>`<div class="ma-item ${x.c}"><i>${x.i}</i><div><b>${E(x.t)}</b><small>${E(x.s)}</small></div><button onclick="${x.a}">${x.b}</button></div>`).join('')}</div>`:`<div class="ma-empty"><i>✅</i><b>كل شيء تمام</b><span>لا بلاغات مفتوحة ولا صيانة مستحقة.</span></div>`}`}
@@ -3722,7 +3764,7 @@ function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}ca
  const G=(t,rows)=>`<h4 class="ma-h4">${t}</h4><div class="ma-menu">${rows.map(([i,l,f,x])=>`<button onclick="${f}"><i>${i}</i><span>${l}</span>${x?`<em>${x}</em>`:''}<b>‹</b></button>`).join('')}</div>`;
  $('maBody').innerHTML=G('تنزيل الملفات',[['📊','الجرد العام — Excel',"maInv()"],['📄','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['🗓️','تقرير الشهر','openMonthly()'],['🏷️','ملصقات QR للطباعة',"maFull('labels')"]])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
- G('الإعدادات',[['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
+ G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
  `<button class="ma-full" onclick="setMapp(false)">🧩 فتح النظام الكامل (كل الأقسام)</button><p class="ma-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
 window.maMe=function(){const v=prompt('اسمك (يُكتب في البلاغات والصيانات):',LS.get('ma_me',''));if(v!=null){LS.set('ma_me',v.trim());renderMore()}};
 window.maFont=function(){sheet(`<h3 class="ma-st">🔤 حجم الخط</h3><div class="ma-seg">${['صغير','عادي','كبير','كبير جدًا'].map((l,i)=>`<button class="${+LS.get('medtech_fs','1')===i?'on ok':''}" onclick="localStorage.setItem('medtech_fs','${i}');fontStep(0);maFont()">${l}</button>`).join('')}</div>`)};
@@ -3738,7 +3780,7 @@ window.maBack=function(){document.body.classList.remove('mapp-peek');document.bo
 const _vd=window.viewDevice;window.viewDevice=function(u){if(document.body.classList.contains('mapp')){try{closeModal()}catch(e){}return maDev(u)}return _vd.apply(this,arguments)};
 const _save=window.saveDB;window.saveDB=function(){const r=_save.apply(this,arguments);if(document.body.classList.contains('mapp')&&!$('maBack')?.classList.contains('on'))clearTimeout(window.__maR),window.__maR=setTimeout(()=>{if(tab==='home'||tab==='work')render();else badges()},120);return r};
 
-function mount(){shell();const b=document.createElement('button');b.id='maReturn';b.innerHTML='📱 رجوع للتطبيق';b.onclick=maBack;document.body.appendChild(b);
+function mount(){shell();applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{applyTheme()})}catch(e){}const b=document.createElement('button');b.id='maReturn';b.innerHTML='📱 رجوع للتطبيق';b.onclick=maBack;document.body.appendChild(b);
  if(isOn()){document.body.classList.add('mapp');render()}
  /* زر للعودة للتطبيق من داخل النظام الكامل */
  const last=document.querySelector('.navbtn[data-view="settings"]');if(last&&!$('navMapp'))last.insertAdjacentHTML("afterend",`<button class="navbtn keep" id="navMapp" onclick="setMapp(true)"><span class="ico">📱</span> واجهة التطبيق</button>`)}
