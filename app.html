@@ -3,6 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
+<script>window.APP_VERSION="2026.11.21.1308"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -981,6 +982,11 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .ma-head .ma-ic+.ma-ic{margin-inline-start:-2px}
 .ma-dev{transition:transform .12s}.ma-chips button.on{background:var(--ma-pri);color:#fff}
 .ma-chips.seg3 button.on{background:var(--ma-pri);color:#fff}
+/* ===== التحديث ===== */
+#updBar{position:fixed;z-index:9999;inset-inline:12px;top:calc(12px + env(safe-area-inset-top));margin-inline:auto;max-width:560px;display:flex;align-items:center;gap:10px;padding:10px 10px 10px 14px;border-radius:18px;background:linear-gradient(135deg,#1e3a5f,#0f2a40);color:#fff;box-shadow:0 14px 34px #0f2a4066;transform:translateY(-140%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+#updBar.show{transform:none}#updBar>i{font-style:normal;font-size:24px}#updBar>div{flex:1;min-width:0;display:flex;flex-direction:column}#updBar span{font-size:12.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#updBar button{border:0;border-radius:12px;padding:10px 14px;background:#14b8a6;color:#fff;font:inherit;font-weight:800;white-space:nowrap}#updBar button.x{background:#ffffff22;padding:10px 12px}
+.ma-ver{color:var(--ma-mut,#6b7a89);margin:-6px 0 10px;font-size:13px}.ma-notes{margin:0;padding-inline-start:20px;line-height:2;font-size:14.5px}
 
 </style>
 </head><body>
@@ -3487,6 +3493,7 @@ function setupNav(){const first=document.querySelector('.navbtn[data-view="dashb
  last.insertAdjacentHTML('afterend',`<button class="navbtn simple-more" id="navMore" onclick="toggleAllNav()"><span class="ico">☰</span> <span id="navMoreTx">كل الأقسام</span></button><button class="navbtn simple-exit" onclick="setSimple(false)"><span class="ico">🧩</span> الوضع الكامل</button><button class="navbtn simple-enter" onclick="setSimple(true)"><span class="ico">🏠</span> الوضع البسيط</button>`);
  document.querySelectorAll('.navbtn').forEach(b=>{if(KEEP.includes(b.dataset.view))b.classList.add('keep')});
  if(!$('view-home')){const s=document.createElement('section');s.className='view';s.id='view-home';document.querySelector('.content').appendChild(s)}try{titles.home='عملي اليوم'}catch(e){}}
+(function(){const c=document.querySelector('.content');if(c&&!document.getElementById('view-home')){const s=document.createElement('section');s.className='view';s.id='view-home';c.appendChild(s)}})();
 window.toggleAllNav=function(){document.body.classList.toggle('navall');const t=$('navMoreTx');if(t)t.textContent=document.body.classList.contains('navall')?'إخفاء الأقسام الأخرى':'كل الأقسام'};
 window.setSimple=function(v){try{localStorage.setItem(K,v?'1':'0')}catch(e){}document.body.classList.toggle('simple',v);document.body.classList.remove('navall');if(v)go('home');else go('dashboard');toast(v?'🏠 الوضع البسيط: كل عملك في شاشة واحدة':'🧩 الوضع الكامل: كل الأقسام ظاهرة')};
 
@@ -3574,7 +3581,7 @@ window.confirm=function(msg){const m=String(msg||'');
  return _confirm(msg)};
 
 /* ---------- 3) يتذكر مكانك ---------- */
-const _go=window.go;window.go=function(v){const r=_go.apply(this,arguments);if(v&&$('view-'+v))LS.set('medtech_last_view',v);try{window.scrollTo(0,0);const c=document.querySelector('.content');if(c)c.scrollTop=0}catch(e){}return r};
+const _go=window.go;window.go=function(v){if(v&&!$('view-'+v)){let n=0;const t=setInterval(()=>{if($('view-'+v)||++n>40){clearInterval(t);if($('view-'+v))window.go(v)}},50);return}const r=_go.apply(this,arguments);if(v&&$('view-'+v))LS.set('medtech_last_view',v);try{window.scrollTo(0,0);const c=document.querySelector('.content');if(c)c.scrollTop=0}catch(e){}return r};
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='devSearch')LS.set('medtech_last_q',e.target.value)});
 function restore(){const v=LS.get('medtech_last_view','');const simple=document.body.classList.contains('simple');
  if(v&&$('view-'+v)&&v!=='dashboard'&&!(simple&&v==='home')){try{go(v)}catch(e){}}
@@ -3764,8 +3771,10 @@ function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}ca
  const G=(t,rows)=>`<h4 class="ma-h4">${t}</h4><div class="ma-menu">${rows.map(([i,l,f,x])=>`<button onclick="${f}"><i>${i}</i><span>${l}</span>${x?`<em>${x}</em>`:''}<b>‹</b></button>`).join('')}</div>`;
  $('maBody').innerHTML=G('تنزيل الملفات',[['📊','الجرد العام — Excel',"maInv()"],['📄','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['🗓️','تقرير الشهر','openMonthly()'],['🏷️','ملصقات QR للطباعة',"maFull('labels')"]])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
+ G('التحديثات',[['🔄','حدّث التطبيق','appCheckUpdate(true)','الإصدار '+E(window.APP_VERSION||'')],['✨','ما الجديد','appWhatsNew()'],['⚙️','التحديث التلقائي عند الفتح','maAutoUpd()',LS.get('app_autoupd','1')!=='0'?'مفعّل':'متوقف']])+
  G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
  `<button class="ma-full" onclick="setMapp(false)">🧩 فتح النظام الكامل (كل الأقسام)</button><p class="ma-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
+window.maAutoUpd=function(){const on=LS.get('app_autoupd','1')!=='0';LS.set('app_autoupd',on?'0':'1');toast(on?'التحديث التلقائي متوقف — سيظهر لك زر «حدّث الآن» فقط':'✓ التحديث التلقائي مفعّل');renderMore()};
 window.maMe=function(){const v=prompt('اسمك (يُكتب في البلاغات والصيانات):',LS.get('ma_me',''));if(v!=null){LS.set('ma_me',v.trim());renderMore()}};
 window.maFont=function(){sheet(`<h3 class="ma-st">🔤 حجم الخط</h3><div class="ma-seg">${['صغير','عادي','كبير','كبير جدًا'].map((l,i)=>`<button class="${+LS.get('medtech_fs','1')===i?'on ok':''}" onclick="localStorage.setItem('medtech_fs','${i}');fontStep(0);maFont()">${l}</button>`).join('')}</div>`)};
 window.maInv=function(){toast('⏳ جاري تجهيز الجرد…');setTimeout(()=>XP.run('devices','xlsx',{}),30)};
@@ -3785,6 +3794,50 @@ function mount(){shell();applyTheme();try{matchMedia('(prefers-color-scheme: dar
  /* زر للعودة للتطبيق من داخل النظام الكامل */
  const last=document.querySelector('.navbtn[data-view="settings"]');if(last&&!$('navMapp'))last.insertAdjacentHTML("afterend",`<button class="navbtn keep" id="navMapp" onclick="setMapp(true)"><span class="ico">📱</span> واجهة التطبيق</button>`)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+})();
+
+</script>
+<script>
+/* =====================================================================
+   update.js — التحديث التلقائي + زر «حدّث التطبيق»
+   النسخة المنشورة تحتوي version.json؛ التطبيق يقارن رقمه به:
+   • عند الفتح: إذا وُجد تحديث يُطبَّق تلقائيًا قبل أن تبدأ العمل
+   • أثناء الاستخدام: يظهر شريط «تحديث جديد» مع زر حدّث الآن
+   ===================================================================== */
+(function(){
+"use strict";
+const V=window.APP_VERSION||'dev';
+const hosted=/^https?:$/.test(location.protocol)&&!/claude\.ai|anthropic|claudeusercontent/.test(location.host);
+const LS={get:(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const $=id=>document.getElementById(id);
+let remote=null;
+async function check(){if(!hosted)return null;try{const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return null;remote=await r.json();return remote}catch(e){return null}}
+const newer=r=>r&&r.v&&String(r.v)>String(V);
+async function apply(){try{toast('⏳ جاري التحديث…')}catch(e){}
+ try{if('caches' in window){const k=await caches.keys();await Promise.all(k.map(x=>caches.delete(x)))}}catch(e){}
+ try{const regs=await navigator.serviceWorker?.getRegistrations?.();for(const g of regs||[])await g.update().catch(()=>{})}catch(e){}
+ LS.set('app_updated_to',remote&&remote.v||'');try{sessionStorage.setItem('upd_once','1')}catch(e){}
+ const u=new URL(location.href);u.searchParams.set('v',remote&&remote.v||Date.now());location.replace(u.toString())}
+window.appUpdateNow=apply;
+function banner(r){if($('updBar'))return;const b=document.createElement('div');b.id='updBar';
+ b.innerHTML=`<i>✨</i><div><b>تحديث جديد متاح</b><span>${esc(r.title||'تحسينات وإضافات جديدة')}</span></div><button onclick="appUpdateNow()">حدّث الآن</button><button class="x" onclick="this.parentNode.remove()">✕</button>`;document.body.appendChild(b);requestAnimationFrame(()=>b.classList.add('show'))}
+window.appCheckUpdate=async function(manual){if(!hosted){if(manual)toast('التحديث التلقائي يعمل من رابط الموقع (GitHub) أو التطبيق المثبّت على الهاتف',true);return}
+ if(manual)toast('🔄 جاري البحث عن تحديث…');const r=await check();if(!r){if(manual)toast('تعذّر الاتصال — تأكد من الإنترنت',true);return}
+ if(newer(r)){if(manual){appWhatsNew(r,true)}else banner(r)}else if(manual)toast('✅ أنت على آخر إصدار ('+V+')')};
+window.appWhatsNew=function(r,offer){r=r||remote||{};const notes=(r.notes||[]).map(n=>`<li>${esc(n)}</li>`).join('');
+ const html=`<h3 class="ma-st">✨ ${offer?'تحديث جديد متاح':'ما الجديد في هذا الإصدار'}</h3><p class="ma-ver">الإصدار ${esc(r.v||V)}${r.date?' • '+esc(r.date):''}</p>${notes?`<ul class="ma-notes">${notes}</ul>`:''}${offer?'<button class="ma-save" onclick="appUpdateNow()">🔄 حدّث الآن</button>':'<button class="ma-save" onclick="maClose()">تمام 👍</button>'}`;
+ if(window.maClose&&document.body.classList.contains('mapp')){try{document.getElementById('maSheetIn').innerHTML=html;document.getElementById('maBack').classList.add('on')}catch(e){}}
+ else modal('✨ التحديث',html.replace(/class="ma-save"/g,'class="btn"'),'<button class="btn secondary" onclick="closeModal()">إغلاق</button>')};
+
+/* عند الفتح: طبّق التحديث تلقائيًا قبل أن يبدأ العمل (مرة واحدة فقط لتجنب الحلقات) */
+async function onStart(){if(!hosted)return;let once=false;try{once=sessionStorage.getItem('upd_once')==='1'}catch(e){}
+ const done=LS.get('app_updated_to','');if(done&&done===V){LS.set('app_updated_to','');try{const r=await check();setTimeout(()=>{try{toast('✨ تم التحديث إلى الإصدار '+V)}catch(e){};if(r&&r.notes&&r.notes.length)appWhatsNew(r,false)},1500)}catch(e){}}
+ const r=await check();if(!newer(r))return;
+ if(LS.get('app_autoupd','1')!=='0'&&!once){apply();return}banner(r)}
+setTimeout(onStart,1200);
+setInterval(()=>appCheckUpdate(false),30*60e3);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')appCheckUpdate(false)});
+window.APP_VER_LABEL=V;
 })();
 
 </script>
