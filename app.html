@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.21.1334"</script>
+<script>window.APP_VERSION="2026.11.21.1641"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1057,6 +1057,43 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 #mApp.ma-dark .ma-th,#mApp.ma-dark .ma-gi,#mApp.ma-dark .ma-dph,#mApp.ma-dark .ma-dphi{border-color:#2a3a4a}
 .ma-ch.scroll{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,auto);overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.ma-ch.scroll::-webkit-scrollbar{display:none}
 .ma-ids .sn b{white-space:normal;word-break:break-all;line-height:1.3}
+/* ===== tools: الأدوات الرئيسية + الملصقات + Excel + التقييم + التقارير ===== */
+.ma-tiles{background:var(--ma-card);border-radius:24px;padding:14px 12px 12px;margin-bottom:16px;box-shadow:0 2px 12px #0f2a400d}
+.ma-tiles-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 4px 10px}.ma-tiles-h b{font-size:16px}.ma-tiles-h small{color:var(--ma-mut);font-size:12px}
+.ma-tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px}
+.ma-tgrid button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:7px;font:inherit;color:inherit;padding:2px 0;min-width:0}
+.ma-tgrid i{font-style:normal;width:56px;height:56px;border-radius:19px;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,var(--b),var(--a));box-shadow:0 6px 14px color-mix(in srgb,var(--a) 35%,transparent),inset 0 1px 0 #ffffff55;transition:transform .15s}
+.ma-tgrid span{font-size:12px;font-weight:800;line-height:1.25;text-align:center;max-width:100%}
+.ma-tgrid button:active i{transform:scale(.9)}
+@media(min-width:520px){.ma-tgrid{grid-template-columns:repeat(6,1fr)}}
+.lbl-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.lbl-opts button{border:2px solid var(--ma-line);background:var(--ma-card);border-radius:18px;padding:12px 6px;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:4px}
+.lbl-opts button.on{border-color:var(--ma-pri);background:color-mix(in srgb,var(--ma-pri) 8%,var(--ma-card))}.lbl-opts b{font-size:14px}.lbl-opts small{font-size:11px;color:var(--ma-mut);text-align:center}
+.lbl-mini{display:grid;gap:3px;width:46px;height:62px;background:#fff;border:1px solid #cfd8de;border-radius:5px;padding:4px;box-sizing:border-box;margin-bottom:4px}
+.lbl-mini i{background:var(--ma-pri);opacity:.55;border-radius:2px}.lbl-mini.n8{grid-template-columns:1fr 1fr}.lbl-mini.n6{grid-template-columns:1fr 1fr}.lbl-mini.n4{grid-template-columns:1fr}
+.lbl-drop{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed color-mix(in srgb,var(--ma-pri) 50%,transparent);border-radius:20px;padding:22px;margin:6px 0 12px;background:color-mix(in srgb,var(--ma-pri) 5%,var(--ma-card));cursor:pointer}
+.lbl-drop i{font-style:normal;font-size:34px}.lbl-drop b{font-size:16px;color:var(--ma-pri)}.lbl-drop small{color:var(--ma-mut)}
+.xu-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.xu-sum div{background:var(--ma-card);border-radius:16px;padding:10px;text-align:center;display:flex;flex-direction:column}
+.xu-sum b{font-size:24px}.xu-sum span{font-size:12px;color:var(--ma-mut)}.xu-sum .chg b{color:#c98a12}.xu-sum .add b{color:#2f7fd1}.xu-sum .ok b{color:#1d8a4e}
+.xu-chk{display:flex;align-items:center;gap:8px;background:var(--ma-card);border-radius:14px;padding:12px;margin-bottom:8px;font-weight:700;font-size:14px}.xu-chk input{width:20px;height:20px;accent-color:var(--ma-pri)}
+.xu-list{display:flex;flex-direction:column;gap:8px}.xu-it{padding:10px 12px}.xu-it>b{display:block;margin-bottom:4px;font-size:14px}
+.xu-ch{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:12.5px;padding:3px 0;align-items:center}.xu-ch span{color:var(--ma-mut);font-weight:700}.xu-ch s{color:#b54;opacity:.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.xu-ch em{font-style:normal;color:#1d8a4e;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xu-new{display:flex;flex-direction:column;padding:8px 14px;border-bottom:1px solid var(--ma-line)}.xu-new small{color:var(--ma-mut);font-size:12px}
+.ev-top{display:flex;align-items:center;gap:14px;background:var(--ma-card);border-radius:20px;padding:14px;margin-bottom:10px}
+.ev-top>div:last-child{display:flex;flex-direction:column;gap:2px}.ev-top>div:last-child b{font-size:22px;color:var(--g)}.ev-top small{color:var(--ma-mut);font-size:12.5px;line-height:1.6}
+.ev-ring{--p:0;flex:none;width:86px;height:86px;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(closest-side,var(--ma-card) 78%,transparent 80%),conic-gradient(var(--g) calc(var(--p)*1%),color-mix(in srgb,var(--g) 15%,transparent) 0)}
+.ev-ring b{font-size:24px;line-height:1}.ev-ring span{font-size:10.5px;color:var(--ma-mut)}
+.ev-bars{display:flex;flex-direction:column;gap:6px;background:var(--ma-card);border-radius:18px;padding:12px;margin-bottom:6px}.ev-bars>div{display:grid;grid-template-columns:1fr 54px 30px;align-items:center;gap:8px;font-size:13px}
+.ev-bars span{height:10px;border-radius:9px;background:color-mix(in srgb,var(--c) 14%,transparent);overflow:hidden}.ev-bars span i{display:block;height:100%;width:var(--w);background:var(--c);border-radius:9px}.ev-bars em{font-style:normal;font-weight:800;text-align:center}
+.ev-dep,.ev-dev{display:flex;align-items:center;gap:10px;width:100%;border:0;border-bottom:1px solid var(--ma-line);background:none;padding:11px 14px;font:inherit;color:inherit;text-align:start}
+.ev-dep>i{width:10px;height:10px;border-radius:50%;flex:none}.ev-dep>span,.ev-dev>span{flex:1;display:flex;flex-direction:column;min-width:0;font-weight:700;font-size:14px}.ev-dep small,.ev-dev small{font-weight:500;color:var(--ma-mut);font-size:12px}
+.ev-dep em,.ev-dev em{font-style:normal;font-weight:800;font-size:13px}.ev-dev>b{flex:none;width:40px;height:40px;border-radius:12px;color:#fff;display:grid;place-items:center;font-size:15px}
+.ev-dev>span>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-mini{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--ma-card);border-radius:16px;padding:10px 12px;margin:8px 0 2px;font:inherit;color:inherit;text-align:start;border-inline-start:5px solid var(--g)}
+.ev-mini b{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--g) 15%,transparent);color:var(--g);font-size:17px;flex:none}.ev-mini span{flex:1;display:flex;flex-direction:column;font-weight:800;font-size:14px}.ev-mini small{font-weight:500;color:var(--ma-mut);font-size:12px}.ev-mini em{font-style:normal;color:var(--ma-mut)}
+.ev-part{display:grid;grid-template-columns:1fr auto 44px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--ma-line);font-size:13.5px}.ev-part span{color:var(--ma-mut)}.ev-part em{font-style:normal;font-weight:800;text-align:center;color:#c0392b}
+.rp-dep{display:flex;gap:6px;background:var(--ma-card);border-radius:16px;padding:8px}.rp-dep select{flex:1;min-width:0;border:1px solid var(--ma-line);border-radius:12px;background:var(--ma-bg);font:inherit;padding:8px;color:inherit}
+.rp-dep button{border:0;background:var(--ma-pri);color:#fff;border-radius:12px;padding:8px 10px;font:inherit;font-size:13px;font-weight:800}
 
 </style>
 </head><body>
@@ -2776,6 +2813,7 @@ window.mohCopy=async function(btn){const v=btn.dataset.v||'';let ok=false;try{if
 const _go=window.go;window.go=function(v){if(v==='moh')ensureView();const r=_go.apply(this,arguments);if(v==='moh'){document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view==='moh'));renderMoh()}return r};
 ensureView();
 try{const last=sessionStorage.getItem('medtech_moh_last');if(last)R=compare(JSON.parse(last))}catch(e){}
+window.readXlsxRows=readXlsx;window.MOH_LBL=LBL;
 })();
 
 </script>
@@ -3080,8 +3118,8 @@ window.openCloud=async function(){if(!C.session){modal('☁️ الحفظ الأ
 window.cloudTab=t=>{document.querySelectorAll('#cloudTab button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));$('clGo').textContent=t==='up'?'إنشاء الحساب':'دخول';$('clGo').dataset.t=t};
 window.cloudAuth=async function(){const em=$('clEmail').value.trim(),pw=$('clPass').value,up=$('clGo').dataset.t==='up',e=$('clErr');e.textContent='';if(!/\S+@\S+\.\S+/.test(em)){e.textContent='اكتب بريدًا صحيحًا';return}if(pw.length<6){e.textContent='كلمة السر 6 أحرف على الأقل';return}
  $('clGo').disabled=true;$('clGo').textContent='⏳';try{
-  if(up){const j=await req('/auth/v1/signup',{method:'POST',auth:false,body:{email:em,password:pw}});if(!j.access_token){e.style.color='var(--green)';e.textContent='✓ أُنشئ الحساب. افتح بريدك واضغط رابط التأكيد، ثم ارجع وسجّل الدخول.';cloudTab('in');return}setSession(j)}
-  else{const j=await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}});setSession(j)}
+  let existed=false;if(up){let r;try{r=await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({email:em,password:pw})})}catch(x){throw {net:true}}const k=await r.json().catch(()=>({}));if(!r.ok||!k.ok)throw new Error(k.error==='rate'?'محاولات كثيرة — انتظر 10 دقائق':k.error==='bad_email'?'اكتب بريدًا صحيحًا':'تعذّر إنشاء الحساب، حاول مرة ثانية');existed=!!k.exists}
+  let j;try{j=await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}})}catch(x){if(existed&&/Invalid login/i.test(String(x.message||'')))throw new Error('هذا البريد عنده حساب من قبل — اكتب كلمة السر القديمة واستخدم «تسجيل الدخول»');if(!up&&/not confirmed/i.test(String(x.message||''))){await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({email:em,password:pw})}).catch(()=>{});j=await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}})}else throw x}setSession(j);if(up)toast(existed?'✓ دخلت إلى حسابك':'✓ أُنشئ حسابك ودخلت مباشرة')
   await refreshRole();C.version=0;saveC();closeModal();toast(C.role==='owner'?'👑 أهلًا بك — أنت المالك. جاري رفع بياناتك…':C.role==='viewer'?'👁 دخلت كمشاهد':'تم الدخول — بانتظار إضافتك من المالك');
   if(C.role==='owner'){const v=await req('/rest/v1/burns_app_state?id=eq.main&select=version');if(v&&v[0]){C.dirty=true;saveC();await pull()}else{C.dirty=true;saveC();await push(true)}}else if(C.role==='viewer')await pull(true);setState(state==='sync'?'ok':state)}
  catch(err){const m=String(err.message||'');e.style.color='';e.textContent=err.net?'⚠️ لا يوجد اتصال بالإنترنت أو أن هذه الصفحة لا تسمح بالاتصال (داخل تطبيق Claude). افتح ملف البرنامج في Chrome أو Safari.':/Invalid login/i.test(m)?'البريد أو كلمة السر غير صحيحة':/not confirmed/i.test(m)?'لم تؤكد بريدك بعد — افتح رسالة التأكيد في بريدك':/already registered/i.test(m)?'هذا البريد مسجّل — استخدم «تسجيل الدخول»':m}
@@ -3151,7 +3189,7 @@ function renumber(){const D=db.devices,L=k=>nk(k['مكان تنصيب الجها
  const old=new Map(D.map((d,i)=>[d,+d._seq||1e5+i]));
  D.sort((a,b)=>order.indexOf(L(a))-order.indexOf(L(b))||(a._moh?+a._moh:1e6+old.get(a))-(b._moh?+b._moh:1e6+old.get(b)));
  let ch=0;D.forEach((d,i)=>{if(+d._seq!==i+1){d._seq=i+1;ch++}});return ch}
-window.mohApplyRef=function(ref,silent){ref=ref||MOH_REF;const m=matchRef(ref);let ch=0;
+window.renumber=()=>renumber();window.mohApplyRef=function(ref,silent){ref=ref||MOH_REF;const m=matchRef(ref);let ch=0;
  db.devices.forEach(d=>{if(d._mohManual)return;const n=m.get(d)||null;if((d._moh||null)!==n){if(n)d._moh=n;else delete d._moh;ch++}});
  ch+=renumber();if(ch&&!silent)toast('🏛️ حُدّث رقم الوزاري لكل جهاز ورُتّب برنامجي حسب الأقسام');return ch};
 function ensureMoh(){if(!db||!Array.isArray(db.devices)||!db.devices.length)return 0;
@@ -3330,7 +3368,7 @@ function score(d){const a=age(d),L=lifeOf(d),k=window.kpiOf?kpiOf(d,730):{failur
  const wv=!isNaN(w)&&w<Date.now()?5:0;s+=wv;parts.push(['الضمان',isNaN(w)?'غير مسجل':w<Date.now()?'منتهي':'ساري',wv]);
  const sf=lastSafety(d._uid,'safety');const fv2=sf&&!sf.ok?10:0;s+=fv2;if(sf)parts.push(['فحص السلامة',sf.ok?'ناجح':'راسب',fv2]);
  s=Math.min(100,s);const rec=s>=70?['bad','إسقاط / إحلال عاجل']:s>=50?['warn','إحلال خلال سنة']:s>=30?['info','مراقبة — يُعاد التقييم بعد 6 أشهر']:['ok','جيد — يستمر بالخدمة'];return {s,rec,parts,age:a,life:L,cost:k.cost||0}}
-window.lcSort='score';
+window.lcScore=score;window.lcSort='score';
 RENDER.lifecycle=function(){const v=$('view-lifecycle'),A=(db.devices||[]).map(d=>({d,x:score(d)})).sort((a,b)=>window.lcSort==='score'?b.x.s-a.x.s:(b.x.age||0)-(a.x.age||0));
  const c={bad:0,warn:0,info:0,ok:0};A.forEach(a=>c[a.x.rec[0]]++);
  v.innerHTML=head('♻️ خطة الإحلال والإسقاط','تقييم كل جهاز حسب عمره وأعطاله وتوقفه وحالته — مع كتاب طلب البديل جاهزًا.',`<button class="btn secondary" onclick="lcSort=lcSort==='score'?'age':'score';MR.lifecycle()">↕ ${window.lcSort==='score'?'ترتيب حسب العمر':'ترتيب حسب الأولوية'}</button><button class="btn secondary" onclick="lcExport()">⬇ Excel</button>`)+
@@ -3779,6 +3817,164 @@ const _rj=window.restoreJSON;if(_rj)window.restoreJSON=function(e){try{const f=e
 </script>
 <script>
 /* =====================================================================
+   tools.js — ملصقات الباركود الكاملة (6 أو 8 بالصفحة) + تحديث الأجهزة من Excel
+             + تقييم الأجهزة + مركز التقارير
+   ===================================================================== */
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cl=v=>{const s=String(v??'').replace(/\s+/g,' ').trim();return /[\p{L}\p{N}]/u.test(s)?s:''};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const LOC=d=>cl(d['مكان تنصيب الجهاز'])||'غير محدد';
+const today=()=>new Date().toISOString().slice(0,10);
+const UI=h=>{if(document.body.classList.contains('mapp')&&window.maSheetOpen)maSheetOpen(h);else modal('',h)};
+const UIclose=()=>{try{if(document.body.classList.contains('mapp')&&window.maClose)maClose();else closeModal()}catch(e){}};
+window.uiSheet=UI;
+const FONT='"IBM Plex Sans Arabic",Tahoma,"Geeza Pro","SF Arabic","Segoe UI",Arial,sans-serif';
+const isLat=s=>!/[؀-ۿ]/.test(s);
+
+/* =========================================================
+   1) ملصقات الباركود — 6 أو 8 أجهزة بالصفحة بكامل المعلومات
+   ========================================================= */
+const _small=window.printLabelsFor;window.printLabelsSmall=_small;
+const NOTE_DEF='يُرجى الحفاظ على الملصق من التلف • يُمنع إزالته أو العبث به';
+window.printLabelsFor=function(list){list=(list||[]).filter(Boolean);if(!list.length){toast('لا توجد أجهزة للطباعة',true);return}window.__lblL=list;const per=+LS.get('lbl_per','8');
+ UI(`<h3 class="ma-st">🖨️ طباعة ملصقات الباركود — ${list.length} جهاز</h3>
+ <p class="ma-hint">كل ملصق فيه: اسم الجهاز، تسلسلك، تسلسل الوزاري، القسم، الشركة، الموديل، S/N، التنصيب والضمان، مع الباركود وعبارة تنبيه.</p>
+ <div class="lbl-opts">${[[8,'8 بالصفحة','حجم متوسط — موفّر للورق'],[6,'6 بالصفحة','حجم أكبر — أوضح للمسح'],[4,'4 بالصفحة','كبير — للأجهزة الكبيرة']].map(([n,t,s])=>`<button class="${per===n?'on':''}" onclick="lblGo(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${t}</b><small>${s}</small></button>`).join('')}</div>
+ <label class="ma-lbl">عبارة التنبيه أسفل كل ملصق</label><input id="lblNote" value="${E(LS.get('lbl_note',NOTE_DEF))}">
+ <button class="ma-link" onclick="uiClose2();printLabelsSmall(__lblL)">ملصقات صغيرة (باركود فقط، 9 بالصفحة) ←</button>`)};
+window.uiClose2=UIclose;
+window.lblGo=function(n){const i=$('lblNote');if(i)LS.set('lbl_note',i.value.trim()||NOTE_DEF);LS.set('lbl_per',String(n));UIclose();labelsPdf(window.__lblL,n)};
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function fit(c,t,w){t=String(t);if(c.measureText(t).width<=w)return t;while(t.length>2&&c.measureText(t+'…').width>w)t=t.slice(0,-1);return t+'…'}
+function wrap2(c,t,w){const ws=String(t).split(' '),L=[];let l='';ws.forEach(s=>{const n=l?l+' '+s:s;if(c.measureText(n).width>w&&l){L.push(l);l=s}else l=n});if(l)L.push(l);if(L.length>2){L[1]=fit(c,L.slice(1).join(' '),w);L.length=2}return L.map(x=>fit(c,x,w))}
+function txt(c,t,x,y,align){c.direction=isLat(t)?'ltr':'rtl';c.textAlign=align||'right';c.fillText(t,x,y);c.direction='rtl'}
+const tick=()=>new Promise(r=>setTimeout(r,0));
+window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.length+' ملصق…');await tick();
+ const W=2480,H=3508,M=90,HD=190,FT=120,G=36,cols=per===4?1:2,rows=per===8?4:per===6?3:4,pagesN=Math.ceil(list.length/per);
+ const lw=(W-2*M-(cols-1)*G)/cols,lh=(H-2*M-HD-FT-40-(rows-1)*G)/rows,f=Math.min(1.3,lh/700);
+ const B=(window.getBranding&&getBranding())||{};const center=B.center||'المركز التخصصي للحروق — الديوانية';const note=LS.get('lbl_note',NOTE_DEF);
+ const pages=[];let cv,c;
+ for(let i=0;i<list.length;i++){const k=i%per,pg=Math.floor(i/per);
+  if(k===0){if(cv)pages.push(cv);cv=document.createElement('canvas');cv.width=W;cv.height=H;c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';c.direction='rtl';
+   /* رأس الصفحة */
+   const g=c.createLinearGradient(0,0,W,0);g.addColorStop(0,'#0b4f57');g.addColorStop(1,'#13a08f');c.fillStyle=g;rr(c,M,M,W-2*M,HD,30);c.fill();
+   c.fillStyle='#fff';c.font=`800 60px ${FONT}`;txt(c,'ملصقات تعريف الأجهزة الطبية',W-M-50,M+68);c.font=`600 36px ${FONT}`;c.globalAlpha=.9;txt(c,'وحدة إدارة الأجهزة الطبية — '+center,W-M-50,M+136);c.globalAlpha=1;
+   c.font=`700 34px ${FONT}`;txt(c,'صفحة '+(pg+1)+' من '+pagesN,M+50,M+68,'left');c.font=`500 30px ${FONT}`;txt(c,new Date().toLocaleDateString('ar-IQ',{year:'numeric',month:'long',day:'numeric'}),M+50,M+134,'left');
+   /* تذييل الصفحة */
+   c.fillStyle='#e3eaee';c.fillRect(M,H-M-FT+10,W-2*M,3);c.fillStyle='#0b4f57';c.font=`700 34px ${FONT}`;c.textAlign='center';c.fillText('وحدة إدارة الأجهزة الطبية — '+center,W/2,H-M-FT+60);
+   c.fillStyle='#8a99a6';c.font=`500 26px ${FONT}`;c.fillText('صيانتك الدورية تحمي المريض • امسح الرمز لعرض بطاقة الجهاز والإبلاغ عن أي عطل • مؤسسة الفرقان البرمجية — رصانة، دقة، أمان',W/2,H-M-FT+108)}
+  const d=list[i],col=(window.locColor&&locColor(LOC(d)))||'#0f8a7e',ci=k%cols,ri=Math.floor(k/cols),x=W-M-(ci+1)*lw-ci*G,y=M+HD+40+ri*(lh+G);
+  /* إطار الملصق */
+  c.fillStyle='#fff';rr(c,x,y,lw,lh,34);c.fill();c.lineWidth=6;c.strokeStyle=col;c.stroke();
+  const bh=Math.round(92*f);c.save();rr(c,x,y,lw,lh,34);c.clip();c.fillStyle=col;c.fillRect(x,y,lw,bh);
+  /* شريط التنبيه */
+  const nh=Math.round(66*f);c.fillStyle='#fff6db';c.fillRect(x,y+lh-nh,lw,nh);c.fillStyle='#f0c24b';c.fillRect(x,y+lh-nh,lw,4);c.restore();
+  c.fillStyle='#fff';c.font=`800 ${Math.round(34*f)}px ${FONT}`;txt(c,'وحدة إدارة الأجهزة الطبية',x+lw-34,y+bh*.36);c.font=`600 ${Math.round(25*f)}px ${FONT}`;txt(c,fit(c,center,lw*.62),x+lw-34,y+bh*.74);
+  /* شارة الرقم في الشريط */
+  c.font=`900 ${Math.round(40*f)}px ${FONT}`;const sn=String(d._seq||'—'),sw=Math.max(bh*.95,c.measureText(sn).width+50);c.fillStyle='#fff';rr(c,x+24,y+bh*.14,sw,bh*.72,bh*.2);c.fill();c.fillStyle=col;c.textAlign='center';c.fillText(sn,x+24+sw/2,y+bh*.52);
+  /* الباركود */
+  const by=y+bh+24,bb=y+lh-nh-18,qa=Math.min(bb-by-Math.round(36*f),lw*.42);let q=null;try{q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M')}catch(e){}
+  const qx=x+28,qy=by;if(q){const n=q.size+4,sc=qa/n;c.fillStyle='#000';for(let r=0;r<q.size;r++)for(let kk=0;kk<q.size;kk++)if(q.modules[r][kk])c.fillRect(Math.floor(qx+(kk+2)*sc),Math.floor(qy+(r+2)*sc),Math.ceil(sc),Math.ceil(sc))}
+  c.fillStyle='#5b6b78';c.font=`700 ${Math.round(23*f)}px ${FONT}`;c.textAlign='center';c.direction='rtl';c.fillText('امسح للبطاقة والإبلاغ',qx+qa/2,qy+qa+Math.round(18*f));
+  /* المعلومات */
+  const ix=x+lw-34,iw=lw-qa-28-34-36;let yy=by+Math.round(30*f);
+  c.fillStyle='#10202e';c.font=`800 ${Math.round(40*f)}px ${FONT}`;const nm=wrap2(c,deviceName(d),iw);nm.forEach(l=>{txt(c,l,ix,yy);yy+=Math.round(48*f)});yy+=Math.round(6*f);
+  /* شارتا التسلسل */
+  c.font=`800 ${Math.round(27*f)}px ${FONT}`;let bx=ix;const badge=(t,bg,fg)=>{const w=c.measureText(t).width+Math.round(34*f),h=Math.round(46*f);c.fillStyle=bg;rr(c,bx-w,yy-h/2,w,h,h/2.4);c.fill();c.fillStyle=fg;c.textAlign='center';c.fillText(t,bx-w/2,yy+1);bx-=w+Math.round(12*f)};
+  badge('تسلسلي: '+(d._seq||'—'),col,'#fff');badge('الوزاري: '+(d._moh||'—'),'#e8ecff','#2f43a8');yy+=Math.round(48*f);
+  const R=[['القسم',LOC(d)],['الشركة',cl(d['الشركه المصنعة'])],['الموديل',cl(d['الموديــل'])],['S/N',cl(d['سريال نمبر'])],['التنصيب',cl(d['تأريخ التنصيب'])],['انتهاء الضمان',cl(d['تأريخ انتهاء الضمان'])]].filter(r=>r[1]);
+  const rh=Math.round(43*f),room=Math.floor((bb-yy)/rh);R.slice(0,Math.max(0,room)).forEach(([l,v])=>{c.fillStyle='#7a8995';c.font=`600 ${Math.round(24*f)}px ${FONT}`;txt(c,l,ix,yy);const lwid=Math.round(170*f);c.fillStyle='#10202e';c.font=`700 ${Math.round(27*f)}px ${FONT}`;txt(c,fit(c,v,iw-lwid),ix-lwid,yy);c.fillStyle='#eef2f4';c.fillRect(ix-iw,yy+rh/2-2,iw,2);yy+=rh});
+  /* نص التنبيه */
+  c.fillStyle='#7a5a00';c.font=`700 ${Math.round(24*f)}px ${FONT}`;c.textAlign='center';c.fillText(fit(c,'⚠ '+note,lw-50),x+lw/2,y+lh-nh/2+2);
+  if(i%8===7)await tick()}
+ pages.push(cv);
+ try{const blob=await XP.canvasesToPdf(pages,false,0.93);X.__ctx={title:'ملصقات الباركود',html:()=>`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><style>body{margin:0;background:#eee}img{display:block;width:100%;max-width:900px;margin:10px auto;background:#fff;box-shadow:0 2px 8px #0003}</style></head><body>${pages.map(p=>`<img src="${p.toDataURL('image/jpeg',.7)}">`).join('')}</body></html>`};
+  downloadBlob(blob,'ملصقات_الباركود_'+per+'_بالصفحة_'+today()+'.pdf')}catch(e){console.warn(e);toast('تعذّر إنشاء الملصقات',true)}
+ return pages};
+
+/* =========================================================
+   2) تحديث الأجهزة من ملف Excel (أحدث البيانات)
+   ========================================================= */
+const F=["الترميز","أسم الجهاز","الشركه المصنعة","الموديــل","سريال نمبر","الحالة","بلد المنشاء","مكان تنصيب الجهاز","توافر الأجهزة","المكتب المجهز","جهة الشراء","رقم عقد التجهيز","رقم عقد الضمان","تأريخ التنصيب","تأريخ بدء الضمان","تأريخ انتهاء الضمان","الملاحظات"];
+const nk=v=>cl(v).toLowerCase().replace(/[\sـ\-_/.]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
+const ALIAS={'اسمالجهاز':'أسم الجهاز','الجهاز':'أسم الجهاز','الشركهالمصنعه':'الشركه المصنعة','الشركه':'الشركه المصنعة','الموديل':'الموديــل','موديل':'الموديــل','الرقمالتسلسلي':'سريال نمبر','سريالنمبر':'سريال نمبر','sn':'سريال نمبر','serialnumber':'سريال نمبر','serial':'سريال نمبر','مكانالتنصيب':'مكان تنصيب الجهاز','القسم':'مكان تنصيب الجهاز','مكانتنصيبالجهاز':'مكان تنصيب الجهاز','بلدالمنشا':'بلد المنشاء','بلدالمنشاء':'بلد المنشاء','تاريخالتنصيب':'تأريخ التنصيب','تاريخبدءالضمان':'تأريخ بدء الضمان','تاريخانتهاءالضمان':'تأريخ انتهاء الضمان','ملاحظات':'الملاحظات'};
+const colKey=h=>{const n=nk(h);if(!n)return null;for(const k of F)if(nk(k)===n)return k;if(ALIAS[n])return ALIAS[n];if(/وزاري/.test(n))return '_moh';if(/برنامجي|تسلسلي|^ت$|^تسلسل$/.test(n))return '_seqx';return null};
+const xdate=(k,v)=>{const s=cl(v);if(/تأريخ/.test(k)&&/^\d{5}(\.\d+)?$/.test(s)){const d=new Date(Math.round((+s-25569)*864e5));return d.toISOString().slice(0,10)}return s};
+let XU=null;
+window.xlsUpdate=function(){UI(`<h3 class="ma-st">📥 تحديث الأجهزة من ملف Excel</h3>
+ <p class="ma-hint">اختر أحدث ملف Excel للأجهزة — ملف «تصدير» البرنامج الوزاري أو ملف الجرد من هذا البرنامج. البرنامج يطابق كل جهاز بالرقم التسلسلي (S/N) ثم بالاسم والقسم، ويعرض لك قبل التطبيق: ما الذي سيتغير، وما الجديد.</p>
+ <label class="lbl-drop"><input type="file" accept=".xlsx" hidden onchange="xlsRead(this.files[0])"><i>📊</i><b>اختيار ملف Excel</b><small>.xlsx</small></label>
+ <div class="ma-card" style="padding:10px 14px;font-size:13px;line-height:1.8">✓ لا يحذف أي جهاز من عندك<br>✓ الخانة الفارغة في الملف لا تمسح بياناتك<br>✓ إذا كان الملف من البرنامج الوزاري يُحدَّث تسلسل الوزاري تلقائيًا</div>`)};
+window.xlsRead=async function(file){if(!file)return;toast('⏳ أقرأ الملف…');let rows;try{rows=await readXlsxRows(file)}catch(e){toast(e.message||'تعذّرت قراءة الملف',true);return}
+ if(!rows.length){toast('الملف فارغ',true);return}const H=Object.keys(rows[0]);const map={};H.forEach(h=>{const k=colKey(h);if(k&&!Object.values(map).includes(k))map[h]=k});
+ const hasMohCol=Object.values(map).includes('_moh'),isMoh=!hasMohCol&&!Object.values(map).includes('_seqx')&&H.some(h=>/مسار المؤسسة|دائرة الصحة/.test(h));
+ const D=db.devices||[],bySN={},byNL={};D.forEach(d=>{const s=nk(d['سريال نمبر']);if(s&&s.length>2)(bySN[s]=bySN[s]||[]).push(d);const nl=nk(d['أسم الجهاز'])+'|'+nk(d['مكان تنصيب الجهاز']);(byNL[nl]=byNL[nl]||[]).push(d)});
+ const used=new Set(),upd=[],add=[],same=[];
+ rows.forEach(r=>{const o={};Object.entries(map).forEach(([h,k])=>{o[k]=k==='_moh'?parseInt(cl(r[h]),10)||'':xdate(k,r[h])});if(!cl(o['أسم الجهاز']))return;
+  const s=nk(o['سريال نمبر']);let d=null;if(s&&s.length>2)d=(bySN[s]||[]).find(x=>!used.has(x._uid));if(!d)d=(byNL[nk(o['أسم الجهاز'])+'|'+nk(o['مكان تنصيب الجهاز'])]||[]).find(x=>!used.has(x._uid)&&(!nk(x['سريال نمبر'])||!s));
+  if(d){used.add(d._uid);const ch=[];F.forEach(k=>{if(k in o&&cl(o[k])&&nk(o[k])!==nk(d[k]))ch.push([k,cl(d[k]),cl(o[k])])});if(hasMohCol&&o._moh&&+o._moh!==+d._moh)ch.push(['_moh',d._moh||'',o._moh]);(ch.length?upd:same).push({d,o,ch})}else add.push({o})});
+ XU={upd,add,same,isMoh,rows,map,name:file.name};
+ const L=(MOH_LBL||{});const lab=k=>k==='_moh'?'تسلسل الوزاري':L[k]||k;
+ UI(`<h3 class="ma-st">📥 نتيجة المطابقة — ${E(file.name)}</h3>
+ <div class="xu-sum"><div class="ok"><b>${same.length}</b><span>مطابق بلا تغيير</span></div><div class="chg"><b>${upd.length}</b><span>سيُحدَّث</span></div><div class="add"><b>${add.length}</b><span>جهاز جديد</span></div></div>
+ ${isMoh?'<label class="xu-chk"><input type="checkbox" id="xuMoh" '+(rows.length>=D.length*.8?'checked':'')+'> تحديث تسلسل الوزاري حسب ترتيب هذا الملف'+(rows.length<D.length*.8?' <small style="color:#b45;font-weight:500">(الملف ناقص — فعّله فقط إذا كان كامل)</small>':'')+'</label>':''}
+ ${add.length?'<label class="xu-chk"><input type="checkbox" id="xuAdd" checked> إضافة الأجهزة الجديدة ('+add.length+')</label>':''}
+ ${upd.length?`<h4 class="ma-h4">✏️ التغييرات</h4><div class="xu-list">${upd.slice(0,60).map(x=>`<div class="ma-card xu-it"><b>${E(x.d._seq)}. ${E(deviceName(x.d))}</b>${x.ch.map(([k,a,b])=>`<div class="xu-ch"><span>${E(lab(k))}</span><s>${E(a)||'فارغ'}</s><em>${E(b)}</em></div>`).join('')}</div>`).join('')}${upd.length>60?`<p class="ma-hint">و${upd.length-60} جهاز آخر…</p>`:''}</div>`:''}
+ ${add.length?`<h4 class="ma-h4">➕ أجهزة جديدة</h4><div class="ma-card">${add.slice(0,40).map(x=>`<div class="xu-new"><b dir="auto">${E(cl(x.o['أسم الجهاز']))}</b><small>${E(cl(x.o['مكان تنصيب الجهاز'])||'—')} • S/N ${E(cl(x.o['سريال نمبر'])||'—')}</small></div>`).join('')}</div>`:''}
+ ${upd.length||add.length||isMoh?'<button class="ma-save" onclick="xlsApply()">✓ تطبيق التحديث</button>':'<div class="ma-empty"><i>✅</i><b>بياناتك مطابقة للملف</b><span>لا يوجد شيء لتحديثه.</span></div>'}`)};
+window.xlsApply=function(){if(!XU)return;const now=new Date().toISOString().slice(0,19).replace('T',' ');let n=0,a=0;
+ XU.upd.forEach(({d,ch})=>{ch.forEach(([k,,v])=>{if(k==='_moh'){d._moh=+v;d._mohManual=1}else d[k]=v});d['عدل في']=now;n++});
+ if(XU.add.length&&(!$('xuAdd')||$('xuAdd').checked)){let mx=Math.max(0,...db.devices.map(x=>+x._seq||0));XU.add.forEach(({o})=>{const d={_uid:'dev-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),_seq:++mx,'الحالة':'صالـــح','أدخل في':now};F.forEach(k=>{if(cl(o[k]))d[k]=cl(o[k])});if(o._moh){d._moh=+o._moh;d._mohManual=1}db.devices.push(d);a++})}
+ let m=0;if(XU.isMoh&&$('xuMoh')&&$('xuMoh').checked&&window.mohApplyRef){const ref=XU.rows.map(x=>{const g=k=>{const h=Object.keys(XU.map).find(h=>XU.map[h]===k);return h?cl(x[h]):''};return [g('أسم الجهاز'),g('سريال نمبر'),g('مكان تنصيب الجهاز'),g('الشركه المصنعة'),g('الموديــل')]});try{m=mohApplyRef(ref)||0}catch(e){}}
+ try{if(window.renumber&&a)renumber()}catch(e){}
+ saveDB();XU=null;UIclose();toast('✓ حُدِّث '+n+' جهاز'+(a?' وأُضيف '+a:'')+(m?' • تسلسل الوزاري لـ '+m:''));try{window.maRefresh&&maRefresh()}catch(e){}};
+
+/* =========================================================
+   3) تقييم الأجهزة — درجة لكل جهاز من 100
+   ========================================================= */
+const GR=[[85,'ممتاز','#1d8a4e'],[70,'جيد','#2f7fd1'],[50,'مقبول','#d69a10'],[0,'ضعيف','#d64545']];
+window.devEval=function(d){let x={s:0,parts:[],rec:['ok','']};try{x=window.lcScore?lcScore(d):x}catch(e){}const sc=Math.max(0,100-x.s),g=GR.find(g=>sc>=g[0]);return {score:sc,grade:g[1],color:g[2],parts:x.parts||[],rec:(x.rec||[])[1]||''}};
+window.evalView=function(dept){const D=(db.devices||[]).filter(d=>!dept||LOC(d)===dept).map(d=>({d,e:devEval(d)}));const avg=D.length?Math.round(D.reduce((s,x)=>s+x.e.score,0)/D.length):0,ag=GR.find(g=>avg>=g[0]);
+ const cnt=GR.map(g=>D.filter(x=>x.e.grade===g[1]).length);const deps={};(db.devices||[]).forEach(d=>{const l=LOC(d);(deps[l]=deps[l]||[]).push(devEval(d).score)});
+ const DL=Object.entries(deps).map(([l,a])=>[l,Math.round(a.reduce((s,v)=>s+v,0)/a.length),a.length]).sort((a,b)=>a[1]-b[1]);
+ const worst=D.slice().sort((a,b)=>a.e.score-b.e.score).slice(0,25);window.__evD=D;
+ UI(`<h3 class="ma-st">⭐ تقييم الأجهزة${dept?' — '+E(dept):''}</h3>
+ <div class="ev-top" style="--g:${ag[2]}"><div class="ev-ring" style="--p:${avg}"><b>${avg}</b><span>من 100</span></div><div><b>${ag[1]}</b><small>متوسط تقييم ${D.length} جهاز — يحسب العمر، والأعطال، وأيام التوقف، والحالة، والضمان، وفحص السلامة</small></div></div>
+ <div class="ev-bars">${GR.map((g,i)=>`<div><span style="--c:${g[2]};--w:${D.length?Math.round(cnt[i]/D.length*100):0}%"><i></i></span><b>${g[1]}</b><em>${cnt[i]}</em></div>`).join('')}</div>
+ ${dept?'':`<h4 class="ma-h4">🏥 تقييم الأقسام</h4><div class="ma-card">${DL.map(([l,s,n])=>{const g=GR.find(g=>s>=g[0]);return `<button class="ev-dep" onclick="evalView(this.dataset.l)" data-l="${E(l)}"><i style="background:${(window.locColor&&locColor(l))||'#888'}"></i><span>${E(l)}<small>${n} جهاز</small></span><em style="color:${g[2]}">${s} • ${g[1]}</em></button>`}).join('')}</div>`}
+ <h4 class="ma-h4">⚠️ الأجهزة الأضعف تقييمًا</h4><div class="ma-card">${worst.map(({d,e})=>`<button class="ev-dev" onclick="${window.maDev?`maDev('${d._uid}')`:`viewDevice('${d._uid}')`}"><b style="background:${e.color}">${e.score}</b><span><span dir="auto">${E(d._seq)}. ${E(deviceName(d))}</span><small>${E(LOC(d))} • ${E(e.rec)}</small></span><em style="color:${e.color}">${e.grade}</em></button>`).join('')}</div>
+ <div class="ma-acts two" style="margin-top:12px"><button onclick="evalExport('xlsx')"><i>📊</i>تقرير Excel</button><button onclick="evalExport('pdf')"><i>📄</i>تقرير PDF</button></div>${dept?`<button class="ma-link" onclick="evalView()">← كل الأقسام</button>`:''}`)};
+window.evalOne=function(u){const d=(db.devices||[]).find(x=>x._uid===u);if(!d)return;const e=devEval(d);
+ UI(`<h3 class="ma-st">⭐ تقييم «${E(deviceName(d))}»</h3><div class="ev-top" style="--g:${e.color}"><div class="ev-ring" style="--p:${e.score}"><b>${e.score}</b><span>من 100</span></div><div><b>${e.grade}</b><small>${E(e.rec)}</small></div></div>
+ <div class="ma-card">${e.parts.map(p=>`<div class="ev-part"><span>${E(p[0])}</span><b>${E(p[1])}</b><em>${p[2]?'−'+p[2]:'✓'}</em></div>`).join('')}</div><p class="ma-hint">كل عامل يخصم نقاطًا من 100: العمر مقارنة بالعمر الافتراضي، الأعطال، أيام التوقف، الحالة، الضمان، وفحص السلامة.</p>
+ ${window.maDev?`<button class="ma-link" onclick="maDev('${u}')">← رجوع للجهاز</button>`:''}`)};
+window.evalExport=function(fmt){const D=(window.__evD||[]).slice().sort((a,b)=>a.e.score-b.e.score);const rows=D.map(({d,e})=>[d._seq,d._moh||'',deviceName(d),LOC(d),cl(d['الموديــل']),cl(d['سريال نمبر']),statusText(d),e.score,e.grade,e.rec]);
+ X.fromRows('تقييم الأجهزة الطبية',['ت برنامجي','ت الوزاري','الجهاز','القسم','الموديل','S/N','الحالة','الدرجة','التقييم','التوصية'],rows,fmt)};
+
+/* =========================================================
+   4) مركز التقارير — كل التقارير المهمة بضغطة
+   ========================================================= */
+window.reportsHub=function(){const depts=[...new Set((db.devices||[]).map(LOC))].sort((a,b)=>a.localeCompare(b,'ar'));const now=Date.now(),soon=now+90*864e5;
+ const wx=(db.devices||[]).filter(d=>{const t=Date.parse(cl(d['تأريخ انتهاء الضمان']));return !isNaN(t)&&t<soon});
+ const R=[['📊','الجرد العام — Excel',"rpRun('devices','xlsx')"],['📄','الجرد العام — PDF',"rpRun('devices','pdf')"],['⚠️','الأجهزة العاطلة',"rpRun('faulty','pdf')",(db.devices||[]).filter(d=>statusText(d)==='عاطل').length],
+  ['🛡️','الضمانات المنتهية والقريبة (90 يوم)',"rpWarr()",wx.length],['🚨','بلاغات الأعطال',"rpRun('faults','xlsx')",(db.faults||[]).length],['🛠️','أوامر الصيانة',"rpRun('maintenance','xlsx')",(db.maintenance||[]).length],
+  ['📅','الصيانة الوقائية',"rpRun('preventive','xlsx')"],['⭐','تقييم الأجهزة',"evalView()"],['🗓️','التقرير الشهري','openMonthly()'],['📚','الملف الشامل (كل الجداول)',"uiClose2();XP.workbookAll()"]];
+ window.__rpW=wx;
+ UI(`<h3 class="ma-st">📑 مركز التقارير</h3><div class="ma-menu">${R.map(([i,l,f,x])=>`<button onclick="${f}"><i>${i}</i><span>${l}</span>${x!==undefined&&x!==''?`<em>${x}</em>`:''}<b>‹</b></button>`).join('')}</div>
+ <h4 class="ma-h4">🏥 جرد قسم واحد</h4><div class="rp-dep"><select id="rpDep">${depts.map(l=>`<option>${E(l)}</option>`).join('')}</select><button onclick="rpDept('xlsx')">Excel</button><button onclick="rpDept('pdf')">PDF</button><button onclick="rpDeptLbl()">ملصقات</button></div>`)};
+window.rpRun=(ds,fmt)=>{uiClose2();toast('⏳ جاري تجهيز التقرير…');setTimeout(()=>XP.run(ds,fmt,{}),30)};
+window.rpWarr=()=>{uiClose2();const L=window.__rpW||[];if(!L.length){toast('لا توجد ضمانات منتهية أو قريبة');return}XP.run('warranty','pdf',{list:L,title:'الضمانات المنتهية والقريبة من الانتهاء'})};
+const depL=()=>{const l=($('rpDep')||{}).value;return [(db.devices||[]).filter(d=>LOC(d)===l),l]};
+window.rpDept=fmt=>{const [L,l]=depL();uiClose2();XP.run('devices',fmt,{list:L,title:'جرد أجهزة '+l})};
+window.rpDeptLbl=()=>{const [L]=depL();printLabelsFor(L)};
+})();
+
+</script>
+<script>
+/* =====================================================================
    mapp.js — واجهة «تطبيق الهاتف»: 4 تبويبات + زر ➕ ، نماذج قصيرة، سريع
    تعمل على نفس البيانات (db) — والنظام الكامل يبقى متاحًا بضغطة
    ===================================================================== */
@@ -3839,8 +4035,10 @@ function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div 
  $('maBody').innerHTML=`<section class="ma-hero"><div class="ma-hero-t"><div><small>${g} 👋</small><h2>${B.engineer?E(String(B.engineer).split(' ').slice(0,2).join(' ')):'وحدة الأجهزة الطبية'}</h2><p>${D.length} جهاز • ${new Set(D.map(LOC)).size} قسم</p></div>
  <div class="ma-ring" style="--p:${pct}"><b>${pct}%</b><span>جاهزية</span></div></div>
  <div class="ma-hero-s">${[['ok','صالح',c.ok,'صالح'],['bad','عاطل',c.bad,'عاطل'],['warn','صيانة',c.warn,'قيد الصيانة']].map(([k,l,n,f])=>`<button onclick="maGoSt('${f}')"><b data-n="${n}">${n}</b><span><i class="${k}"></i>${l}</span></button>`).join('')}</div></section>
+ <section class="ma-tiles"><div class="ma-tiles-h"><b>الأدوات الرئيسية</b><small>اضغط للبدء</small></div><div class="ma-tgrid">${[['🏥','الأجهزة',"maView2('list')",'#0f8a7e','#14b8a6'],['📋','الجرد Excel','maInv()','#1d7a45','#34c26f'],['🔳','الباركود',"maView2('qr')",'#5b3cc4','#8b6cf0'],['🏷️','طباعة الملصقات','printLabelsFor(db.devices)','#b4235f','#ec5f95'],
+ ['🖨️','طباعة الجرد',"XP.run('devices','pdf',{})",'#2a5fb4','#5b8def'],['📑','التقارير','reportsHub()','#0b6f8a','#2bb3d6'],['🚨','بلاغ عطل','maFault()','#b3261e','#ef6352'],['🔧','صيانة','maMaint()','#0b7a70','#2fc0b0'],
+ ['📥','تحديث من Excel','xlsUpdate()','#7a4b0b','#e39a2d'],['⭐','تقييم الأجهزة','evalView()','#a17700','#f2c21b'],['📷','مسح باركود','maScan()','#37474f','#78909c'],['↗','مشاركة','maShareAll()','#4527a0','#7e57c2']].map(([i,t,f,a,b])=>`<button onclick="${f}" style="--a:${a};--b:${b}"><i>${i}</i><span>${t}</span></button>`).join('')}</div></section>
  <section class="ma-week"><div class="ma-week-h"><b>آخر 7 أيام</b><span><i class="f"></i>أعطال <i class="m"></i>صيانات</span></div><div class="ma-bars">${wk.map((x,i)=>`<div><span><i class="f" style="height:${Math.round(x.n/mx*100)}%"></i><i class="m" style="height:${Math.round(x.m/mx*100)}%"></i></span><small>${dn[new Date(x.d).getDay()]}</small></div>`).join('')}</div></section>
- <section class="ma-quick">${[['🚨','بلاغ عطل','maFault()','#c0392b'],['🔧','صيانة','maMaint()','#0f8a7e'],['🔳','الباركود',"maView2('qr')",'#7451c9'],['📋','الجرد','maInv()','#1d7a45']].map(([i,t,f,col])=>`<button onclick="${f}" style="--c:${col}"><i>${i}</i><span>${t}</span></button>`).join('')}</section>
  <h3 class="ma-h">يحتاج انتباهك ${items.length?`<em>${items.length}</em>`:''}</h3>
  ${items.length?`<div class="ma-list">${items.map(x=>`<div class="ma-item ${x.c}"><i>${x.i}</i><div><b>${E(x.t)}</b><small>${E(x.s)}</small></div><button onclick="${x.a}">${x.b}</button></div>`).join('')}</div>`:`<div class="ma-empty"><i>✅</i><b>كل شيء تمام</b><span>لا بلاغات مفتوحة ولا صيانة مستحقة.</span></div>`}`}
 window.maImport=function(){let i=document.getElementById('maImpIn');if(!i){i=document.createElement('input');i.type='file';i.id='maImpIn';i.accept='.json,application/json';i.hidden=true;i.onchange=e=>{try{restoreJSON(e)}catch(x){toast('تعذّر قراءة الملف',true)}setTimeout(()=>{tab='home';render()},700)};document.body.appendChild(i)}i.value='';i.click()};
@@ -3927,7 +4125,7 @@ window.maTour=function(){const by=new Map();(db.devices||[]).forEach(d=>{const k
 window.maTourShot=function(u,cam){const d=devBy(u);phPick(cam,async files=>{toast('⏳ جاري الحفظ…');await PH.add(PH.typeKey(d),files.slice(0,1));toast('✓ صورة «'+deviceName(d)+'» لكل أجهزته');maRefresh();maTour()})};
 
 /* ---------------- النافذة السفلية ---------------- */
-function sheet(html){$('maSheetIn').innerHTML=html;$('maBack').classList.add('on');$('maSheet').scrollTop=0;document.documentElement.classList.add('ma-lock')}
+window.maSheetOpen=h=>sheet(h);function sheet(html){$('maSheetIn').innerHTML=html;$('maBack').classList.add('on');$('maSheet').scrollTop=0;document.documentElement.classList.add('ma-lock')}
 window.maClose=function(){$('maBack').classList.remove('on');document.documentElement.classList.remove('ma-lock')};
 const row=(k,v)=>v?`<div class="ma-row"><span>${k}</span><b>${E(v)}</b></div>`:'';
 
@@ -3942,6 +4140,7 @@ window.maDev=function(u){vib();const d=devBy(u);if(!d)return;const s=ST(d);const
  <div class="ma-seg">${[['صالـــح','صالح','ok'],['عاطل','عاطل','bad'],['قيد الصيانة','قيد الصيانة','warn']].map(([v,l,c])=>`<button class="${c} ${s===l?'on':''}" onclick="maSetSt('${u}','${v}')">${l}</button>`).join('')}</div>
  <div class="ma-acts"><button onclick="maFault('${u}')"><i>🚨</i>بلاغ عطل</button><button onclick="maMaint('${u}')"><i>🔧</i>صيانة</button><button onclick="maEdit('${u}')"><i>✏️</i>تعديل</button><button onclick="maShare('${u}')"><i>↗</i>مشاركة</button></div>
  <div class="ma-ids"><div><small>رقمي</small><b>${E(d._seq)}</b></div><div class="${d._moh?'':'none'}"><small>الوزاري</small><b>${d._moh?E(d._moh):'—'}</b></div><div class="sn"><small>الرقم التسلسلي S/N</small><b dir="ltr">${E(cl(d['سريال نمبر'])||'—')}</b></div></div>
+ ${(()=>{try{const e=devEval(d);return `<button class="ev-mini" onclick="evalOne('${u}')" style="--g:${e.color}"><b>${e.score}</b><span>تقييم الجهاز: ${e.grade}<small>${E(e.rec)}</small></span><em>‹</em></button>`}catch(x){return ''}})()}
  ${sec('🏭 التصنيع',[row('الشركة',cl(d['الشركه المصنعة'])),row('الموديل',cl(d['الموديــل'])),row('بلد المنشأ',cl(d['بلد المنشاء'])),row('الترميز',cl(d['الترميز']))])}
  ${sec('📅 التنصيب والضمان',[row('تاريخ التنصيب',cl(d['تأريخ التنصيب'])),row('الضمان',wt),row('المجهز',cl(d['المكتب المجهز'])),row('جهة الشراء',cl(d['جهة الشراء'])),row('رقم العقد',cl(d['رقم عقد التجهيز']))])}
  ${cl(d['الملاحظات'])?`<h4 class="ma-h4">📝 ملاحظات</h4><div class="ma-card"><p class="ma-notes">${E(cl(d['الملاحظات']))}</p></div>`:''}
@@ -4029,11 +4228,12 @@ window.maWork=k=>{vib();workSeg=k;renderWork()};
 /* ---------------- المزيد ---------------- */
 function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}catch(e){}
  const G=(t,rows)=>`<h4 class="ma-h4">${t}</h4><div class="ma-menu">${rows.map(([i,l,f,x])=>`<button onclick="${f}"><i>${i}</i><span>${l}</span>${x?`<em>${x}</em>`:''}<b>‹</b></button>`).join('')}</div>`;
- $('maBody').innerHTML=G('تنزيل الملفات',[['📊','الجرد العام — Excel',"maInv()"],['📄','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['🗓️','تقرير الشهر','openMonthly()'],['🔳','الباركود وملصقات QR',"maView2('qr')"],['↗','مشاركة كل الأجهزة','maShareAll()']])+
+ $('maBody').innerHTML=G('الجرد والتقارير',[['📑','مركز التقارير','reportsHub()'],['📊','الجرد العام — Excel',"maInv()"],['🖨️','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['⭐','تقييم الأجهزة','evalView()'],['🗓️','تقرير الشهر','openMonthly()']])+
+ G('الباركود والصور',[['🏷️','طباعة ملصقات الباركود (6–8 بالصفحة)','printLabelsFor(db.devices)'],['🔳','قسم الباركود',"maView2('qr')"],['📷','مسح باركود','maScan()'],['📸','صور الأجهزة',"maTour()",(()=>{const S=PH.stats();return (S.own+S.type)+'/'+S.total})()],['↗','مشاركة كل الأجهزة','maShareAll()']])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
+ G('البيانات',[['📥','تحديث الأجهزة من Excel','xlsUpdate()'],['📂','استيراد نسخة بيانات (JSON)','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()'],['💾','حفظ نسخة مع الصور','exportWithPhotos()']])+
  G('التحديثات',[['🔄','حدّث التطبيق','appCheckUpdate(true)','الإصدار '+E(window.APP_VERSION||'')],['✨','ما الجديد','appWhatsNew()'],['⚙️','التحديث التلقائي عند الفتح','maAutoUpd()',LS.get('app_autoupd','1')!=='0'?'مفعّل':'متوقف']])+
- G('البيانات',[['📥','استيراد بيانات من ملف','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()'],['💾','حفظ نسخة مع الصور','exportWithPhotos()'],['📸','صور الأجهزة',"maTour()",(()=>{const S=PH.stats();return (S.own+S.type)+'/'+S.total})()]])+
- G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
+  G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
  `<button class="ma-full" onclick="setMapp(false)">🧩 فتح النظام الكامل (كل الأقسام)</button><p class="ma-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
 window.maAutoUpd=function(){const on=LS.get('app_autoupd','1')!=='0';LS.set('app_autoupd',on?'0':'1');toast(on?'التحديث التلقائي متوقف — سيظهر لك زر «حدّث الآن» فقط':'✓ التحديث التلقائي مفعّل');renderMore()};
 window.maMe=function(){const v=prompt('اسمك (يُكتب في البلاغات والصيانات):',LS.get('ma_me',''));if(v!=null){LS.set('ma_me',v.trim());renderMore()}};
