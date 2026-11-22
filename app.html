@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.21.1646"</script>
+<script>window.APP_VERSION="2026.11.22.0939"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -2364,7 +2364,7 @@ window.viewerURL=()=>{const v=LS.get('medtech_viewer_url',DEFAULT_VIEWER);return
 function b64url(str){const b=new TextEncoder().encode(str);let s='';for(let i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 function unb64url(h){h=h.replace(/-/g,'+').replace(/_/g,'/');while(h.length%4)h+='=';const bin=atob(h),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new TextDecoder().decode(a)}
 const CARD_FIELDS={c:'الترميز',m:'الشركه المصنعة',o:'الموديــل',sn:'سريال نمبر',co:'بلد المنشاء',l:'مكان تنصيب الجهاز',a:'توافر الأجهزة',sp:'المكتب المجهز',pb:'جهة الشراء',k:'رقم عقد التجهيز',wc:'رقم عقد الضمان',i:'تأريخ التنصيب',ws:'تأريخ بدء الضمان',w:'تأريخ انتهاء الضمان',nt:'الملاحظات',pa:'مسار المؤسسة',hd:'دائرة الصحة',eb:'المدخل',ea:'أدخل في',mb:'المعدل',ma:'عدل في'};
-window.deviceCardLink=function(d){const o={id:d._uid,n:deviceName(d),s:d._seq,st:statusText(d)};Object.entries(CARD_FIELDS).forEach(([k,f])=>{const v=clean(d[f]);if(v)o[k]=v});const known=new Set([...Object.values(CARD_FIELDS),'أسم الجهاز','الحالة']);const extra=Object.keys(d).filter(k=>!k.startsWith('_')&&!known.has(k)&&clean(d[k])&&typeof d[k]!=='object').map(k=>[k,clean(d[k])]);if(extra.length)o.x=extra;o.ct=CENTER;o.u=today();
+window.deviceCardLink=function(d){const o={id:d._uid,n:deviceName(d),s:d._seq,st:statusText(d)};Object.entries(CARD_FIELDS).forEach(([k,f])=>{const v=clean(d[f]);if(v)o[k]=v});const known=new Set([...Object.values(CARD_FIELDS),'أسم الجهاز','الحالة']);const extra=Object.keys(d).filter(k=>!k.startsWith('_')&&!known.has(k)&&clean(d[k])&&typeof d[k]!=='object').map(k=>[k,clean(d[k])]);if(extra.length)o.x=extra;o.ct=CENTER;o.u=today();try{const w=(localStorage.getItem('eng_wa')||'').replace(/\D/g,'');if(w)o.wa=w}catch(e){}
  Object.keys(o).forEach(k=>{if(o[k]===''||o[k]==null)delete o[k]});let base=viewerURL().trim();if(!/\/$/.test(base)&&!/\.html?$/.test(base))base+='/';return base+'#'+b64url(JSON.stringify(o))};
 const _payload=window.qrPayloadFor;
 window.qrPayloadFor=function(d){return qrMode()==='link'&&viewerURL()?deviceCardLink(d):_payload(d)};
@@ -3051,10 +3051,11 @@ try{if(typeof renderTasks==='function'){}}catch(e){}
 /* ===== الحفظ الأونلاين (Supabase): مزامنة تلقائية + مالك يعدّل + مشاهدون فقط ===== */
 (function(){
 "use strict";
-const URL_='https://fifjajthuoczaykefjuj.supabase.co',KEY='sb_publishable_yx010nGnVM-ohHy5QFXBag_VFdLjMxi';
+const URL_='https://jmvbxnmvoqvumsljsqff.supabase.co',KEY='sb_publishable_hKnkJCFz9MudI2wUrbtaxQ_iBYB3kt3';
 const $=id=>document.getElementById(id);
 const K='medtech_cloud_v1';
 let C=(()=>{try{return JSON.parse(localStorage.getItem(K)||'null')}catch(e){return null}})()||{session:null,version:0,dirty:false,role:null,last:null};
+if(C.proj!=='jmvbxnmvoqvumsljsqff'){C={session:null,version:0,dirty:false,role:null,last:null,proj:'jmvbxnmvoqvumsljsqff'};try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}}
 const saveC=()=>{try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}};
 let state='off',errMsg='',busy=false,pushT=null;
 
@@ -3128,7 +3129,7 @@ window.cloudAuth=async function(){const em=$('clEmail').value.trim(),pw=$('clPas
 window.cloudPw=function(must){modal('🔑 '+(must?'اختر كلمة سر جديدة':'تغيير كلمة السر'),`${must?'<div class="notice">دخلت بكلمة سر مؤقتة. اختر الآن كلمة سرك الخاصة — لا يعرفها أحد غيرك.</div>':''}<div class="formfield"><label>كلمة السر الجديدة (6 أحرف على الأقل)</label><input class="field" id="pw1" type="password" autocomplete="new-password"></div><div class="formfield"><label>أعد كتابتها</label><input class="field" id="pw2" type="password" autocomplete="new-password"></div><div id="pwErr" style="color:var(--red);font-weight:700;min-height:20px"></div>`,`${must?'':'<button class="btn secondary" onclick="closeModal()">إلغاء</button>'}<button class="btn" id="pwGo" onclick="cloudPwSave()">حفظ كلمة السر</button>`)};
 window.cloudPwSave=async function(){const a=$('pw1').value,b=$('pw2').value,e=$('pwErr');if(a.length<6){e.textContent='6 أحرف على الأقل';return}if(a!==b){e.textContent='الكلمتان غير متطابقتين';return}
  $('pwGo').disabled=true;try{await ensureToken();await req('/auth/v1/user',{method:'PUT',body:{password:a,data:{must_change:false}}});closeModal();toast('✓ تغيّرت كلمة السر — استخدمها من الآن')}catch(x){e.textContent=x.net?'لا يوجد اتصال':/same|different/i.test(String(x.message))?'اختر كلمة مختلفة عن المؤقتة':String(x.message||'تعذّر الحفظ')}finally{const g=$('pwGo');if(g)g.disabled=false}};
-window.cloudLogout=()=>{if(C.dirty&&C.role==='owner'&&!confirm('توجد تغييرات لم تُرفع بعد. تسجيل الخروج على أي حال؟'))return;C={session:null,version:0,dirty:false,role:null,last:null};saveC();closeModal();setState('off');toast('تم تسجيل الخروج — البيانات باقية على هذا الجهاز')};
+window.cloudLogout=()=>{if(C.dirty&&C.role==='owner'&&!confirm('توجد تغييرات لم تُرفع بعد. تسجيل الخروج على أي حال؟'))return;C={session:null,version:0,dirty:false,role:null,last:null,proj:'jmvbxnmvoqvumsljsqff'};saveC();closeModal();setState('off');toast('تم تسجيل الخروج — البيانات باقية على هذا الجهاز')};
 window.cloudSync=()=>{closeModal();pull(true)};window.cloudForcePull=()=>{if(confirm('استبدال بيانات هذا الجهاز بنسخة الإنترنت؟')){closeModal();pull(true)}};window.cloudForcePush=()=>{closeModal();C.dirty=true;saveC();push(true)};
 window.cloudAdd=async()=>{const em=$('clAdd').value.trim();if(!em)return;try{await rpc('burns_add_member',{p_email:em,p_role:'viewer'});toast('✓ أُضيف '+em+' كمشاهد');openCloud()}catch(e){const m=String(e.message||'');toast(/user_not_found/.test(m)?'هذا البريد لم يُنشئ حسابًا بعد — اطلب منه «إنشاء حساب» أولًا':/burns_add_member/.test(m)||e.status===404?'أكمل إعداد Supabase أولًا (ملف supabase_setup.sql)':m,true)}};
 window.cloudRemove=async u=>{if(!confirm('إزالة هذا العضو؟'))return;try{await rpc('burns_remove_member',{p_user:u});openCloud()}catch(e){toast(e.message||'تعذّر',true)}};
@@ -3422,7 +3423,7 @@ window.restoreJSON=function(e){const f=e.target.files&&e.target.files[0];if(!f)r
  const photos={};(db.devices||[]).forEach(d=>{if(d._photos&&d._photos.length)photos[d._uid]=d._photos});x.devices.forEach(d=>{if(!d._photos&&photos[d._uid])d._photos=photos[d._uid]});
  db=x;if(Array.isArray(books)){try{const cur=JSON.parse(localStorage.getItem('medtech_electronic_books_v1')||'[]'),img={};cur.forEach(b=>{if(b.image)img[b.id]=b.image});localStorage.setItem('medtech_electronic_books_v1',JSON.stringify(books.map(b=>{const c={...b};delete c.hasImage;if(img[b.id])c.image=img[b.id];return c})))}catch(_){}}
  saveDB();db.mohSync={base:now(),done:{}};saveDB();try{renderView(currentView)}catch(_){}toast('✓ تمت استعادة النسخة — '+x.devices.length+' جهاز')}catch(err){toast('تعذرت الاستعادة: '+err.message,true)}finally{e.target.value=''}};r.readAsText(f)};
-window.backupToTelegram=async function(){try{const SB='https://fifjajthuoczaykefjuj.supabase.co',K='sb_publishable_yx010nGnVM-ohHy5QFXBag_VFdLjMxi';const m=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'{}');if(!m.session||m.role!=='owner'){toast('سجّل الدخول كمالك في ☁️ أولًا',true);return}
+window.backupToTelegram=async function(){try{const SB='https://jmvbxnmvoqvumsljsqff.supabase.co',K='sb_publishable_hKnkJCFz9MudI2wUrbtaxQ_iBYB3kt3';const m=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'{}');if(!m.session||m.role!=='owner'){toast('سجّل الدخول كمالك في ☁️ أولًا',true);return}
  toast('⏳ جاري الإرسال…');const r=await fetch(SB+'/functions/v1/burns-bot?action=backup',{method:'POST',headers:{apikey:K,Authorization:'Bearer '+m.session.access_token,'Content-Type':'application/json'},body:'{}'});const j=await r.json().catch(()=>({}));
  if(r.ok&&j.sent)toast('✅ وصلت النسخة إلى تلغرام ('+j.sent+')');else toast(j.error==='not_owner'?'للمالك فقط':r.ok?'لا يوجد حساب مالك مربوط بالبوت':'تعذّر الإرسال',true)}catch(e){toast('لا يوجد اتصال بالإنترنت',true)}};
 
@@ -4048,6 +4049,7 @@ function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div 
 window.maImport=function(){let i=document.getElementById('maImpIn');if(!i){i=document.createElement('input');i.type='file';i.id='maImpIn';i.accept='.json,application/json';i.hidden=true;i.onchange=e=>{try{restoreJSON(e)}catch(x){toast('تعذّر قراءة الملف',true)}setTimeout(()=>{tab='home';render()},700)};document.body.appendChild(i)}i.value='';i.click()};
 window.maExport=function(){try{const books=JSON.parse(localStorage.getItem('medtech_electronic_books_v1')||'[]').map(b=>{const c={...b};delete c.image;return c});const data=JSON.parse(JSON.stringify(db));(data.devices||[]).forEach(d=>{delete d._photos});data.books=books;
  const blob=new Blob([JSON.stringify({app:'medtech_system_v3',exportedAt:new Date().toISOString(),data})],{type:'application/json'});X.__ctx={title:'نسخة البيانات'};downloadBlob(blob,'بيانات_الأجهزة_'+todayS()+'.json')}catch(e){toast('تعذّر التصدير',true)}};
+window.maEngWa=function(){const cur=localStorage.getItem('eng_wa')||'';const v=prompt('رقم واتساب الذي تصله البلاغات عندما لا يتوفر الإنترنت للخادم (مثال 07801234567).\nيُضاف للملصقات التي تطبعها من الآن.',cur);if(v===null)return;const n=v.replace(/[^\d]/g,'');localStorage.setItem('eng_wa',n?(n.startsWith('0')?'964'+n.slice(1):n):'');toast(n?'✓ حُفظ الرقم — أعد طباعة الملصقات ليظهر فيها':'حُذف الرقم');render()};
 window.maView2=v=>{dview=v;LS.set('ma_dview',v);maTab('devices')};
 window.maGoSt=function(s){fSt=s;fDept='';q='';maTab('devices')};
 
@@ -4236,6 +4238,7 @@ function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}ca
  G('الباركود والصور',[['🏷️','طباعة ملصقات الباركود (6–8 بالصفحة)','printLabelsFor(db.devices)'],['🔳','قسم الباركود',"maView2('qr')"],['📷','مسح باركود','maScan()'],['📸','صور الأجهزة',"maTour()",(()=>{const S=PH.stats();return (S.own+S.type)+'/'+S.total})()],['↗','مشاركة كل الأجهزة','maShareAll()']])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
  G('البيانات',[['📥','تحديث الأجهزة من Excel','xlsUpdate()'],['📂','استيراد نسخة بيانات (JSON)','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()'],['💾','حفظ نسخة مع الصور','exportWithPhotos()']])+
+ G('البلاغات من الملصقات',[['📲','رقم واتساب لاستلام البلاغات',"maEngWa()",(localStorage.getItem('eng_wa')||'').replace(/\D/g,'')?'✓':'']])+
  G('التحديثات',[['🔄','حدّث التطبيق','appCheckUpdate(true)','الإصدار '+E(window.APP_VERSION||'')],['✨','ما الجديد','appWhatsNew()'],['⚙️','التحديث التلقائي عند الفتح','maAutoUpd()',LS.get('app_autoupd','1')!=='0'?'مفعّل':'متوقف']])+
   G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
  `<button class="ma-full" onclick="setMapp(false)">🧩 فتح النظام الكامل (كل الأقسام)</button><p class="ma-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
