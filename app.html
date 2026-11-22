@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1032"</script>
+<script>window.APP_VERSION="2026.11.22.1105"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1094,6 +1094,22 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .ev-part{display:grid;grid-template-columns:1fr auto 44px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--ma-line);font-size:13.5px}.ev-part span{color:var(--ma-mut)}.ev-part em{font-style:normal;font-weight:800;text-align:center;color:#c0392b}
 .rp-dep{display:flex;gap:6px;background:var(--ma-card);border-radius:16px;padding:8px}.rp-dep select{flex:1;min-width:0;border:1px solid var(--ma-line);border-radius:12px;background:var(--ma-bg);font:inherit;padding:8px;color:inherit}
 .rp-dep button{border:0;background:var(--ma-pri);color:#fff;border-radius:12px;padding:8px 10px;font:inherit;font-size:13px;font-weight:800}
+/* ===== قسم الباركود الجديد: قائمة أنيقة ===== */
+.ma-qhero{background:linear-gradient(135deg,var(--ma-pri3,#0e5f68),var(--ma-pri));color:#fff;border-radius:22px;padding:14px;margin-bottom:12px;box-shadow:0 8px 22px color-mix(in srgb,var(--ma-pri) 28%,transparent)}
+.ma-qh-t{display:flex;flex-direction:column;gap:2px;margin:0 4px 12px}.ma-qh-t b{font-size:18px}.ma-qh-t small{opacity:.88;font-size:12.5px}
+.ma-qacts{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px}
+.ma-qacts button{border:0;border-radius:15px;background:#ffffff26;color:#fff;font:inherit;font-weight:800;font-size:13.5px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;backdrop-filter:blur(4px)}
+.ma-qacts button i{font-style:normal;font-size:20px}.ma-qacts button.pri{background:#fff;color:var(--ma-pri)}
+.ma-devs.qrl{display:flex;flex-direction:column;gap:8px}
+.ma-qrow{display:flex;align-items:center;gap:12px;background:var(--ma-card);border-radius:18px;padding:8px 10px 8px 12px;box-shadow:0 1px 6px #0f2a400a;border-inline-start:4px solid var(--lc);cursor:pointer;transition:background .15s}
+.ma-qrow:active{transform:scale(.99)}
+.ma-qth{width:64px;height:64px;flex:none;border-radius:12px;background:#fff;border:1px solid var(--ma-line);padding:2px;box-sizing:border-box}
+.ma-qrow .ma-dinfo{flex:1;min-width:0}.ma-qrow .ma-dinfo b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14.5px}
+.ma-qrow .ma-dinfo small{display:flex;align-items:center;gap:5px;color:var(--ma-mut);font-size:12px;margin-top:3px;white-space:nowrap;overflow:hidden}.ma-qrow .ma-dinfo small i{width:7px;height:7px;border-radius:50%;background:var(--lc);flex:none}
+.ma-qrow .ma-num{flex:none;background:var(--lc);color:#fff}
+.ma-qck{display:none;width:26px;height:26px;flex:none;border-radius:9px;border:2px solid var(--ma-line);color:transparent;place-items:center;font-weight:900;font-size:14px}
+.ma-qrow.pick .ma-qck{display:grid}.ma-qrow.sel{background:color-mix(in srgb,var(--ma-pri) 9%,var(--ma-card))}.ma-qrow.sel .ma-qck{background:var(--ma-pri);border-color:var(--ma-pri);color:#fff}
+.ma-qrbig img{border:1px solid var(--ma-line)}
 
 </style>
 </head><body>
@@ -3796,13 +3812,13 @@ window.devCardBlob=async function(d){const W=1080,H=1540,c=document.createElemen
  let y=990;x.fillStyle='#fff';rr(x,50,y-10,W-420,rows.length*62+30,30);x.fill();
  rows.forEach((r,i)=>{const yy=y+40+i*62;x.textAlign='right';x.fillStyle='#6b7a89';x.font='600 27px '+F;x.fillText(r[0],W-420+50-30+0,yy);x.textAlign='left';x.fillStyle='#14212e';x.font='700 29px '+F;x.direction=/[؀-ۿ]/.test(r[1])?'rtl':'ltr';x.fillText(r[1].slice(0,26),80,yy);x.direction='rtl';if(i<rows.length-1){x.fillStyle='#eef1f4';x.fillRect(80,yy+20,W-520,2)}});
  /* QR */
- try{const q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M'),n=q.size+8,sz=300,s=sz/n,qx=W-50-sz,qy=y-10;x.fillStyle='#fff';rr(x,qx,qy,sz,sz,24);x.fill();x.fillStyle='#000';for(let r=0;r<q.size;r++)for(let k=0;k<q.size;k++)if(q.modules[r][k])x.fillRect(qx+(k+4)*s,qy+(r+4)*s,Math.ceil(s),Math.ceil(s));x.textAlign='center';x.fillStyle='#6b7a89';x.font='600 24px '+F;x.fillText('امسح لفتح بطاقة الجهاز',qx+sz/2,qy+sz+38)}catch(e){}
+ try{const q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M'),n=q.size+8,sz=300,s=sz/n,qx=W-50-sz,qy=y-10;x.fillStyle='#fff';rr(x,qx,qy,sz,sz,24);x.fill();qrStyledDraw(x,qrPayloadFor(d),qrColorFor(d),qx+12,qy+12,sz-24);x.textAlign='center';x.fillStyle='#6b7a89';x.font='600 24px '+F;x.fillText('امسح لفتح بطاقة الجهاز',qx+sz/2,qy+sz+38)}catch(e){}
  x.textAlign='center';x.fillStyle='#9aa6b2';x.font='500 22px '+F;x.fillText('مؤسسة الفرقان البرمجية — رصانة، دقة، أمان',W/2,H-36);
  return await new Promise(r=>c.toBlob(r,'image/png'))};
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 window.shareDevCard=async function(u){const d=db.devices.find(x=>x._uid===u);if(!d)return;toast('⏳ جاري تجهيز بطاقة الجهاز…');try{const b=await devCardBlob(d);const name='بطاقة_'+(d._seq||'')+'_'+String(deviceName(d)).replace(/[\\/:*?"<>|\s]+/g,'_')+'.png';
  if(!(await shareFiles([new File([b],name,{type:'image/png'})],devText(d),deviceName(d)))){X.__ctx={title:'بطاقة جهاز'};downloadBlob(b,name)}}catch(e){console.warn(e);toast('تعذّر إنشاء البطاقة',true)}};
-window.shareDevQR=async function(u){const d=db.devices.find(x=>x._uid===u);if(!d)return;const q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M'),sc=Math.max(8,Math.ceil(900/q.size)),b=4,c=document.createElement('canvas'),S=(q.size+b*2)*sc;c.width=S;c.height=S+330;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.fillStyle='#000';for(let r=0;r<q.size;r++)for(let k=0;k<q.size;k++)if(q.modules[r][k])x.fillRect((k+b)*sc,(r+b)*sc,sc,sc);
+window.shareDevQR=async function(u){const d=db.devices.find(x=>x._uid===u);if(!d)return;const q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M'),sc=Math.max(8,Math.ceil(900/q.size)),b=4,c=document.createElement('canvas'),S=(q.size+b*2)*sc;c.width=S;c.height=S+330;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);qrStyledDraw(x,qrPayloadFor(d),qrColorFor(d),0,0,S);
  x.textAlign='center';x.direction='rtl';x.font='700 44px "IBM Plex Sans Arabic",Tahoma,sans-serif';x.fillText((d._seq?d._seq+' — ':'')+String(deviceName(d)).slice(0,34),S/2,S+70);x.font='800 34px "IBM Plex Sans Arabic",Tahoma,sans-serif';x.fillStyle='#b3261e';['إذا كنت تواجه مشكلة، امسح الباركود بكاميرا هاتفك','وأبلغ الفريق فورًا لمعالجة المشكلة'].forEach((l,i)=>x.fillText(l,S/2,S+140+i*48));x.fillStyle='#7a5a00';x.font='700 30px "IBM Plex Sans Arabic",Tahoma,sans-serif';x.fillText('يرجى المحافظة عليه من التلف والعبث وعدم إيصال أي سوائل إليه',S/2,S+270);
  const bl=await new Promise(r=>c.toBlob(r,'image/png'));const name='QR_'+(d._seq||'')+'.png';if(!(await shareFiles([new File([bl],name,{type:'image/png'})],deviceName(d),'QR')))
  {X.__ctx={title:'QR'};downloadBlob(bl,name)}};
@@ -3891,8 +3907,7 @@ window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.
   c.font=`900 ${Math.round(40*f)}px ${FONT}`;const sn=String(d._seq||'—'),sw=Math.max(bh*.95,c.measureText(sn).width+50);c.fillStyle='#fff';rr(c,x+24,y+bh*.14,sw,bh*.72,bh*.2);c.fill();c.fillStyle=col;c.textAlign='center';c.fillText(sn,x+24+sw/2,y+bh*.52);
   /* الباركود — رابط قصير ومنطقة هادئة كافية لقراءة سهلة من أي هاتف */
   const by=y+bh+18,bb=y+lh-nh-gh-12,qcol=Math.round(lw*.40);c.font=`800 ${Math.round(22*f)}px ${FONT}`;const cta=wrapN(c,CTA,qcol-10,3),ctaH=cta.length*Math.round(28*f)+Math.round(8*f);
-  const qa=Math.min(bb-by-ctaH,qcol-16);let q=null;try{q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M')}catch(e){}
-  const qx=x+20+(qcol-qa)/2,qy=by;if(q){const n=q.size+8,sc=Math.floor(qa/n*100)/100;c.fillStyle='#fff';c.fillRect(qx,qy,qa,qa);c.fillStyle='#000';const ox=qx+(qa-n*sc)/2+4*sc,oy=qy+(qa-n*sc)/2+4*sc;for(let r=0;r<q.size;r++)for(let kk=0;kk<q.size;kk++)if(q.modules[r][kk])c.fillRect(Math.floor(ox+kk*sc),Math.floor(oy+r*sc),Math.ceil(sc),Math.ceil(sc))}
+  const qa=Math.min(bb-by-ctaH,qcol-16);const qx=x+20+(qcol-qa)/2,qy=by;try{qrStyledDraw(c,qrPayloadFor(d),col,qx,qy,qa)}catch(e){}
   c.fillStyle='#b3261e';c.textAlign='center';c.direction='rtl';c.font=`800 ${Math.round(22*f)}px ${FONT}`;cta.forEach((l,j)=>c.fillText(l,x+20+qcol/2,qy+qa+Math.round(22*f)+j*Math.round(28*f)));
   /* المعلومات */
   const ix=x+lw-34,iw=lw-qcol-20-34-30;let yy=by+Math.round(30*f);
@@ -3988,6 +4003,31 @@ window.rpDept=fmt=>{const [L,l]=depL();uiClose2();XP.run('devices',fmt,{list:L,t
 window.rpDeptLbl=()=>{const [L]=depL();printLabelsFor(L)};
 })();
 
+/* =========================================================
+   5) باركود بتصميم جميل: نقاط دائرية، عيون ملوّنة بلون القسم، شعار طبي في الوسط
+      (تصحيح الخطأ Q يسمح بتغطية الوسط مع بقاء القراءة سهلة)
+   ========================================================= */
+(function(){
+const QC=new Map();
+function plan(text){const q=QRLocal.encode(text,'Q'),n=q.size,inF=(r,c)=>(r<7&&c<7)||(r<7&&c>=n-7)||(r>=n-7&&c<7);let L=Math.floor(n*0.22);if(L%2===0)L--;const lo=(n-L)/2,inL=(r,c)=>r>=lo-0.5&&r<lo+L-0.5&&c>=lo-0.5&&c<lo+L-0.5;return {q,n,inF,inL,L,lo}}
+window.qrStyledSVG=function(text,color){const k=text+'|'+color;if(QC.has(k))return QC.get(k);const P=plan(text),{q,n,inF,inL,L,lo}=P,B=3,S=n+B*2,ink='#10263a';let b='';
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.modules[r][c]&&!inF(r,c)&&!inL(r,c))b+=`<rect x="${c+B+0.06}" y="${r+B+0.06}" width="0.88" height="0.88" rx="0.38"/>`;
+ const eye=(x,y)=>`<rect x="${x+B+0.5}" y="${y+B+0.5}" width="6" height="6" rx="1.8" fill="none" stroke="${color}" stroke-width="1"/><rect x="${x+B+2}" y="${y+B+2}" width="3" height="3" rx="0.9" fill="${ink}"/>`;
+ const lx=lo+B-0.5,ls=L,cx=lx+ls/2,cy=lx+ls/2,a=ls*0.16,w=ls*0.5;
+ const logo=`<rect x="${lx}" y="${lx}" width="${ls}" height="${ls}" rx="${ls*0.28}" fill="#fff"/><rect x="${lx+ls*0.12}" y="${lx+ls*0.12}" width="${ls*0.76}" height="${ls*0.76}" rx="${ls*0.22}" fill="${color}"/><rect x="${cx-a/2}" y="${cy-w/2}" width="${a}" height="${w}" rx="${a*0.3}" fill="#fff"/><rect x="${cx-w/2}" y="${cy-a/2}" width="${w}" height="${a}" rx="${a*0.3}" fill="#fff"/>`;
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" shape-rendering="geometricPrecision"><rect width="${S}" height="${S}" fill="#fff"/><g fill="${ink}">${b}</g>${eye(0,0)}${eye(n-7,0)}${eye(0,n-7)}${logo}</svg>`;
+ const u='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);if(QC.size>400)QC.clear();QC.set(k,u);return u};
+/* رسم على canvas (للملصقات المطبوعة) */
+window.qrStyledDraw=function(c,text,color,x,y,size){const {q,n,inF,inL,L,lo}=plan(text),B=3,S=n+B*2,s=size/S,ink='#10263a';c.save();c.fillStyle='#fff';c.fillRect(x,y,size,size);c.fillStyle=ink;
+ const rr2=(X,Y,W,H,R)=>{c.beginPath();c.moveTo(X+R,Y);c.arcTo(X+W,Y,X+W,Y+H,R);c.arcTo(X+W,Y+H,X,Y+H,R);c.arcTo(X,Y+H,X,Y,R);c.arcTo(X,Y,X+W,Y,R);c.closePath()};
+ for(let r=0;r<n;r++)for(let cc=0;cc<n;cc++)if(q.modules[r][cc]&&!inF(r,cc)&&!inL(r,cc)){rr2(x+(cc+B+0.06)*s,y+(r+B+0.06)*s,0.88*s,0.88*s,0.38*s);c.fill()}
+ const eye=(ex,ey)=>{c.strokeStyle=color;c.lineWidth=s;rr2(x+(ex+B+0.5)*s,y+(ey+B+0.5)*s,6*s,6*s,1.8*s);c.stroke();c.fillStyle=ink;rr2(x+(ex+B+2)*s,y+(ey+B+2)*s,3*s,3*s,0.9*s);c.fill()};eye(0,0);eye(n-7,0);eye(0,n-7);
+ const lx=(lo+B-0.5)*s,ls=L*s,cx=x+lx+ls/2,cy=y+lx+ls/2,a=ls*0.16,w=ls*0.5;c.fillStyle='#fff';rr2(x+lx,y+lx,ls,ls,ls*0.28);c.fill();c.fillStyle=color;rr2(x+lx+ls*0.12,y+lx+ls*0.12,ls*0.76,ls*0.76,ls*0.22);c.fill();c.fillStyle='#fff';rr2(cx-a/2,cy-w/2,a,w,a*0.3);c.fill();rr2(cx-w/2,cy-a/2,w,a,a*0.3);c.fill();c.restore()};
+const col=d=>(window.locColor&&locColor((String(d['مكان تنصيب الجهاز']||'').trim())||'غير محدد'))||'#0f8a7e';
+window.qrImageFor=function(d){try{return qrStyledSVG(qrPayloadFor(d),col(d))}catch(e){console.warn(e);return ''}};
+window.qrColorFor=col;
+})();
+
 </script>
 <script>
 /* =====================================================================
@@ -4065,7 +4105,7 @@ window.maView2=v=>{dview=v;LS.set('ma_dview',v);maTab('devices')};
 window.maGoSt=function(s){fSt=s;fDept='';q='';maTab('devices')};
 
 /* ---------------- الأجهزة: قائمة / صور / باركود ---------------- */
-let dview=LS.get('ma_dview','list'),dsort=LS.get('ma_dsort','dept');const qsel=new Set();
+let dview=LS.get('ma_dview','list'),dsort=LS.get('ma_dsort','dept');const qsel=new Set();let qselMode=false;
 function filtered(){const n=q.toLowerCase().trim(),w=n.split(/\s+/).filter(Boolean);
  const L=(db.devices||[]).filter(d=>(!fDept||LOC(d)===fDept)&&(!fSt||ST(d)===fSt)&&(!w.length||w.every(x=>[d._seq,d._moh?'و'+d._moh:'',deviceName(d),LOC(d),d['سريال نمبر'],d['الشركه المصنعة'],d['الموديــل']].join(' ').toLowerCase().includes(x))||String(d._seq)===n));
  const sq=(a,b)=>(+a._seq||0)-(+b._seq||0),SO={'عاطل':0,'قيد الصيانة':1,'صالح':2};
@@ -4075,29 +4115,31 @@ const phImg=(d,cls)=>`<img class="${cls||'ma-th'}${PH.thumb(d)?'':' ill'}" src="
 const devCard={
  list:d=>{const s=ST(d),m=[cl(d['الشركه المصنعة']),cl(d['الموديــل'])].filter(Boolean).join(' • ');return `<button class="ma-dev" style="--lc:${locColor(LOC(d))}" onclick="maDev('${d._uid}')"><span class="ma-thw">${phImg(d)}<span class="ma-num sm">${E(d._seq)}</span></span><span class="ma-dinfo"><b dir="auto">${E(deviceName(d))}</b>${m?`<small class="ma-mdl">${E(m)}</small>`:''}<small><i></i>${E(LOC(d))}${d._moh?` <em class="ma-moh">🏛️ ${E(d._moh)}</em>`:''}</small></span><span class="ma-pill ${stc(s)}">${E(s)}</span></button>`},
  grid:d=>{const s=ST(d);return `<button class="ma-gcard" style="--lc:${locColor(LOC(d))}" onclick="maDev('${d._uid}')"><span class="ma-gimg">${phImg(d,'ma-gi')}<span class="ma-num sm">${E(d._seq)}</span><span class="ma-dot ${stc(s)}" title="${E(s)}"></span></span><b dir="auto">${E(deviceName(d))}</b><small><i></i>${E(LOC(d))}</small></button>`},
- qr:d=>`<div class="ma-qcard ${qsel.has(d._uid)?'sel':''}" style="--lc:${locColor(LOC(d))}" data-u="${d._uid}"><button class="ma-qchk" onclick="maQSel('${d._uid}',this)">${qsel.has(d._uid)?'✓':''}</button><button class="ma-qimg" onclick="maQR('${d._uid}')"><img data-qruid="${d._uid}" alt="QR"></button><b><span>${E(d._seq)}</span> ${E(deviceName(d))}</b><small>${E(LOC(d))}</small></div>`};
+ qr:d=>`<div class="ma-qrow ${qselMode?'pick':''} ${qsel.has(d._uid)?'sel':''}" style="--lc:${locColor(LOC(d))}" onclick="maQTap('${d._uid}',this)"><span class="ma-qck">✓</span><img class="ma-qth" src="${qrImageFor(d)}" alt="QR" loading="lazy" decoding="async"><span class="ma-dinfo"><b dir="auto">${E(deviceName(d))}</b><small><i></i>${E(LOC(d))}${d._moh?` <em class="ma-moh">🏛️ ${E(d._moh)}</em>`:''}</small></span><span class="ma-num">${E(d._seq)}</span></div>`};
 function listHtml(L){let h='',g=null;const cnt={};if(dsort==='dept'||dsort==='status')L.forEach(d=>{const k=grpOf(d);cnt[k]=(cnt[k]||0)+1});
  L.slice(0,shown).forEach(d=>{const k=grpOf(d);if((dsort==='dept'||dsort==='status')&&k!==g){g=k;h+=`<div class="ma-grp" style="--lc:${dsort==='dept'?locColor(k):k==='عاطل'?'#d64545':k==='صالح'?'#1d8a4e':'#c98a12'}"><i></i><b>${E(k)}</b><em>${cnt[k]}</em></div>`}h+=devCard[dview](d)});return h}
 function renderDevices2(append){const L=filtered(),depts={};(db.devices||[]).forEach(d=>{const l=LOC(d);depts[l]=(depts[l]||0)+1});
- if(append){$('maDevList').innerHTML=listHtml(L);if(dview==='qr')hydrateQR($('maDevList'));return}
+ if(append){$('maDevList').innerHTML=listHtml(L);return}
  const S=PH.stats();
  $('maBody').innerHTML=`<div class="ma-vseg">${[['list','📋','القائمة'],['grid','🖼️','الصور'],['qr','🔳','الباركود']].map(([k,i,t])=>`<button class="${dview===k?'on':''}" onclick="maView('${k}')"><i>${i}</i>${t}</button>`).join('')}</div>
  <div class="ma-search"><span>🔍</span><input id="maQ" placeholder="ابحث: الاسم، الرقم، القسم، S/N…" value="${E(q)}" oninput="maQ(this.value)" autocomplete="off">${q?`<button onclick="maQ('');document.getElementById('maQ').value=''">✕</button>`:''}<button onclick="maScan()" title="مسح باركود">📷</button></div>
- <div class="ma-chips">${['','صالح','عاطل','قيد الصيانة'].map(s=>`<button class="${fSt===s?'on':''}" onclick="maSt('${s}')">${s||'الكل'}</button>`).join('')}</div>
+ ${dview==='qr'?'':`<div class="ma-chips">${['','صالح','عاطل','قيد الصيانة'].map(s=>`<button class="${fSt===s?'on':''}" onclick="maSt('${s}')">${s||'الكل'}</button>`).join('')}</div>`}
  <div class="ma-chips dept"><button class="${!fDept?'on':''}" onclick="maDept('')">كل الأقسام</button>${Object.entries(depts).sort((a,b)=>b[1]-a[1]).map(([l,n])=>`<button class="${fDept===l?'on':''}" style="--lc:${locColor(l)}" onclick="maDept(this.dataset.l)" data-l="${E(l)}"><i></i>${E(l)} <em>${n}</em></button>`).join('')}</div>
  <div class="ma-tool"><span class="ma-count">${L.length} جهاز${fDept||fSt||q?' — <a onclick="maClear()">مسح الفلتر</a>':''}</span>
   <label class="ma-sort">⇅ <select onchange="maSort(this.value)">${[['dept','حسب القسم'],['seq','حسب رقمي'],['moh','حسب الوزاري'],['name','حسب الاسم'],['status','حسب الحالة']].map(([k,t])=>`<option value="${k}" ${dsort===k?'selected':''}>${t}</option>`).join('')}</select></label>
   <button class="ma-tbtn" onclick="maShareAll()">↗ مشاركة</button></div>
  ${dview==='grid'&&S.none?`<button class="ma-tour" onclick="maTour()"><i>📸</i><span><b>${S.none} جهاز بدون صورة</b><small>صوّر كل نوع مرة واحدة فتظهر الصورة لكل أجهزته</small></span><em>ابدأ ‹</em></button>`:''}
- ${dview==='qr'?`<div class="ma-qbar"><button onclick="maQAll()">${qsel.size?'إلغاء التحديد':'☑️ تحديد الكل'}</button><button class="pri" onclick="maQPrint()">🖨️ طباعة ${qsel.size?qsel.size+' ملصق':'الكل ('+L.length+')'}</button><button onclick="maScan()">📷 مسح</button></div>`:''}
- <div id="maDevList" class="ma-devs ${dview}">${listHtml(L)||'<div class="ma-empty"><i>🔎</i><b>لا توجد نتائج</b><span>جرّب كلمة أخرى.</span></div>'}</div>`;
- if(dview==='qr')hydrateQR($('maDevList'))}
+ ${dview==='qr'?`<div class="ma-qhero"><div class="ma-qh-t"><b>🔳 الباركود</b><small>${qselMode?'اضغط على الأجهزة لتحديدها — '+qsel.size+' محدد':'اضغط على أي جهاز لعرض الباركود بحجم كبير'}</small></div><div class="ma-qacts"><button class="pri" onclick="maQPrint()"><i>🖨️</i><span>طباعة ${qsel.size?qsel.size:'الكل'}</span></button><button onclick="maScan()"><i>📷</i><span>مسح</span></button><button onclick="maQMode()"><i>${qselMode?'✔️':'☑️'}</i><span>${qselMode?'إنهاء':'تحديد'}</span></button></div></div>`:''}
+ <div id="maDevList" class="ma-devs ${dview==="qr"?"qrl":dview}">${listHtml(L)||'<div class="ma-empty"><i>🔎</i><b>لا توجد نتائج</b><span>جرّب كلمة أخرى.</span></div>'}</div>`;
+ }
 let qT;window.maQ=function(v){q=v;shown=40;clearTimeout(qT);qT=setTimeout(()=>{const pos=$('maQ')?.selectionStart;renderDevices2();const i=$('maQ');if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(e){}}},140)};
 window.maSt=s=>{vib();fSt=s;shown=40;renderDevices2()};window.maDept=l=>{vib();fDept=l;shown=40;renderDevices2()};window.maClear=()=>{fSt='';fDept='';q='';renderDevices2()};
 window.maView=v=>{vib();dview=v;LS.set('ma_dview',v);shown=40;renderDevices2()};window.maSort=v=>{dsort=v;LS.set('ma_dsort',v);shown=40;renderDevices2()};
 window.maRefresh=()=>{try{if(tab==='devices')renderDevices2();else render()}catch(e){}};
 /* الباركود */
 window.maQSel=function(u,b){vib();qsel.has(u)?qsel.delete(u):qsel.add(u);const c=b.closest('.ma-qcard');c.classList.toggle('sel');b.textContent=qsel.has(u)?'✓':'';const p=document.querySelector('.ma-qbar .pri');if(p)p.textContent='🖨️ طباعة '+(qsel.size?qsel.size+' ملصق':'الكل ('+filtered().length+')');const a=document.querySelector('.ma-qbar button');if(a)a.textContent=qsel.size?'إلغاء التحديد':'☑️ تحديد الكل'};
+window.maQMode=function(){vib();qselMode=!qselMode;if(!qselMode)qsel.clear();renderDevices2()};
+window.maQTap=function(u,el){if(!qselMode){maQR(u);return}vib();qsel.has(u)?qsel.delete(u):qsel.add(u);el.classList.toggle('sel');const p=document.querySelector('.ma-qacts .pri span');if(p)p.textContent='طباعة '+(qsel.size?qsel.size:'الكل');const t=document.querySelector('.ma-qh-t small');if(t)t.textContent='اضغط على الأجهزة لتحديدها — '+qsel.size+' محدد'};
 window.maQAll=function(){if(qsel.size)qsel.clear();else filtered().forEach(d=>qsel.add(d._uid));renderDevices2()};
 window.maQPrint=function(){const L=qsel.size?(db.devices||[]).filter(d=>qsel.has(d._uid)):filtered();printLabelsFor(L)};
 window.maQR=function(u){const d=devBy(u);if(!d)return;sheet(`<div class="ma-qrbig"><img src="${qrImageFor(d)}" alt="QR"><b>${E(d._seq)} — ${E(deviceName(d))}</b><small style="--lc:${locColor(LOC(d))}"><i></i>${E(LOC(d))}${d._moh?' • 🏛️ '+E(d._moh):''}</small></div>
