@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1116"</script>
+<script>window.APP_VERSION="2026.11.22.1120"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1141,6 +1141,7 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .ma-selbar .sb-all{background:#ffffff1f;color:#fff}.ma-selbar .sb-x{background:#ffffff1f;color:#fff;width:42px;padding:11px 0}
 .ma-selbar .sb-n{flex:1;text-align:center;font-size:13px;opacity:.9}.ma-selbar .sb-n b{font-size:18px;margin-inline-end:3px}
 .ma-selbar .sb-p{background:var(--ma-pri);color:#fff;padding:11px 16px}.ma-selbar .sb-p:disabled{opacity:.4}
+.pdfok{text-align:center;padding:6px 0 14px}.pdfok i{font-style:normal;font-size:52px;display:block}.pdfok h3{margin:6px 0 4px;font-size:20px}.pdfok p{margin:0;color:var(--ma-mut);font-size:13.5px}
 
 </style>
 </head><body>
@@ -3917,9 +3918,11 @@ window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.
  const W=2480,H=3508,M=90,HD=190,FT=120,G=36,cols=per===4?1:2,rows=per===8?4:per===6?3:4,pagesN=Math.ceil(list.length/per);
  const lw=(W-2*M-(cols-1)*G)/cols,lh=(H-2*M-HD-FT-40-(rows-1)*G)/rows,f=Math.min(1.3,lh/700);
  const B=(window.getBranding&&getBranding())||{};const center=B.center||'المركز التخصصي للحروق — الديوانية';const note=LS.get('lbl_note2',NOTE_DEF);
- const pages=[];let cv,c;
+ /* قماش واحد يُعاد استخدامه بدقة 210dpi — خفيف على ذاكرة الهاتف */
+ const SC=0.7,cv=document.createElement('canvas');cv.width=Math.round(W*SC);cv.height=Math.round(H*SC);const c=cv.getContext('2d');const jp=[];let first='';
+ const flush=async()=>{if(!first)first=cv.toDataURL('image/jpeg',0.6);const b=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.8));jp.push(new Uint8Array(await b.arrayBuffer()));await tick()};
  for(let i=0;i<list.length;i++){const k=i%per,pg=Math.floor(i/per);
-  if(k===0){if(cv)pages.push(cv);cv=document.createElement('canvas');cv.width=W;cv.height=H;c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';c.direction='rtl';
+  if(k===0){if(i>0)await flush();c.setTransform(SC,0,0,SC,0,0);c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';c.direction='rtl';
    /* رأس الصفحة */
    const g=c.createLinearGradient(0,0,W,0);g.addColorStop(0,'#0b4f57');g.addColorStop(1,'#13a08f');c.fillStyle=g;rr(c,M,M,W-2*M,HD,30);c.fill();
    c.fillStyle='#fff';c.font=`800 60px ${FONT}`;txt(c,'ملصقات تعريف الأجهزة الطبية',W-M-50,M+68);c.font=`600 36px ${FONT}`;c.globalAlpha=.9;txt(c,'وحدة إدارة الأجهزة الطبية — '+center,W-M-50,M+136);c.globalAlpha=1;
@@ -3952,10 +3955,31 @@ window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.
   c.textAlign='center';c.direction='rtl';c.fillStyle='#146c43';c.font=`800 ${Math.round(23*f)}px ${FONT}`;c.fillText(fit(c,'✔ '+ENC,lw-40),x+lw/2,y+lh-nh-gh/2+2);
   c.fillStyle='#7a5a00';c.font=`800 ${Math.round(23*f)}px ${FONT}`;c.fillText(fit(c,'⚠ '+note,lw-40),x+lw/2,y+lh-nh/2+2);
   if(i%8===7)await tick()}
- pages.push(cv);
- try{const blob=await XP.canvasesToPdf(pages,false,0.93);X.__ctx={title:'ملصقات الباركود',html:()=>`<!doctype html><html dir="rtl"><head><meta charset="utf-8"><style>body{margin:0;background:#eee}img{display:block;width:100%;max-width:900px;margin:10px auto;background:#fff;box-shadow:0 2px 8px #0003}</style></head><body>${pages.map(p=>`<img src="${p.toDataURL('image/jpeg',.7)}">`).join('')}</body></html>`};
-  downloadBlob(blob,'ملصقات_الباركود_'+per+'_بالصفحة_'+today()+'.pdf')}catch(e){console.warn(e);toast('تعذّر إنشاء الملصقات',true)}
- return pages};
+ await flush();cv.width=1;cv.height=1;
+ try{const blob=jpegPdf(jp,Math.round(W*SC),Math.round(H*SC));const name='ملصقات_الباركود_'+per+'_بالصفحة_'+today()+'.pdf';window.__lastLbl={blob,name,n:list.length,p:jp.length,first};pdfReady(blob,name,list.length,jp.length)}catch(e){console.warn(e);toast('تعذّر إنشاء الملصقات',true)}
+ return [{toDataURL:()=>first}]};
+/* ملف PDF خفيف من صور JPEG مباشرة (بدون مكتبات) */
+function jpegPdf(jpgs,wpx,hpx){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const add=x=>{const u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length};
+ const PW=595.28,PH=841.89,n=jpgs.length,obj=(i,body)=>{offs[i]=len;add(i+' 0 obj\n');body();add('\nendobj\n')};
+ add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');const kids=[];for(let i=0;i<n;i++)kids.push((3+i*3)+' 0 R');
+ obj(1,()=>add('<< /Type /Catalog /Pages 2 0 R >>'));obj(2,()=>add('<< /Type /Pages /Count '+n+' /Kids ['+kids.join(' ')+'] >>'));
+ jpgs.forEach((j,i)=>{const P=3+i*3,C=P+1,I=P+2;obj(P,()=>add('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+PW+' '+PH+'] /Resources << /XObject << /Im0 '+I+' 0 R >> >> /Contents '+C+' 0 R >>'));
+  const cs='q '+PW+' 0 0 '+PH+' 0 0 cm /Im0 Do Q';obj(C,()=>add('<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream'));
+  obj(I,()=>{add('<< /Type /XObject /Subtype /Image /Width '+wpx+' /Height '+hpx+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+j.length+' >>\nstream\n');add(j);add('\nendstream')})});
+ const N=3+n*3,xo=len;let x='xref\n0 '+N+'\n0000000000 65535 f \n';for(let i=1;i<N;i++)x+=String(offs[i]).padStart(10,'0')+' 00000 n \n';add(x+'trailer\n<< /Size '+N+' /Root 1 0 R >>\nstartxref\n'+xo+'\n%%EOF');
+ return new Blob(parts,{type:'application/pdf'})}
+/* بعد التجهيز: نافذة «الملف جاهز» — زر الطباعة/المشاركة يفتح قائمة الهاتف (طباعة، واتساب، حفظ) بضغطة */
+function pdfReady(blob,name,n,p,title){const kb=Math.round(blob.size/1024);window.__pdfR={blob,name};const isPdf=/pdf$/i.test(name),ic=isPdf?'📄':/xlsx$/i.test(name)?'📊':/docx$/i.test(name)?'📝':'📁';
+ UI(`<div class="pdfok"><i>${ic}</i><h3>${title||'ملف الملصقات جاهز'}</h3><p>${n?n+' ملصق • '+p+' صفحة • ':E(name)+' • '}${kb>1024?(kb/1024).toFixed(1)+' MB':kb+' KB'}</p></div>
+ <button class="ma-save" onclick="pdfShare()">🖨️ طباعة أو إرسال</button>
+ <div class="ma-acts two" style="margin-top:10px"><button onclick="pdfOpen()"><i>👁️</i>عرض الملف</button><button onclick="pdfSave()"><i>💾</i>حفظ في الهاتف</button></div>
+ <p class="ma-hint" style="text-align:center">«طباعة أو إرسال» تفتح قائمة الهاتف: اختر «طباعة» للطابعة، أو واتساب، أو «حفظ في الملفات».</p>`)}
+window.pdfReady=pdfReady;
+window.pdfShare=async function(){const r=window.__pdfR;if(!r)return;const f=new File([r.blob],r.name,{type:r.blob.type||'application/octet-stream'});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:r.name});return}}catch(e){if(e&&e.name==='AbortError')return}
+ pdfOpen()};
+window.pdfOpen=function(){const r=window.__pdfR;if(!r)return;const u=URL.createObjectURL(r.blob);const w=window.open(u,'_blank');if(!w)location.href=u;setTimeout(()=>URL.revokeObjectURL(u),120000)};
+window.pdfSave=function(){const r=window.__pdfR;if(!r)return;const u=URL.createObjectURL(r.blob),a=document.createElement('a');a.href=u;a.download=r.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)};
 
 /* =========================================================
    2) تحديث الأجهزة من ملف Excel (أحدث البيانات)
@@ -4058,6 +4082,10 @@ const col=d=>(window.locColor&&locColor((String(d['مكان تنصيب الجه�
 window.qrImageFor=function(d){try{return qrStyledSVG(qrPayloadFor(d),col(d))}catch(e){console.warn(e);return ''}};
 window.qrColorFor=col;
 })();
+
+/* كل الملفات (PDF / Excel / Word) في واجهة الهاتف: نافذة «الملف جاهز» بدل فتح صفحة فارغة */
+(function(){const _dl=window.downloadBlob;window.downloadBlob=function(blob,name){if(window.__shareNext||!document.body.classList.contains('mapp'))return _dl.apply(this,arguments);
+ try{pdfReady(blob,name,0,0,'✓ الملف جاهز')}catch(e){return _dl.apply(this,arguments)}}})();
 
 </script>
 <script>
