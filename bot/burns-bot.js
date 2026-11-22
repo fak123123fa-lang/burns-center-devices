@@ -62,6 +62,11 @@ function stat(d) { const s = norm(d["الحالة"]); if (/عاطل|متوقف|�
 const SIC = { "صالح": "🟢", "عاطل": "🔴", "قيد الصيانة": "🟡" };
 function wstate(d) { const x = cl(d["تأريخ انتهاء الضمان"]); if (!x) return "غير مسجل"; const t = new Date(x); if (isNaN(+t)) return "غير مسجل"; const days = Math.ceil((+t - Date.now()) / 864e5); if (days < 0) return "منتهي"; if (days <= 60) return "ينتهي خلال " + days + " يوم"; return "ساري"; }
 const today = () => new Date().toISOString().slice(0, 10);
+const bagh = () => { const x = new Date(Date.now() + 3 * 3600e3).toISOString(); return { date: x.slice(0, 10), time: x.slice(11, 16) }; };
+const VIEWER = "https://fak123123fa-lang.github.io/burns-center-devices/";
+const qrLink = (d, wa) => VIEWER + "#i=" + encodeURIComponent(d._uid) + (d._seq ? "&s=" + d._seq : "") + (wa ? "&w=" + wa : "");
+const qrImg = (d, wa) => "https://api.qrserver.com/v1/create-qr-code/?size=700x700&ecc=Q&margin=18&format=png&data=" + encodeURIComponent(qrLink(d, wa));
+const qrCap = (d) => `🔳 <b>${H(d._seq)}. ${H(dname(d))}</b>\n🏛️ الوزاري: ${H(d._moh || "—")} • 📍 ${H(loc(d))}${cl(d["سريال نمبر"]) ? "\n🔢 S/N: " + H(cl(d["سريال نمبر"])) : ""}\n\nامسح الباركود لعرض بطاقة الجهاز والإبلاغ عن عطل.`;
 const nowStr = () => new Date().toISOString().slice(0, 19).replace("T", " ");
 function devCard(d) {
   return `${SIC[stat(d)] || "⚪"} <b>${H(d._seq)}. ${H(dname(d))}</b>\n` +
@@ -151,6 +156,7 @@ function mainMenu(u) {
   const kb = [
     [B("📋 الجرد العام", "inv"), B("🛡️ الضمانات", "war")],
     [B("🔍 بحث عن جهاز", "srch"), B("⛔ الأجهزة العاطلة", "bad")],
+    [B("🔳 الباركود", "qrm")],
     [B("🚨 البلاغات المفتوحة", "flt"), B("📅 الصيانة المستحقة", "pm")],
     [B("📤 كتب صادرة", "out"), B("📥 كتب واردة", "in")],
   ];
@@ -204,9 +210,19 @@ async function onCallback(cq) {
     case "sum": { const st = {}; devs.forEach((d) => { const s = stat(d); st[s] = (st[s] || 0) + 1; }); const f = (D.faults || []).filter((x) => !/مغلق|تمت|مكتمل/.test(x.status || "")).length;
       const over = (D.preventive || []).filter((p) => p.status !== "منجزة" && p.date && p.date < today()).length, soon = devs.filter((d) => /ينتهي/.test(wstate(d))).length;
       return edit(chat, mid, `📊 <b>ملخص اليوم — ${today()}</b>\n\n🏥 الأجهزة: ${devs.length}\n${Object.entries(st).map(([k, v]) => `${SIC[k] || "⚪"} ${k}: ${v}`).join("\n")}\n\n🚨 بلاغات مفتوحة: ${f}\n⏰ صيانة وقائية متأخرة: ${over}\n🛡️ ضمانات تنتهي قريبًا: ${soon}`, back); }
+    case "qrm": { const locs = [...new Set(devs.map(loc))].sort((a, b) => a.localeCompare(b, "ar"));
+      return edit(chat, mid, `🔳 <b>الباركود</b>\n\n• ابحث عن جهاز فأرسل لك باركوده كصورة جاهزة للطباعة أو المشاركة.\n• أو اختر قسمًا لتصلك باركودات كل أجهزته.\n• ولطباعة ملصقات كاملة (من 1 إلى 50 بالصفحة) افتح البرنامج.`, [[B("🔍 باركود جهاز", "qrs")], ...locs.slice(0, 14).map((l, i) => [B(`🏥 ${l} (${devs.filter((d) => loc(d) === l).length})`, "qrd:" + i)]), [{ text: "🖨️ طباعة الملصقات في البرنامج", url: APP_URL + "#qr" }], ...back]); }
+    case "qrs": await setSess(chat, { mode: "search", then: "qr" }); return edit(chat, mid, "🔳 اكتب اسم الجهاز أو رقمه أو الرقم التسلسلي:", back);
+    case "qr": { const d = devs.find((x) => x._uid === a1); if (!d) return send(chat, "لم أجد الجهاز.", back); const wa = String(D.engWa || "").replace(/\D/g, "");
+      await tg("sendPhoto", { chat_id: chat, photo: qrImg(d, wa), caption: qrCap(d), parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "🌐 فتح بطاقة الجهاز", url: qrLink(d, wa) }], ...back] } }); return; }
+    case "qrd": { const locs = [...new Set(devs.map(loc))].sort((a, b) => a.localeCompare(b, "ar")), l = locs[+a1]; if (!l) return; const wa = String(D.engWa || "").replace(/\D/g, "");
+      const L = sorted(devs.filter((d) => loc(d) === l)).slice(0, 40);
+      await send(chat, `🔳 باركودات <b>${H(l)}</b> — ${L.length} جهاز${devs.filter((d) => loc(d) === l).length > 40 ? " (أول 40)" : ""}…`);
+      for (let i = 0; i < L.length; i += 10) await tg("sendMediaGroup", { chat_id: chat, media: L.slice(i, i + 10).map((d) => ({ type: "photo", media: qrImg(d, wa), caption: `${d._seq}. ${dname(d)} — الوزاري ${d._moh || "—"}`.slice(0, 1000) })) });
+      return send(chat, "✅ أُرسلت الباركودات. لطباعة ملصقات كاملة بالمعلومات والملاحظات افتح البرنامج:", [[{ text: "🖨️ طباعة الملصقات", url: APP_URL + "#qr" }], ...back]); }
     case "srch": case "edit": await setSess(chat, { mode: "search" }); return edit(chat, mid, "🔍 اكتب اسم الجهاز أو رقمه أو الرقم التسلسلي أو القسم (أو و12 للبحث بتسلسل الوزاري):", back);
     case "dev": { const d = devs.find((x) => x._uid === a1); if (!d) return send(chat, "لم أجد الجهاز.", back);
-      const kb = owner ? [[B("🟢 صالح", "st:" + d._uid + ":0"), B("🔴 عاطل", "st:" + d._uid + ":1"), B("🟡 صيانة", "st:" + d._uid + ":2")], [B("🚨 بلاغ عطل", "fl:" + d._uid), B("📍 نقل لقسم", "mv:" + d._uid)], ...back] : back;
+      const kb = owner ? [[B("🟢 صالح", "st:" + d._uid + ":0"), B("🔴 عاطل", "st:" + d._uid + ":1"), B("🟡 صيانة", "st:" + d._uid + ":2")], [B("🚨 بلاغ عطل", "fl:" + d._uid), B("📍 نقل لقسم", "mv:" + d._uid)], [B("🔳 الباركود", "qr:" + d._uid)], ...back] : [[B("🔳 الباركود", "qr:" + d._uid)], ...back];
       return send(chat, devCard(d), kb); }
     case "st": { if (!owner) return; const s = ["صالح", "عاطل", "قيد الصيانة"][+a2]; let name = "";
       await mutate((data) => { const d = (data.devices || []).find((x) => x._uid === a1); if (!d) return; const from = stat(d); d["الحالة"] = s; d["عدل في"] = nowStr(); name = dname(d); (data.history = data.history || []).push({ t: nowStr(), u: d._uid, k: "status", f: "الحالة", from, to: s, via: "telegram" }); });
@@ -251,6 +267,7 @@ async function onText(msg) {
     const S = await loadState(); if (!S) return send(chat, "⚠️ لا توجد بيانات على الإنترنت بعد.");
     const res = search(S.data, text);
     if (!res.length) return send(chat, "لم أجد أجهزة مطابقة. جرّب كلمة أخرى:", back);
+    if (ss.then === "qr") { await setSess(chat, {}); if (res.length === 1) return onCallback({ id: "", data: "qr:" + res[0]._uid, message: { chat: { id: chat }, message_id: 0 } }); return send(chat, `🔳 اختر الجهاز:`, [...res.map((d) => [B(`${d._seq}${d._moh ? " 🏛" + d._moh : ""}. ${dname(d).slice(0, 26)} — ${loc(d).slice(0, 18)}`, "qr:" + d._uid)]), ...back]); }
     if (res.length === 1 && ss.then !== "fault") { await setSess(chat, {}); return onCallback({ id: "", data: "dev:" + res[0]._uid, message: { chat: { id: chat }, message_id: 0 } }); }
     if (ss.then === "fault") { await setSess(chat, { mode: "pickfault" }); return send(chat, "اختر الجهاز:", [...res.map((d) => [B(`${SIC[stat(d)] || "⚪"} ${d._seq}. ${dname(d).slice(0, 28)} — ${loc(d).slice(0, 18)}`, "fl:" + d._uid)]), ...back]); }
     await setSess(chat, {});
@@ -352,11 +369,12 @@ async function report(req) {
   if (!d) return J({ error: "device" }, 404);
   const recent = (S.data.faults || []).filter((f) => f.via === "qr" && f.deviceId === d._uid && Date.now() - (+f.id || 0) < 15 * 60e3).length;
   if (recent >= 3) return J({ error: "too_many" }, 429);
-  let num = "";
+  let num = ""; const T = bagh(), fid = String(Date.now()), pid = photo ? "ph-" + fid : "";
+  if (photo) { try { await rest("burns_fault_photos", { method: "POST", prefer: "return=minimal", body: { id: pid, fault_id: fid, device_uid: d._uid, data: photo } }); } catch (e) { console.error(e); } }
   await mutate((data) => { data.faults = data.faults || []; num = "FLT-" + String(data.faults.length + 1).padStart(4, "0");
-    data.faults.push({ id: String(Date.now()), number: num, deviceId: d._uid, deviceName: dname(d), location: loc(d), date: today(), priority: "متوسطة", reporter: "QR — " + (who || "بدون اسم") + (phone ? " (" + phone + ")" : ""), status: "جديد", description: desc, via: "qr", hasPhoto: !!photo });
+    data.faults.push({ id: fid, number: num, deviceId: d._uid, deviceName: dname(d), location: loc(d), date: T.date, time: T.time, priority: "متوسطة", reporter: "QR — " + (who || "بدون اسم") + (phone ? " (" + phone + ")" : ""), reporterName: who, reporterPhone: phone, status: "جديد", description: desc, via: "qr", hasPhoto: !!photo, photoId: pid });
     (data.history = data.history || []).push({ t: nowStr(), u: d._uid, k: "fault", to: desc.slice(0, 120), ref: num, via: "qr" }); });
-  const cap = `🚨 <b>بلاغ عطل جديد ${num}</b> (من ملصق QR)\n\n🏥 <b>${H(d._seq)}. ${H(dname(d))}</b>${d._moh ? " — 🏛 وزاري " + H(d._moh) : ""}\n📍 ${H(loc(d))}\n🔢 S/N: ${H(cl(d["سريال نمبر"]) || "—")}\n\n📝 ${H(desc)}\n\n👤 ${H(who || "بدون اسم")}${phone ? " — 📞 " + H(phone) : ""}`;
+  const cap = `🚨 <b>بلاغ عطل جديد ${num}</b> (من ملصق QR)\n🕐 ${T.date} — الساعة ${T.time}\n\n🏥 <b>${H(d._seq)}. ${H(dname(d))}</b>${d._moh ? " — 🏛 وزاري " + H(d._moh) : ""}\n📍 ${H(loc(d))}\n🔢 S/N: ${H(cl(d["سريال نمبر"]) || "—")}\n\n📝 ${H(desc)}\n\n👤 ${H(who || "بدون اسم")}${phone ? " — 📞 " + H(phone) : ""}`;
   const kb = { inline_keyboard: [[B("📋 بطاقة الجهاز", "dev:" + d._uid), B("🔴 عاطل", "st:" + d._uid + ":1")], ...(phone ? [[{ text: "💬 واتساب المبلّغ", url: "https://wa.me/" + phone.replace(/^0/, "964").replace(/^\+/, "") }]] : [])] };
   const c = await cfg();
   for (const chat of await owners()) {
