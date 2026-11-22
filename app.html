@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1110"</script>
+<script>window.APP_VERSION="2026.11.22.1116"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1131,6 +1131,16 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .lbx-g{background:#e9f7ef;color:#146c43;font-size:11px;font-weight:800;text-align:center;padding:6px 8px;border-top:2px solid #bfe5cf}
 .lbx-y{background:#fff3cf;color:#7a5a00;font-size:11px;font-weight:800;text-align:center;padding:6px 8px;border-top:2px solid #f0c24b}
 #mApp.ma-dark .lbx{box-shadow:none}
+.ma-qacts3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ma-qacts3 button{border:0;border-radius:14px;background:#ffffff26;color:#fff;font:inherit;font-weight:800;font-size:13px;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ma-qacts3 button i{font-style:normal;font-size:18px}.ma-qacts3 button.on{background:#fff;color:var(--ma-pri)}
+.ma-qspace{height:84px}
+.ma-selbar{position:absolute;z-index:30;inset-inline:12px;bottom:calc(96px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;background:#10263a;color:#fff;border-radius:20px;padding:8px;box-shadow:0 10px 30px #0006;animation:sbIn .25s ease}
+@keyframes sbIn{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.ma-selbar button{border:0;font:inherit;font-weight:800;border-radius:14px;padding:11px 12px;font-size:13.5px}
+.ma-selbar .sb-all{background:#ffffff1f;color:#fff}.ma-selbar .sb-x{background:#ffffff1f;color:#fff;width:42px;padding:11px 0}
+.ma-selbar .sb-n{flex:1;text-align:center;font-size:13px;opacity:.9}.ma-selbar .sb-n b{font-size:18px;margin-inline-end:3px}
+.ma-selbar .sb-p{background:var(--ma-pri);color:#fff;padding:11px 16px}.ma-selbar .sb-p:disabled{opacity:.4}
 
 </style>
 </head><body>
@@ -4157,10 +4167,10 @@ function renderDevices2(append){const L=filtered(),depts={};(db.devices||[]).for
   <label class="ma-sort">⇅ <select onchange="maSort(this.value)">${[['dept','حسب القسم'],['seq','حسب رقمي'],['moh','حسب الوزاري'],['name','حسب الاسم'],['status','حسب الحالة']].map(([k,t])=>`<option value="${k}" ${dsort===k?'selected':''}>${t}</option>`).join('')}</select></label>
   <button class="ma-tbtn" onclick="maShareAll()">↗ مشاركة</button></div>
  ${dview==='grid'&&S.none?`<button class="ma-tour" onclick="maTour()"><i>📸</i><span><b>${S.none} جهاز بدون صورة</b><small>صوّر كل نوع مرة واحدة فتظهر الصورة لكل أجهزته</small></span><em>ابدأ ‹</em></button>`:''}
- ${dview==='qr'?`<div class="ma-qhero"><div class="ma-qh-t"><b>🖨️ طباعة الملصقات ${qsel.size?'('+qsel.size+' محدد)':'('+L.length+' جهاز)'}</b><small>${qselMode?'اضغط على الملصقات لتحديدها، ثم اختر الطباعة':'اضغط زر الطباعة مباشرة — كل ملصق بمعلوماته وملاحظاته'}</small></div>
+ ${dview==='qr'?`<div class="ma-qhero"><div class="ma-qh-t"><b>🖨️ طباعة ملصقات الباركود</b><small id="maQInfo">${qInfo(L.length)}</small></div>
   <div class="ma-qp">${[[8,'متوسط'],[6,'أكبر'],[4,'كبير']].map(([n,t])=>`<button onclick="maQPrintN(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${n} بالصفحة</b><small>${t}</small></button>`).join('')}</div>
-  <div class="ma-qacts2"><button onclick="maScan()">📷 مسح باركود</button><button onclick="maQMode()">${qselMode?'✔️ إنهاء التحديد':'☑️ تحديد ملصقات'}</button></div></div>`:''}
- <div id="maDevList" class="ma-devs ${dview==="qr"?"qrl":dview}">${listHtml(L)||'<div class="ma-empty"><i>🔎</i><b>لا توجد نتائج</b><span>جرّب كلمة أخرى.</span></div>'}</div>`;
+  <div class="ma-qacts3"><button class="${qselMode?'on':''}" onclick="maQMode()"><i>☑️</i>${qselMode?'إنهاء التحديد':'تحديد'}</button><button onclick="maQAllSel()"><i>✅</i>تحديد الكل</button><button onclick="maScan()"><i>📷</i>مسح</button></div></div>`:''}
+ <div id="maDevList" class="ma-devs ${dview==="qr"?"qrl":dview}">${listHtml(L)||'<div class="ma-empty"><i>🔎</i><b>لا توجد نتائج</b><span>جرّب كلمة أخرى.</span></div>'}</div>${dview==='qr'&&qselMode?`<div class="ma-qspace"></div><div class="ma-selbar" id="maSelBar">${selBar()}</div>`:''}`;
  }
 let qT;window.maQ=function(v){q=v;shown=40;clearTimeout(qT);qT=setTimeout(()=>{const pos=$('maQ')?.selectionStart;renderDevices2();const i=$('maQ');if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(e){}}},140)};
 window.maSt=s=>{vib();fSt=s;shown=40;renderDevices2()};window.maDept=l=>{vib();fDept=l;shown=40;renderDevices2()};window.maClear=()=>{fSt='';fDept='';q='';renderDevices2()};
@@ -4168,9 +4178,14 @@ window.maView=v=>{vib();dview=v;LS.set('ma_dview',v);shown=40;renderDevices2()};
 window.maRefresh=()=>{try{if(tab==='devices')renderDevices2();else render()}catch(e){}};
 /* الباركود */
 window.maQSel=function(u,b){vib();qsel.has(u)?qsel.delete(u):qsel.add(u);const c=b.closest('.ma-qcard');c.classList.toggle('sel');b.textContent=qsel.has(u)?'✓':'';const p=document.querySelector('.ma-qbar .pri');if(p)p.textContent='🖨️ طباعة '+(qsel.size?qsel.size+' ملصق':'الكل ('+filtered().length+')');const a=document.querySelector('.ma-qbar button');if(a)a.textContent=qsel.size?'إلغاء التحديد':'☑️ تحديد الكل'};
+function qInfo(n){return qsel.size?'سيُطبع '+qsel.size+' ملصق محدد — اختر حجم الصفحة':'سيُطبع كل الأجهزة المعروضة ('+n+') — أو اضغط «تحديد» لاختيار أجهزة معيّنة'}
+function selBar(){const n=filtered().length,all=qsel.size&&qsel.size>=n;return `<button class="sb-all" onclick="maQAllSel()">${all?'☐ إلغاء الكل':'✅ تحديد الكل'}</button><span class="sb-n"><b>${qsel.size}</b> محدد</span><button class="sb-x" onclick="maQMode()">✕</button><button class="sb-p" ${qsel.size?'':'disabled'} onclick="maQPrintMenu()">🖨️ طباعة</button>`}
+function qUpd(){const b=document.getElementById('maSelBar');if(b)b.innerHTML=selBar();const i=document.getElementById('maQInfo');if(i)i.textContent=qInfo(filtered().length)}
+window.maQAllSel=function(){vib();const L=filtered();if(qselMode&&qsel.size>=L.length){qsel.clear()}else{qselMode=true;L.forEach(d=>qsel.add(d._uid))}renderDevices2();setTimeout(()=>toast(qsel.size?'✓ تم تحديد '+qsel.size+' جهاز':'أُلغي التحديد'),50)};
+window.maQPrintMenu=function(){if(!qsel.size){toast('حدد ملصقات أولاً',true);return}sheet(`<h3 class="ma-st">🖨️ طباعة ${qsel.size} ملصق</h3><p class="ma-hint">اختر عدد الملصقات في كل صفحة A4 — كل ملصق بمعلوماته والباركود والملاحظات.</p><div class="lbl-opts">${[[8,'8 بالصفحة','متوسط — موفّر للورق'],[6,'6 بالصفحة','أكبر — أوضح'],[4,'4 بالصفحة','كبير — للأجهزة الكبيرة']].map(([n,t,x])=>`<button onclick="maClose();maQPrintN(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${t}</b><small>${x}</small></button>`).join('')}</div>`)};
 window.maQPrintN=function(n){vib();const L=qsel.size?(db.devices||[]).filter(d=>qsel.has(d._uid)):filtered();if(!L.length){toast('لا توجد أجهزة',true);return}LS.set('lbl_per',String(n));labelsPdf(L,n)};
 window.maQMode=function(){vib();qselMode=!qselMode;if(!qselMode)qsel.clear();renderDevices2()};
-window.maQTap=function(u,el){if(!qselMode){maQR(u);return}vib();qsel.has(u)?qsel.delete(u):qsel.add(u);el.classList.toggle('sel');const t=document.querySelector('.ma-qh-t b');if(t)t.textContent='🖨️ طباعة الملصقات ('+(qsel.size?qsel.size+' محدد':filtered().length+' جهاز')+')'};
+window.maQTap=function(u,el){if(!qselMode){maQR(u);return}vib();qsel.has(u)?qsel.delete(u):qsel.add(u);el.classList.toggle('sel');qUpd()};
 window.maQAll=function(){if(qsel.size)qsel.clear();else filtered().forEach(d=>qsel.add(d._uid));renderDevices2()};
 window.maQPrint=function(){const L=qsel.size?(db.devices||[]).filter(d=>qsel.has(d._uid)):filtered();printLabelsFor(L)};
 window.maQR=function(u){const d=devBy(u);if(!d)return;sheet(`<div class="ma-qrbig"><img src="${qrImageFor(d)}" alt="QR"><b>${E(d._seq)} — ${E(deviceName(d))}</b><small style="--lc:${locColor(LOC(d))}"><i></i>${E(LOC(d))}${d._moh?' • 🏛️ '+E(d._moh):''}</small></div>
