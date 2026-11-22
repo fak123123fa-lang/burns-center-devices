@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1120"</script>
+<script>window.APP_VERSION="2026.11.22.1141"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1142,6 +1142,18 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .ma-selbar .sb-n{flex:1;text-align:center;font-size:13px;opacity:.9}.ma-selbar .sb-n b{font-size:18px;margin-inline-end:3px}
 .ma-selbar .sb-p{background:var(--ma-pri);color:#fff;padding:11px 16px}.ma-selbar .sb-p:disabled{opacity:.4}
 .pdfok{text-align:center;padding:6px 0 14px}.pdfok i{font-style:normal;font-size:52px;display:block}.pdfok h3{margin:6px 0 4px;font-size:20px}.pdfok p{margin:0;color:var(--ma-mut);font-size:13.5px}
+.ma-qp.four{grid-template-columns:repeat(4,1fr);gap:6px}.ma-qp.four button b{font-size:12.5px}.ma-qp.four button small{font-size:10px}
+.lbl-mini.nx{grid-template-columns:repeat(4,1fr);gap:2px}
+.lc-box{display:flex;align-items:center;justify-content:center;gap:18px;margin:6px 0}.lc-box button{width:52px;height:52px;border-radius:16px;border:0;background:var(--ma-card);font-size:28px;font-weight:800;color:var(--ma-pri)}
+.lc-box output{font-size:44px;font-weight:900;min-width:80px;text-align:center;color:var(--ma-pri)}
+.lc-r{width:100%;accent-color:var(--ma-pri);margin:4px 0 10px}
+.lc-q{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px}.lc-q button{border:1px solid var(--ma-line);background:var(--ma-card);border-radius:10px;padding:6px 11px;font:inherit;font-weight:800;color:inherit}
+.lc-prev{display:grid;gap:3px;width:150px;aspect-ratio:1/1.41;margin:0 auto 12px;background:#fff;border:1px solid #cfd8de;border-radius:6px;padding:6px;box-sizing:border-box}
+.lc-prev i{background:var(--ma-pri);opacity:.55;border-radius:2px}.lc-prev b{background:transparent}
+.lc-inline{display:flex;align-items:center;gap:8px;background:var(--ma-card);border-radius:14px;padding:8px 12px;margin:-4px 0 10px;font-size:13.5px;font-weight:700}.lc-inline input{width:70px;text-align:center}.lc-inline button{border:0;background:var(--ma-pri);color:#fff;border-radius:10px;padding:8px 12px;font:inherit;font-weight:800}
+.ma-rep{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px;font-size:12.5px}.ma-rep span{background:var(--ma-bg);border-radius:9px;padding:5px 9px;font-weight:700}
+.ma-rep a,.ma-rep button{border:0;background:color-mix(in srgb,var(--ma-pri) 12%,transparent);color:var(--ma-pri);border-radius:9px;padding:5px 10px;font:inherit;font-weight:800;text-decoration:none}
+.ma-fp{text-align:center;color:var(--ma-mut)}.ma-fp img{width:100%;border-radius:16px;display:block;margin-bottom:6px}
 
 </style>
 </head><body>
@@ -2092,7 +2104,7 @@ X.run=function(ds,fmt,opts={}){const D=DATASETS[ds]||DATASETS.devices;const list
  };
 X.workbookAll=function(){const sheets=[];{const _d=X.devicesDoc(db.devices,DATASETS.devices.title,false);X.__ctx={html:()=>X.pdfHtml(_d),doc:_d,title:'الملف الشامل'}}Object.entries(DATASETS).forEach(([k,D])=>{if(k==='faulty')return;const l=D.get();if(!l.length&&k!=='devices')return;const d=buildDoc(k,l,false);sheets.push({name:D.title.split('—')[0].replace('تقرير','').trim(),title:D.title,columns:d.sheet.columns,rows:d.sheet.rows})});X.xlsx(sheets,'الملف_الشامل_لنظام_الأجهزة_الطبية_'+stamp())};
 X.fromRows=function(title,cols,rows,fmt){fmt={xlsx:'xlsx',excel:'xlsx',doc:'docx',word:'docx',pdf:'pdf'}[fmt]||fmt;title=String(title||'تقرير').replace(/\.csv$/,'').replace(/_/g,' ');
- const columns=cols.map(c=>({h:c,w:/اسم|الجهاز|وصف|ملاحظ/.test(c)?26:14,tone:/الحالة|الضمان/.test(c)}));const data=rows.map(r=>cols.map(c=>r[c]??''));
+ const columns=cols.map(c=>({h:c,w:/اسم|الجهاز|وصف|ملاحظ/.test(c)?26:14,tone:/الحالة|الضمان/.test(c)}));const data=rows.map(r=>Array.isArray(r)?r.map(v=>v??''):cols.map(c=>r[c]??''));
  const doc={title,columns,rows:data,summary:[['عدد السجلات',rows.length]]};X.__ctx={html:()=>X.pdfHtml(doc),doc,title};
  if(fmt==='xlsx')X.xlsx([{name:title.slice(0,30),title,columns,rows:data}],title+'_'+stamp());
  else fmt==='docx'?X.docx(doc,title+'_'+stamp()):X.pdf(doc)};
@@ -3177,6 +3189,7 @@ window.cloudAuth=async function(){const em=$('clEmail').value.trim(),pw=$('clPas
 window.cloudPw=function(must){modal('🔑 '+(must?'اختر كلمة سر جديدة':'تغيير كلمة السر'),`${must?'<div class="notice">دخلت بكلمة سر مؤقتة. اختر الآن كلمة سرك الخاصة — لا يعرفها أحد غيرك.</div>':''}<div class="formfield"><label>كلمة السر الجديدة (6 أحرف على الأقل)</label><input class="field" id="pw1" type="password" autocomplete="new-password"></div><div class="formfield"><label>أعد كتابتها</label><input class="field" id="pw2" type="password" autocomplete="new-password"></div><div id="pwErr" style="color:var(--red);font-weight:700;min-height:20px"></div>`,`${must?'':'<button class="btn secondary" onclick="closeModal()">إلغاء</button>'}<button class="btn" id="pwGo" onclick="cloudPwSave()">حفظ كلمة السر</button>`)};
 window.cloudPwSave=async function(){const a=$('pw1').value,b=$('pw2').value,e=$('pwErr');if(a.length<6){e.textContent='6 أحرف على الأقل';return}if(a!==b){e.textContent='الكلمتان غير متطابقتين';return}
  $('pwGo').disabled=true;try{await ensureToken();await req('/auth/v1/user',{method:'PUT',body:{password:a,data:{must_change:false}}});closeModal();toast('✓ تغيّرت كلمة السر — استخدمها من الآن')}catch(x){e.textContent=x.net?'لا يوجد اتصال':/same|different/i.test(String(x.message))?'اختر كلمة مختلفة عن المؤقتة':String(x.message||'تعذّر الحفظ')}finally{const g=$('pwGo');if(g)g.disabled=false}};
+window.cloudGet=async function(path){if(!C.session)throw {message:'سجّل الدخول أولاً'};await ensureToken();return req(path)};
 window.cloudLogout=()=>{if(C.dirty&&C.role==='owner'&&!confirm('توجد تغييرات لم تُرفع بعد. تسجيل الخروج على أي حال؟'))return;C={session:null,version:0,dirty:false,role:null,last:null,proj:'jmvbxnmvoqvumsljsqff'};saveC();closeModal();setState('off');toast('تم تسجيل الخروج — البيانات باقية على هذا الجهاز')};
 window.cloudSync=()=>{closeModal();pull(true)};window.cloudForcePull=()=>{if(confirm('استبدال بيانات هذا الجهاز بنسخة الإنترنت؟')){closeModal();pull(true)}};window.cloudForcePush=()=>{closeModal();C.dirty=true;saveC();push(true)};
 window.cloudAdd=async()=>{const em=$('clAdd').value.trim();if(!em)return;try{await rpc('burns_add_member',{p_email:em,p_role:'viewer'});toast('✓ أُضيف '+em+' كمشاهد');openCloud()}catch(e){const m=String(e.message||'');toast(/user_not_found/.test(m)?'هذا البريد لم يُنشئ حسابًا بعد — اطلب منه «إنشاء حساب» أولًا':/burns_add_member/.test(m)||e.status===404?'أكمل إعداد Supabase أولًا (ملف supabase_setup.sql)':m,true)}};
@@ -3849,11 +3862,11 @@ window.devCardBlob=async function(d){const W=1080,H=1540,c=document.createElemen
  return await new Promise(r=>c.toBlob(r,'image/png'))};
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
 window.shareDevCard=async function(u){const d=db.devices.find(x=>x._uid===u);if(!d)return;toast('⏳ جاري تجهيز بطاقة الجهاز…');try{const b=await devCardBlob(d);const name='بطاقة_'+(d._seq||'')+'_'+String(deviceName(d)).replace(/[\\/:*?"<>|\s]+/g,'_')+'.png';
- if(!(await shareFiles([new File([b],name,{type:'image/png'})],devText(d),deviceName(d)))){X.__ctx={title:'بطاقة جهاز'};downloadBlob(b,name)}}catch(e){console.warn(e);toast('تعذّر إنشاء البطاقة',true)}};
+ if(!(await shareFiles([new File([b],name,{type:'image/png'})],devText(d),deviceName(d)))){XP.__ctx={title:'بطاقة جهاز'};downloadBlob(b,name)}}catch(e){console.warn(e);toast('تعذّر إنشاء البطاقة',true)}};
 window.shareDevQR=async function(u){const d=db.devices.find(x=>x._uid===u);if(!d)return;const q=QRLocal.encode(qrPayloadFor(d),window.qrEcl?qrEcl():'M'),sc=Math.max(8,Math.ceil(900/q.size)),b=4,c=document.createElement('canvas'),S=(q.size+b*2)*sc;c.width=S;c.height=S+330;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);qrStyledDraw(x,qrPayloadFor(d),qrColorFor(d),0,0,S);
  x.textAlign='center';x.direction='rtl';x.font='700 44px "IBM Plex Sans Arabic",Tahoma,sans-serif';x.fillText((d._seq?d._seq+' — ':'')+String(deviceName(d)).slice(0,34),S/2,S+70);x.font='800 34px "IBM Plex Sans Arabic",Tahoma,sans-serif';x.fillStyle='#b3261e';['إذا كنت تواجه مشكلة، امسح الباركود بكاميرا هاتفك','وأبلغ الفريق فورًا لمعالجة المشكلة'].forEach((l,i)=>x.fillText(l,S/2,S+140+i*48));x.fillStyle='#7a5a00';x.font='700 30px "IBM Plex Sans Arabic",Tahoma,sans-serif';x.fillText('يرجى المحافظة عليه من التلف والعبث وعدم إيصال أي سوائل إليه',S/2,S+270);
  const bl=await new Promise(r=>c.toBlob(r,'image/png'));const name='QR_'+(d._seq||'')+'.png';if(!(await shareFiles([new File([bl],name,{type:'image/png'})],deviceName(d),'QR')))
- {X.__ctx={title:'QR'};downloadBlob(bl,name)}};
+ {XP.__ctx={title:'QR'};downloadBlob(bl,name)}};
 
 /* مشاركة ملف مباشرة (Excel/PDF) بعد إنشائه */
 const _dl=window.downloadBlob;window.downloadBlob=function(blob,name){if(window.__shareNext){window.__shareNext=0;const f=new File([blob],name,{type:blob.type||'application/octet-stream'});return shareFiles([f],'',name).then(ok=>{if(!ok)_dl(blob,name)})}return _dl.apply(this,arguments)};
@@ -3863,7 +3876,7 @@ window.shareListText=function(list){const by={};list.forEach(d=>{const l=cl(d['�
 
 /* نسخة احتياطية مع الصور + استيرادها */
 window.exportWithPhotos=async function(){toast('⏳ جاري تجميع البيانات والصور…');try{const ph=await PH.dump();const books=JSON.parse(localStorage.getItem('medtech_electronic_books_v1')||'[]').map(b=>{const c={...b};delete c.image;return c});const data=JSON.parse(JSON.stringify(db));(data.devices||[]).forEach(d=>{delete d._photos});data.books=books;
- const blob=new Blob([JSON.stringify({app:'medtech_system_v3',exportedAt:new Date().toISOString(),data,photos:ph})],{type:'application/json'});X.__ctx={title:'نسخة مع الصور'};downloadBlob(blob,'بيانات_الأجهزة_مع_الصور_'+new Date().toISOString().slice(0,10)+'.json')}catch(e){toast('تعذّر التصدير',true)}};
+ const blob=new Blob([JSON.stringify({app:'medtech_system_v3',exportedAt:new Date().toISOString(),data,photos:ph})],{type:'application/json'});XP.__ctx={title:'نسخة مع الصور'};downloadBlob(blob,'بيانات_الأجهزة_مع_الصور_'+new Date().toISOString().slice(0,10)+'.json')}catch(e){toast('تعذّر التصدير',true)}};
 const _rj=window.restoreJSON;if(_rj)window.restoreJSON=function(e){try{const f=e&&e.target&&e.target.files&&e.target.files[0];if(f&&f.size>0)f.text().then(t=>{try{const j=JSON.parse(t);if(j&&j.photos)PH.load(j.photos).then(n=>{if(n){toast('✓ استُعيدت صور '+n+' جهاز/نوع');window.maRefresh&&maRefresh()}})}catch(x){}})}catch(x){}return _rj.apply(this,arguments)};
 })();
 
@@ -3905,6 +3918,7 @@ window.printLabelsFor=function(list){list=(list||[]).filter(Boolean);if(!list.le
  UI(`<h3 class="ma-st">🖨️ طباعة ملصقات الباركود — ${list.length} جهاز</h3>
  <p class="ma-hint">كل ملصق فيه: اسم الجهاز، تسلسلك، تسلسل الوزاري، القسم، الشركة، الموديل، S/N، التنصيب والضمان، مع الباركود وعبارة تنبيه.</p>
  <div class="lbl-opts">${[[8,'8 بالصفحة','حجم متوسط — موفّر للورق'],[6,'6 بالصفحة','حجم أكبر — أوضح للمسح'],[4,'4 بالصفحة','كبير — للأجهزة الكبيرة']].map(([n,t,s])=>`<button class="${per===n?'on':''}" onclick="lblGo(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${t}</b><small>${s}</small></button>`).join('')}</div>
+ <div class="lc-inline"><span>عدد آخر (1–50):</span><input id="lblCus" type="number" min="1" max="50" value="${E(LS.get('lbl_custom','12'))}"><button onclick="lblGo(Math.max(1,Math.min(50,+document.getElementById('lblCus').value||12)))">طباعة</button></div>
  <label class="ma-lbl">عبارة التنبيه أسفل كل ملصق</label><input id="lblNote" value="${E(LS.get('lbl_note2',NOTE_DEF))}">
 `)};
 window.uiClose2=UIclose;
@@ -3915,12 +3929,12 @@ function wrap2(c,t,w){const ws=String(t).split(' '),L=[];let l='';ws.forEach(s=>
 function txt(c,t,x,y,align){c.direction=isLat(t)?'ltr':'rtl';c.textAlign=align||'right';c.fillText(t,x,y);c.direction='rtl'}
 const tick=()=>new Promise(r=>setTimeout(r,0));
 window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.length+' ملصق…');await tick();
- const W=2480,H=3508,M=90,HD=190,FT=120,G=36,cols=per===4?1:2,rows=per===8?4:per===6?3:4,pagesN=Math.ceil(list.length/per);
- const lw=(W-2*M-(cols-1)*G)/cols,lh=(H-2*M-HD-FT-40-(rows-1)*G)/rows,f=Math.min(1.3,lh/700);
+ per=Math.max(1,Math.min(50,per|0||8));const W=2480,H=3508,M=90,HD=190,FT=120,G=per>12?22:36,[cols,rows]=gridFor(per,W-2*M,H-2*M-HD-FT-40,G),pagesN=Math.ceil(list.length/per);
+ const lw=(W-2*M-(cols-1)*G)/cols,lh=(H-2*M-HD-FT-40-(rows-1)*G)/rows,f=Math.min(1.3,lh/700),FULL=lw>=1000&&lh>=560;
  const B=(window.getBranding&&getBranding())||{};const center=B.center||'المركز التخصصي للحروق — الديوانية';const note=LS.get('lbl_note2',NOTE_DEF);
  /* قماش واحد يُعاد استخدامه بدقة 210dpi — خفيف على ذاكرة الهاتف */
- const SC=0.7,cv=document.createElement('canvas');cv.width=Math.round(W*SC);cv.height=Math.round(H*SC);const c=cv.getContext('2d');const jp=[];let first='';
- const flush=async()=>{if(!first)first=cv.toDataURL('image/jpeg',0.6);const b=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.8));jp.push(new Uint8Array(await b.arrayBuffer()));await tick()};
+ const SC=per>12?1:0.7,cv=document.createElement('canvas');cv.width=Math.round(W*SC);cv.height=Math.round(H*SC);const c=cv.getContext('2d');const jp=[];let first='';
+ const flush=async()=>{if(!first)first=cv.toDataURL('image/jpeg',0.85);const b=await new Promise(r=>cv.toBlob(r,'image/jpeg',per>12?0.85:0.8));jp.push(new Uint8Array(await b.arrayBuffer()));await tick()};
  for(let i=0;i<list.length;i++){const k=i%per,pg=Math.floor(i/per);
   if(k===0){if(i>0)await flush();c.setTransform(SC,0,0,SC,0,0);c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';c.direction='rtl';
    /* رأس الصفحة */
@@ -3931,6 +3945,7 @@ window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.
    c.fillStyle='#e3eaee';c.fillRect(M,H-M-FT+10,W-2*M,3);c.fillStyle='#0b4f57';c.font=`700 34px ${FONT}`;c.textAlign='center';c.fillText('وحدة إدارة الأجهزة الطبية — '+center,W/2,H-M-FT+60);
    c.fillStyle='#8a99a6';c.font=`500 26px ${FONT}`;c.fillText('صيانتك الدورية تحمي المريض • امسح الرمز لعرض بطاقة الجهاز والإبلاغ عن أي عطل • مؤسسة الفرقان البرمجية — رصانة، دقة، أمان',W/2,H-M-FT+108)}
   const d=list[i],col=(window.locColor&&locColor(LOC(d)))||'#0f8a7e',ci=k%cols,ri=Math.floor(k/cols),x=W-M-(ci+1)*lw-ci*G,y=M+HD+40+ri*(lh+G);
+  if(!FULL){drawCompact(c,d,col,x,y,lw,lh);if(i%6===5)await tick();continue}
   /* إطار الملصق */
   c.fillStyle='#fff';rr(c,x,y,lw,lh,34);c.fill();c.lineWidth=6;c.strokeStyle=col;c.stroke();
   const bh=Math.round(92*f);c.save();rr(c,x,y,lw,lh,34);c.clip();c.fillStyle=col;c.fillRect(x,y,lw,bh);
@@ -3958,6 +3973,24 @@ window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.
  await flush();cv.width=1;cv.height=1;
  try{const blob=jpegPdf(jp,Math.round(W*SC),Math.round(H*SC));const name='ملصقات_الباركود_'+per+'_بالصفحة_'+today()+'.pdf';window.__lastLbl={blob,name,n:list.length,p:jp.length,first};pdfReady(blob,name,list.length,jp.length)}catch(e){console.warn(e);toast('تعذّر إنشاء الملصقات',true)}
  return [{toDataURL:()=>first}]};
+/* أفضل تقسيم للصفحة لأي عدد من 1 إلى 50 */
+function gridFor(n,AW,AH,G){let best=null;for(let c=1;c<=8;c++){const r=Math.ceil(n/c);if(r>12)continue;const w=(AW-(c-1)*G)/c,h=(AH-(r-1)*G)/r;const tgt=n<=8?1.6:n<=20?1.25:1.0;const waste=(c*r-n)/(c*r);const sc=Math.abs(Math.log((w/h)/tgt))+waste*1.5;if(!best||sc<best[0])best=[sc,c,r]}return [best[1],best[2]]}
+window.lblGrid=n=>gridFor(n,2300,2978,n>12?22:36);
+/* ملصق مختصر للأعداد الكبيرة: باركود + رقم + اسم + قسم + تنبيه قصير */
+function drawCompact(c,d,col,x,y,lw,lh){const r=Math.min(26,Math.min(lw,lh)*.08);c.fillStyle='#fff';rr(c,x,y,lw,lh,r);c.fill();c.lineWidth=Math.max(3,Math.min(6,lw/180));c.strokeStyle=col;c.stroke();
+ const fs=Math.max(15,Math.min(34,Math.min(lw/13,lh/9))),bh=Math.max(fs*1.7,Math.min(lh*.16,72)),ft=lh>=230?Math.max(fs*1.3,lh*.1):0;
+ c.save();rr(c,x,y,lw,lh,r);c.clip();c.fillStyle=col;c.fillRect(x,y,lw,bh);if(ft){c.fillStyle='#fff3cf';c.fillRect(x,y+lh-ft,lw,ft)}c.restore();
+ /* الشريط: الرقم + اسم الوحدة */
+ c.textBaseline='middle';c.font=`900 ${fs*1.15}px ${FONT}`;const sn=String(d._seq||'—'),sw=c.measureText(sn).width+fs*.9;c.fillStyle='#fff';rr(c,x+fs*.4,y+bh*.16,sw,bh*.68,bh*.18);c.fill();c.fillStyle=col;c.textAlign='center';c.fillText(sn,x+fs*.4+sw/2,y+bh/2+1);
+ const tw=lw-sw-fs*1.4;if(tw>fs*4){c.fillStyle='#fff';c.font=`800 ${fs*.78}px ${FONT}`;txt(c,fit(c,'وحدة إدارة الأجهزة الطبية',tw),x+lw-fs*.5,y+bh/2)}
+ const by=y+bh+fs*.35,bb=y+lh-ft-fs*.3,ah=bb-by;const wide=lw/ah>1.35;
+ const info=[['n',deviceName(d)],['b','تسلسلي '+(d._seq||'—')+'  •  الوزاري '+(d._moh||'—')],['l',LOC(d)],['s',cl(d['سريال نمبر'])?'S/N '+cl(d['سريال نمبر']):'']].filter(v=>v[1]);
+ if(wide){const qa=Math.min(ah,lw*.46);qrStyledDraw(c,qrPayloadFor(d),col,x+fs*.4,by+(ah-qa)/2,qa,qa<420);const ix=x+lw-fs*.5,iw=lw-qa-fs*1.4;let yy=by+fs*.75;
+  info.forEach(([k,v])=>{if(yy>bb-fs*.4)return;if(k==='n'){c.fillStyle='#10202e';c.font=`800 ${fs*1.02}px ${FONT}`;wrap2(c,v,iw).forEach(l=>{if(yy<bb-fs*.4){txt(c,l,ix,yy);yy+=fs*1.25}})}else{c.fillStyle=k==='b'?col:'#5b6b78';c.font=`${k==='b'?800:600} ${fs*.78}px ${FONT}`;txt(c,fit(c,v,iw),ix,yy);yy+=fs*1.12}})}
+ else{const lines=Math.min(2,Math.max(1,Math.floor((ah*.32)/(fs*1.1))));const qa=Math.min(lw-fs*.8,ah-lines*fs*1.15-fs*.2);const qx=x+(lw-qa)/2;qrStyledDraw(c,qrPayloadFor(d),col,qx,by,qa,qa<420);let yy=by+qa+fs*.7;
+  c.textAlign='center';c.direction='rtl';c.fillStyle='#10202e';c.font=`800 ${fs*.9}px ${FONT}`;c.fillText(fit(c,deviceName(d),lw-fs*.6),x+lw/2,yy);yy+=fs*1.1;
+  if(lines>1&&yy<bb){c.fillStyle=col;c.font=`800 ${fs*.74}px ${FONT}`;c.fillText(fit(c,'الوزاري '+(d._moh||'—')+' • '+LOC(d),lw-fs*.6),x+lw/2,yy)}}
+ if(ft){c.fillStyle='#7a5a00';c.textAlign='center';c.direction='rtl';c.font=`800 ${Math.min(fs*.7,ft*.5)}px ${FONT}`;c.fillText(fit(c,'⚠ امسح الباركود للإبلاغ عن عطل • حافظ عليه من التلف والسوائل',lw-fs*.6),x+lw/2,y+lh-ft/2+1)}}
 /* ملف PDF خفيف من صور JPEG مباشرة (بدون مكتبات) */
 function jpegPdf(jpgs,wpx,hpx){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const add=x=>{const u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length};
  const PW=595.28,PH=841.89,n=jpgs.length,obj=(i,body)=>{offs[i]=len;add(i+' 0 obj\n');body();add('\nendobj\n')};
@@ -4038,7 +4071,7 @@ window.evalOne=function(u){const d=(db.devices||[]).find(x=>x._uid===u);if(!d)re
  <div class="ma-card">${e.parts.map(p=>`<div class="ev-part"><span>${E(p[0])}</span><b>${E(p[1])}</b><em>${p[2]?'−'+p[2]:'✓'}</em></div>`).join('')}</div><p class="ma-hint">كل عامل يخصم نقاطًا من 100: العمر مقارنة بالعمر الافتراضي، الأعطال، أيام التوقف، الحالة، الضمان، وفحص السلامة.</p>
  ${window.maDev?`<button class="ma-link" onclick="maDev('${u}')">← رجوع للجهاز</button>`:''}`)};
 window.evalExport=function(fmt){const D=(window.__evD||[]).slice().sort((a,b)=>a.e.score-b.e.score);const rows=D.map(({d,e})=>[d._seq,d._moh||'',deviceName(d),LOC(d),cl(d['الموديــل']),cl(d['سريال نمبر']),statusText(d),e.score,e.grade,e.rec]);
- X.fromRows('تقييم الأجهزة الطبية',['ت برنامجي','ت الوزاري','الجهاز','القسم','الموديل','S/N','الحالة','الدرجة','التقييم','التوصية'],rows,fmt)};
+ XP.fromRows('تقييم الأجهزة الطبية',['ت برنامجي','ت الوزاري','الجهاز','القسم','الموديل','S/N','الحالة','الدرجة','التقييم','التوصية'],rows,fmt)};
 
 /* =========================================================
    4) مركز التقارير — كل التقارير المهمة بضغطة
@@ -4073,11 +4106,11 @@ window.qrStyledSVG=function(text,color){const k=text+'|'+color;if(QC.has(k))retu
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" shape-rendering="geometricPrecision"><rect width="${S}" height="${S}" fill="#fff"/><g fill="${ink}">${b}</g>${eye(0,0)}${eye(n-7,0)}${eye(0,n-7)}${logo}</svg>`;
  const u='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);if(QC.size>400)QC.clear();QC.set(k,u);return u};
 /* رسم على canvas (للملصقات المطبوعة) */
-window.qrStyledDraw=function(c,text,color,x,y,size){const {q,n,inF,inL,L,lo}=plan(text),B=3,S=n+B*2,s=size/S,ink='#10263a';c.save();c.fillStyle='#fff';c.fillRect(x,y,size,size);c.fillStyle=ink;
+window.qrStyledDraw=function(c,text,color,x,y,size,plain){const P0=plan(text),{q,n,inF,L,lo}=P0,inL=plain?(()=>false):P0.inL,B=3,S=n+B*2,s=size/S,ink='#10263a';c.save();c.fillStyle='#fff';c.fillRect(x,y,size,size);c.fillStyle=ink;
  const rr2=(X,Y,W,H,R)=>{c.beginPath();c.moveTo(X+R,Y);c.arcTo(X+W,Y,X+W,Y+H,R);c.arcTo(X+W,Y+H,X,Y+H,R);c.arcTo(X,Y+H,X,Y,R);c.arcTo(X,Y,X+W,Y,R);c.closePath()};
- for(let r=0;r<n;r++)for(let cc=0;cc<n;cc++)if(q.modules[r][cc]&&!inF(r,cc)&&!inL(r,cc)){rr2(x+(cc+B+0.06)*s,y+(r+B+0.06)*s,0.88*s,0.88*s,0.38*s);c.fill()}
+ for(let r=0;r<n;r++)for(let cc=0;cc<n;cc++)if(q.modules[r][cc]&&!inF(r,cc)&&!inL(r,cc)){if(plain)c.fillRect(Math.floor(x+(cc+B)*s),Math.floor(y+(r+B)*s),Math.ceil(s),Math.ceil(s));else{rr2(x+(cc+B+0.06)*s,y+(r+B+0.06)*s,0.88*s,0.88*s,0.38*s);c.fill()}}
  const eye=(ex,ey)=>{c.strokeStyle=color;c.lineWidth=s;rr2(x+(ex+B+0.5)*s,y+(ey+B+0.5)*s,6*s,6*s,1.8*s);c.stroke();c.fillStyle=ink;rr2(x+(ex+B+2)*s,y+(ey+B+2)*s,3*s,3*s,0.9*s);c.fill()};eye(0,0);eye(n-7,0);eye(0,n-7);
- const lx=(lo+B-0.5)*s,ls=L*s,cx=x+lx+ls/2,cy=y+lx+ls/2,a=ls*0.16,w=ls*0.5;c.fillStyle='#fff';rr2(x+lx,y+lx,ls,ls,ls*0.28);c.fill();c.fillStyle=color;rr2(x+lx+ls*0.12,y+lx+ls*0.12,ls*0.76,ls*0.76,ls*0.22);c.fill();c.fillStyle='#fff';rr2(cx-a/2,cy-w/2,a,w,a*0.3);c.fill();rr2(cx-w/2,cy-a/2,w,a,a*0.3);c.fill();c.restore()};
+ if(plain){c.restore();return}const lx=(lo+B-0.5)*s,ls=L*s,cx=x+lx+ls/2,cy=y+lx+ls/2,a=ls*0.16,w=ls*0.5;c.fillStyle='#fff';rr2(x+lx,y+lx,ls,ls,ls*0.28);c.fill();c.fillStyle=color;rr2(x+lx+ls*0.12,y+lx+ls*0.12,ls*0.76,ls*0.76,ls*0.22);c.fill();c.fillStyle='#fff';rr2(cx-a/2,cy-w/2,a,w,a*0.3);c.fill();rr2(cx-w/2,cy-a/2,w,a,a*0.3);c.fill();c.restore()};
 const col=d=>(window.locColor&&locColor((String(d['مكان تنصيب الجهاز']||'').trim())||'غير محدد'))||'#0f8a7e';
 window.qrImageFor=function(d){try{return qrStyledSVG(qrPayloadFor(d),col(d))}catch(e){console.warn(e);return ''}};
 window.qrColorFor=col;
@@ -4086,6 +4119,29 @@ window.qrColorFor=col;
 /* كل الملفات (PDF / Excel / Word) في واجهة الهاتف: نافذة «الملف جاهز» بدل فتح صفحة فارغة */
 (function(){const _dl=window.downloadBlob;window.downloadBlob=function(blob,name){if(window.__shareNext||!document.body.classList.contains('mapp'))return _dl.apply(this,arguments);
  try{pdfReady(blob,name,0,0,'✓ الملف جاهز')}catch(e){return _dl.apply(this,arguments)}}})();
+
+/* =========================================================
+   6) الجرد السنوي — ملف مرتب قابل للتعديل (Excel أو Word أو PDF)
+   ========================================================= */
+(function(){
+const cl=v=>{const s=String(v??'').replace(/\s+/g,' ').trim();return /[\p{L}\p{N}]/u.test(s)?s:''};
+const LOC=d=>cl(d['مكان تنصيب الجهاز'])||'غير محدد';
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+window.annualInv=function(){const y=new Date().getFullYear(),D=db.devices||[],by={};D.forEach(d=>{const l=LOC(d);by[l]=(by[l]||0)+1});const st={};D.forEach(d=>{const s=statusText(d);st[s]=(st[s]||0)+1});
+ uiSheet(`<h3 class="ma-st">📋 الجرد السنوي للأجهزة الطبية</h3>
+ <div class="xu-sum"><div class="ok"><b>${D.length}</b><span>جهاز</span></div><div class="chg"><b>${Object.keys(by).length}</b><span>قسم</span></div><div class="add"><b>${st['عاطل']||0}</b><span>عاطل</span></div></div>
+ <label class="ma-lbl">سنة الجرد</label><input id="aiY" type="number" value="${y}">
+ <label class="ma-lbl">النطاق</label><select id="aiS" class="field"><option value="">كل الأقسام (${D.length})</option>${Object.entries(by).sort((a,b)=>a[0].localeCompare(b[0],'ar')).map(([l,n])=>`<option value="${E(l)}">${E(l)} (${n})</option>`).join('')}</select>
+ <p class="ma-hint">الملف مرتب حسب القسم، وفيه: التسلسل، تسلسل الوزاري، الجهاز، الشركة، الموديل، S/N، سنة التنصيب، العمر، الحالة، الضمان، وخانة فارغة لملاحظات لجنة الجرد. يمكنك تعديله أو الإضافة إليه بعد فتحه.</p>
+ <div class="ma-acts three"><button onclick="annualGo('xlsx')"><i>📊</i>Excel</button><button onclick="annualGo('docx')"><i>📝</i>Word</button><button onclick="annualGo('pdf')"><i>📄</i>PDF</button></div>`)};
+window.annualGo=function(fmt){const y=+(document.getElementById('aiY')||{}).value||new Date().getFullYear(),sc=(document.getElementById('aiS')||{}).value||'';
+ const L=(db.devices||[]).filter(d=>!sc||LOC(d)===sc).slice().sort((a,b)=>LOC(a).localeCompare(LOC(b),'ar')||(+a._seq-+b._seq));
+ const age=d=>{const t=Date.parse(cl(d['تأريخ التنصيب']));return isNaN(t)?'':String(Math.max(0,y-new Date(t).getFullYear()))};
+ const war=d=>{const t=Date.parse(cl(d['تأريخ انتهاء الضمان']));return isNaN(t)?'غير مسجل':t<Date.now()?'منتهي':'ساري'};
+ let i=0;const rows=L.map(d=>[++i,d._seq,d._moh||'',deviceName(d),cl(d['الشركه المصنعة']),cl(d['الموديــل']),cl(d['سريال نمبر']),LOC(d),cl(d['تأريخ التنصيب']).slice(0,4),age(d),statusText(d),war(d),'']);
+ uiClose2();toast('⏳ جاري تجهيز الجرد السنوي…');
+ setTimeout(()=>XP.fromRows('الجرد السنوي للأجهزة الطبية لسنة '+y+(sc?' — '+sc:''),['ت','تسلسلي','ت الوزاري','اسم الجهاز','الشركة المصنعة','الموديل','الرقم التسلسلي S/N','القسم','سنة التنصيب','العمر (سنة)','الحالة','الضمان','ملاحظات لجنة الجرد'],rows,fmt),40)};
+})();
 
 </script>
 <script>
@@ -4152,14 +4208,16 @@ function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div 
  <div class="ma-hero-s">${[['ok','صالح',c.ok,'صالح'],['bad','عاطل',c.bad,'عاطل'],['warn','صيانة',c.warn,'قيد الصيانة']].map(([k,l,n,f])=>`<button onclick="maGoSt('${f}')"><b data-n="${n}">${n}</b><span><i class="${k}"></i>${l}</span></button>`).join('')}</div></section>
  <section class="ma-tiles"><div class="ma-tiles-h"><b>الأدوات الرئيسية</b><small>اضغط للبدء</small></div><div class="ma-tgrid">${[['🏥','الأجهزة',"maView2('list')",'#0f8a7e','#14b8a6'],['📋','الجرد Excel','maInv()','#1d7a45','#34c26f'],['🔳','الباركود',"maView2('qr')",'#5b3cc4','#8b6cf0'],['🏷️','طباعة الملصقات','printLabelsFor(db.devices)','#b4235f','#ec5f95'],
  ['🖨️','طباعة الجرد',"XP.run('devices','pdf',{})",'#2a5fb4','#5b8def'],['📑','التقارير','reportsHub()','#0b6f8a','#2bb3d6'],['🚨','بلاغ عطل','maFault()','#b3261e','#ef6352'],['🔧','صيانة','maMaint()','#0b7a70','#2fc0b0'],
- ['📥','تحديث من Excel','xlsUpdate()','#7a4b0b','#e39a2d'],['⭐','تقييم الأجهزة','evalView()','#a17700','#f2c21b'],['📷','مسح باركود','maScan()','#37474f','#78909c'],['↗','مشاركة','maShareAll()','#4527a0','#7e57c2']].map(([i,t,f,a,b])=>`<button onclick="${f}" style="--a:${a};--b:${b}"><i>${i}</i><span>${t}</span></button>`).join('')}</div></section>
+ ['📥','تحديث من Excel','xlsUpdate()','#7a4b0b','#e39a2d'],['⭐','تقييم الأجهزة','evalView()','#a17700','#f2c21b'],['📷','مسح باركود','maScan()','#37474f','#78909c'],['↗','مشاركة','maShareAll()','#4527a0','#7e57c2'],
+ ['🗓️','الجرد السنوي','annualInv()','#00695c','#26a69a'],['📢','البلاغات',"maTab('work')",'#c62828','#ff7043'],['🛡️','الضمانات','rpWarr()','#1565c0','#42a5f5'],['🤖','بوت تلغرام','maBot()','#0277bd','#29b6f6']].map(([i,t,f,a,b])=>`<button onclick="${f}" style="--a:${a};--b:${b}"><i>${i}</i><span>${t}</span></button>`).join('')}</div></section>
  <section class="ma-week"><div class="ma-week-h"><b>آخر 7 أيام</b><span><i class="f"></i>أعطال <i class="m"></i>صيانات</span></div><div class="ma-bars">${wk.map((x,i)=>`<div><span><i class="f" style="height:${Math.round(x.n/mx*100)}%"></i><i class="m" style="height:${Math.round(x.m/mx*100)}%"></i></span><small>${dn[new Date(x.d).getDay()]}</small></div>`).join('')}</div></section>
  <h3 class="ma-h">يحتاج انتباهك ${items.length?`<em>${items.length}</em>`:''}</h3>
  ${items.length?`<div class="ma-list">${items.map(x=>`<div class="ma-item ${x.c}"><i>${x.i}</i><div><b>${E(x.t)}</b><small>${E(x.s)}</small></div><button onclick="${x.a}">${x.b}</button></div>`).join('')}</div>`:`<div class="ma-empty"><i>✅</i><b>كل شيء تمام</b><span>لا بلاغات مفتوحة ولا صيانة مستحقة.</span></div>`}`}
 window.maImport=function(){let i=document.getElementById('maImpIn');if(!i){i=document.createElement('input');i.type='file';i.id='maImpIn';i.accept='.json,application/json';i.hidden=true;i.onchange=e=>{try{restoreJSON(e)}catch(x){toast('تعذّر قراءة الملف',true)}setTimeout(()=>{tab='home';render()},700)};document.body.appendChild(i)}i.value='';i.click()};
 window.maExport=function(){try{const books=JSON.parse(localStorage.getItem('medtech_electronic_books_v1')||'[]').map(b=>{const c={...b};delete c.image;return c});const data=JSON.parse(JSON.stringify(db));(data.devices||[]).forEach(d=>{delete d._photos});data.books=books;
- const blob=new Blob([JSON.stringify({app:'medtech_system_v3',exportedAt:new Date().toISOString(),data})],{type:'application/json'});X.__ctx={title:'نسخة البيانات'};downloadBlob(blob,'بيانات_الأجهزة_'+todayS()+'.json')}catch(e){toast('تعذّر التصدير',true)}};
+ const blob=new Blob([JSON.stringify({app:'medtech_system_v3',exportedAt:new Date().toISOString(),data})],{type:'application/json'});XP.__ctx={title:'نسخة البيانات'};downloadBlob(blob,'بيانات_الأجهزة_'+todayS()+'.json')}catch(e){toast('تعذّر التصدير',true)}};
 window.maEngWa=function(){const cur=localStorage.getItem('eng_wa')||'';const v=prompt('رقم واتساب الذي تصله البلاغات عندما لا يتوفر الإنترنت للخادم (مثال 07801234567).\nيُضاف للملصقات التي تطبعها من الآن.',cur);if(v===null)return;const n=v.replace(/[^\d]/g,'');const nn=n?(n.startsWith('0')?'964'+n.slice(1):n):'';localStorage.setItem('eng_wa',nn);db.engWa=nn;saveDB();toast(n?'✓ حُفظ الرقم — أعد طباعة الملصقات ليظهر فيها':'حُذف الرقم');render()};
+window.maBot=()=>{try{openBot()}catch(e){toast('سجّل الدخول أولاً من ☁️',true)}};
 window.maView2=v=>{dview=v;LS.set('ma_dview',v);maTab('devices')};
 window.maGoSt=function(s){fSt=s;fDept='';q='';maTab('devices')};
 
@@ -4196,7 +4254,7 @@ function renderDevices2(append){const L=filtered(),depts={};(db.devices||[]).for
   <button class="ma-tbtn" onclick="maShareAll()">↗ مشاركة</button></div>
  ${dview==='grid'&&S.none?`<button class="ma-tour" onclick="maTour()"><i>📸</i><span><b>${S.none} جهاز بدون صورة</b><small>صوّر كل نوع مرة واحدة فتظهر الصورة لكل أجهزته</small></span><em>ابدأ ‹</em></button>`:''}
  ${dview==='qr'?`<div class="ma-qhero"><div class="ma-qh-t"><b>🖨️ طباعة ملصقات الباركود</b><small id="maQInfo">${qInfo(L.length)}</small></div>
-  <div class="ma-qp">${[[8,'متوسط'],[6,'أكبر'],[4,'كبير']].map(([n,t])=>`<button onclick="maQPrintN(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${n} بالصفحة</b><small>${t}</small></button>`).join('')}</div>
+  <div class="ma-qp four">${[[8,'متوسط'],[6,'أكبر'],[4,'كبير']].map(([n,t])=>`<button onclick="maQPrintN(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${n} بالصفحة</b><small>${t}</small></button>`).join('')}<button onclick="maQCustom()"><span class="lbl-mini nx">${'<i></i>'.repeat(20)}</span><b>عدد آخر</b><small>من 1 إلى 50</small></button></div>
   <div class="ma-qacts3"><button class="${qselMode?'on':''}" onclick="maQMode()"><i>☑️</i>${qselMode?'إنهاء التحديد':'تحديد'}</button><button onclick="maQAllSel()"><i>✅</i>تحديد الكل</button><button onclick="maScan()"><i>📷</i>مسح</button></div></div>`:''}
  <div id="maDevList" class="ma-devs ${dview==="qr"?"qrl":dview}">${listHtml(L)||'<div class="ma-empty"><i>🔎</i><b>لا توجد نتائج</b><span>جرّب كلمة أخرى.</span></div>'}</div>${dview==='qr'&&qselMode?`<div class="ma-qspace"></div><div class="ma-selbar" id="maSelBar">${selBar()}</div>`:''}`;
  }
@@ -4211,6 +4269,12 @@ function selBar(){const n=filtered().length,all=qsel.size&&qsel.size>=n;return `
 function qUpd(){const b=document.getElementById('maSelBar');if(b)b.innerHTML=selBar();const i=document.getElementById('maQInfo');if(i)i.textContent=qInfo(filtered().length)}
 window.maQAllSel=function(){vib();const L=filtered();if(qselMode&&qsel.size>=L.length){qsel.clear()}else{qselMode=true;L.forEach(d=>qsel.add(d._uid))}renderDevices2();setTimeout(()=>toast(qsel.size?'✓ تم تحديد '+qsel.size+' جهاز':'أُلغي التحديد'),50)};
 window.maQPrintMenu=function(){if(!qsel.size){toast('حدد ملصقات أولاً',true);return}sheet(`<h3 class="ma-st">🖨️ طباعة ${qsel.size} ملصق</h3><p class="ma-hint">اختر عدد الملصقات في كل صفحة A4 — كل ملصق بمعلوماته والباركود والملاحظات.</p><div class="lbl-opts">${[[8,'8 بالصفحة','متوسط — موفّر للورق'],[6,'6 بالصفحة','أكبر — أوضح'],[4,'4 بالصفحة','كبير — للأجهزة الكبيرة']].map(([n,t,x])=>`<button onclick="maClose();maQPrintN(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${t}</b><small>${x}</small></button>`).join('')}</div>`)};
+window.maQCustom=function(){const v=+LS.get('lbl_custom','12');sheet(`<h3 class="ma-st">🔢 عدد الملصقات في الصفحة</h3><p class="ma-hint">اختر أي عدد من 1 إلى 50. الأعداد الكبيرة تطبع ملصقًا مختصرًا (باركود + رقم + اسم + قسم + تنبيه) ليبقى الباركود واضحًا.</p>
+ <div class="lc-box"><button onclick="maQCv(-1)">−</button><output id="lcN">${v}</output><button onclick="maQCv(1)">+</button></div><input id="lcR" type="range" min="1" max="50" value="${v}" oninput="maQCv(0,this.value)" class="lc-r">
+ <div class="lc-q">${[1,2,4,10,12,20,24,30,40,50].map(n=>`<button onclick="maQCv(0,${n})">${n}</button>`).join('')}</div><div id="lcPrev" class="lc-prev"></div>
+ <button class="ma-save" onclick="maQCgo()">🖨️ طباعة <span id="lcT">${v}</span> بالصفحة</button>`);maQCv(0,v)};
+window.maQCv=function(dlt,val){const r=$('lcR');let n=val!=null?+val:(+r.value)+dlt;n=Math.max(1,Math.min(50,n));r.value=n;$('lcN').textContent=n;$('lcT').textContent=n;const [c,rw]=window.lblGrid(n);$('lcPrev').style.gridTemplateColumns=`repeat(${c},1fr)`;$('lcPrev').innerHTML='<i></i>'.repeat(n)+'<b></b>'.repeat(c*rw-n)};
+window.maQCgo=function(){const n=+$('lcR').value;LS.set('lbl_custom',String(n));maClose();maQPrintN(n)};
 window.maQPrintN=function(n){vib();const L=qsel.size?(db.devices||[]).filter(d=>qsel.has(d._uid)):filtered();if(!L.length){toast('لا توجد أجهزة',true);return}LS.set('lbl_per',String(n));labelsPdf(L,n)};
 window.maQMode=function(){vib();qselMode=!qselMode;if(!qselMode)qsel.clear();renderDevices2()};
 window.maQTap=function(u,el){if(!qselMode){maQR(u);return}vib();qsel.has(u)?qsel.delete(u):qsel.add(u);el.classList.toggle('sel');qUpd()};
@@ -4349,10 +4413,13 @@ window.maSaveDev=async function(u){const g=id=>($(id)?.value||'').trim();const n
 window.maAdd=function(){vib();sheet(`<h3 class="ma-st">ماذا تريد أن تضيف؟</h3><div class="ma-addgrid">${[['🚨','بلاغ عطل','maFault()','#c0392b'],['🔧','صيانة','maMaint()','#0f8a7e'],['🏥','جهاز جديد','maEdit()','#2f6fd6'],['📝','كتاب رسمي',"maFull('letters')",'#7451c9']].map(([i,t,f,c])=>`<button onclick="${f}" style="--c:${c}"><i>${i}</i><b>${t}</b></button>`).join('')}</div>`)};
 
 /* ---------------- العمل ---------------- */
+function repInfo(f){const nm=f.reporterName||'',ph=f.reporterPhone||'';if(!nm&&!ph&&!f.photoId)return f.reporter?`<div class="ma-rep"><span>👤 ${E(f.reporter)}</span></div>`:'';const intl=ph.replace(/^0/,'964');
+ return `<div class="ma-rep"><span>👤 ${E(nm||'—')}</span>${ph?`<a href="tel:${E(ph)}">📞 ${E(ph)}</a><a href="https://wa.me/${E(intl)}" target="_blank" rel="noopener">💬 واتساب</a>`:''}${f.photoId?`<button onclick="maFPhoto('${E(f.photoId)}')">📷 صورة العطل</button>`:''}</div>`}
+window.maFPhoto=async function(pid){sheet(`<h3 class="ma-st">📷 صورة العطل</h3><div id="maFP" class="ma-fp">⏳ جاري التحميل…</div>`);try{const r=await cloudGet('/rest/v1/burns_fault_photos?id=eq.'+encodeURIComponent(pid)+'&select=data,created_at');const x=r&&r[0];$('maFP').innerHTML=x?`<img src="${x.data}" alt=""><small>${E(new Date(x.created_at).toLocaleString('ar-IQ'))}</small>`:'لم أجد الصورة.'}catch(e){$('maFP').textContent=e.message||'تعذّر التحميل — سجّل الدخول للحفظ الأونلاين'}};
 function renderWork(){const F=openFaults().slice().reverse(),P=pmDue(),t=todayS();const done=[...(db.maintenance||[])].slice(-25).reverse();
  const seg=`<div class="ma-chips seg3">${[['faults','🚨 البلاغات',F.length],['pm','📅 الوقائية',P.length],['done','✅ المنجز','']].map(([k,l,n])=>`<button class="${workSeg===k?'on':''}" onclick="maWork('${k}')">${l}${n?` <em>${n}</em>`:''}</button>`).join('')}</div>`;
  let body='';
- if(workSeg==='faults')body=F.length?F.map(f=>{const d=devBy(f.deviceId);return `<div class="ma-wcard" style="--lc:${d?locColor(LOC(d)):'#999'}"><div class="ma-wtop"><b>${E(f.deviceName||'')}</b><span class="ma-pill ${/حرجة|عالية/.test(f.priority||'')?'bad':'warn'}">${E(f.priority||'متوسطة')}</span></div><p>${E(cl(f.description))}</p><small>${E(cl(f.location)||'')} • منذ ${daysAgo(f.date)} يوم • ${E(f.status||'')}</small><div class="ma-wact"><button class="ok" onclick="maFix('${f.id}')">✓ تم الإصلاح</button>${d?`<button onclick="maDev('${d._uid}')">الجهاز</button>`:''}</div></div>`}).join(''):`<div class="ma-empty"><i>🎉</i><b>لا توجد بلاغات مفتوحة</b><span>كل الأجهزة تعمل.</span></div>`;
+ if(workSeg==='faults')body=F.length?F.map(f=>{const d=devBy(f.deviceId);return `<div class="ma-wcard" style="--lc:${d?locColor(LOC(d)):'#999'}"><div class="ma-wtop"><b>${E(f.deviceName||'')}</b><span class="ma-pill ${/حرجة|عالية/.test(f.priority||'')?'bad':'warn'}">${E(f.priority||'متوسطة')}</span></div><p>${E(cl(f.description))}</p><small>${E(cl(f.location)||'')} • ${E(f.date||'')}${f.time?' الساعة '+E(f.time):''} • منذ ${daysAgo(f.date)} يوم • ${E(f.status||'')}</small>${repInfo(f)}<div class="ma-wact"><button class="ok" onclick="maFix('${f.id}')">✓ تم الإصلاح</button>${d?`<button onclick="maDev('${d._uid}')">الجهاز</button>`:''}</div></div>`}).join(''):`<div class="ma-empty"><i>🎉</i><b>لا توجد بلاغات مفتوحة</b><span>كل الأجهزة تعمل.</span></div>`;
  else if(workSeg==='pm')body=P.length?P.map(p=>`<div class="ma-wcard ${p.date<t?'late':''}"><div class="ma-wtop"><b>${E(p.deviceName||'')}</b><span class="ma-pill ${p.date<t?'bad':'warn'}">${p.date<t?'متأخرة':E(p.date)}</span></div><small>${E(cl(p.location)||'')}</small><div class="ma-wact"><button class="ok" onclick="maPM('${p.id}')">✓ أنجزتها</button></div></div>`).join(''):`<div class="ma-empty"><i>📅</i><b>لا صيانة وقائية هذا الأسبوع</b><span>${(db.preventive||[]).length?'':'فعّل الجدولة التلقائية من «المزيد ← الطيار الآلي».'}</span></div>`;
  else body=done.length?done.map(m=>`<div class="ma-ev"><i>${m.status==='مكتمل'?'✅':'🔧'}</i><div><b>${E(m.deviceName||'')}</b><small>${E(m.date||'')} • ${E(cl(m.work)||m.type||'')} • ${E(m.status||'')}</small></div></div>`).join(''):`<div class="ma-empty"><i>🗂️</i><b>لا يوجد سجل بعد</b></div>`;
  $('maBody').innerHTML=seg+`<div class="ma-wlist">${body}</div>`}
@@ -4361,7 +4428,7 @@ window.maWork=k=>{vib();workSeg=k;renderWork()};
 /* ---------------- المزيد ---------------- */
 function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}catch(e){}
  const G=(t,rows)=>`<h4 class="ma-h4">${t}</h4><div class="ma-menu">${rows.map(([i,l,f,x])=>`<button onclick="${f}"><i>${i}</i><span>${l}</span>${x?`<em>${x}</em>`:''}<b>‹</b></button>`).join('')}</div>`;
- $('maBody').innerHTML=G('الجرد والتقارير',[['📑','مركز التقارير','reportsHub()'],['📊','الجرد العام — Excel',"maInv()"],['🖨️','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['⭐','تقييم الأجهزة','evalView()'],['🗓️','تقرير الشهر','openMonthly()']])+
+ $('maBody').innerHTML=G('الجرد والتقارير',[['🗓️','الجرد السنوي','annualInv()'],['📑','مركز التقارير','reportsHub()'],['📊','الجرد العام — Excel',"maInv()"],['🖨️','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['⭐','تقييم الأجهزة','evalView()'],['🗓️','تقرير الشهر','openMonthly()']])+
  G('الباركود والصور',[['🏷️','طباعة ملصقات الباركود (6–8 بالصفحة)','printLabelsFor(db.devices)'],['🔳','قسم الباركود',"maView2('qr')"],['📷','مسح باركود','maScan()'],['📸','صور الأجهزة',"maTour()",(()=>{const S=PH.stats();return (S.own+S.type)+'/'+S.total})()],['↗','مشاركة كل الأجهزة','maShareAll()']])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
  G('البيانات',[['📥','تحديث الأجهزة من Excel','xlsUpdate()'],['📂','استيراد نسخة بيانات (JSON)','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()'],['💾','حفظ نسخة مع الصور','exportWithPhotos()']])+
@@ -4386,6 +4453,7 @@ const _save=window.saveDB;window.saveDB=function(){const r=_save.apply(this,argu
 
 function mount(){shell();applyTheme();try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{applyTheme()})}catch(e){}const b=document.createElement('button');b.id='maReturn';b.innerHTML='📱 رجوع للتطبيق';b.onclick=maBack;document.body.appendChild(b);
  if(isOn()){document.body.classList.add('mapp');render()}
+ if(location.hash==='#qr'){setTimeout(()=>{try{maView2('qr')}catch(e){}},300)}
  try{PH.ready.then(()=>{if(document.body.classList.contains('mapp')&&tab==='devices')renderDevices2()})}catch(e){}
  /* زر للعودة للتطبيق من داخل النظام الكامل */
  const last=document.querySelector('.navbtn[data-view="settings"]');if(last&&!$('navMapp'))last.insertAdjacentHTML("afterend",`<button class="navbtn keep" id="navMapp" onclick="setMapp(true)"><span class="ico">📱</span> واجهة التطبيق</button>`)}
