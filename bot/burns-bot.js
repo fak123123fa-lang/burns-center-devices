@@ -426,11 +426,25 @@ async function signup(req) {
   return J({ error: "signup_failed", detail: t.slice(0, 200) }, 400);
 }
 
+/* ---------------- بطاقة الجهاز العامة (للباركود القصير) ---------------- */
+const CARD_F = { c: "الترميز", m: "الشركه المصنعة", o: "الموديــل", sn: "سريال نمبر", co: "بلد المنشاء", l: "مكان تنصيب الجهاز", a: "توافر الأجهزة", sp: "المكتب المجهز", i: "تأريخ التنصيب", ws: "تأريخ بدء الضمان", w: "تأريخ انتهاء الضمان" };
+async function card(url) {
+  const id = String(url.searchParams.get("id") || "").slice(0, 80); if (!id) return J({ error: "missing" }, 400);
+  const S = await loadState(); if (!S) return J({ error: "no_state" }, 404);
+  const d = (S.data.devices || []).find((x) => x._uid === id); if (!d) return J({ error: "device" }, 404);
+  const o = { id, n: dname(d), s: d._seq, st: stat(d), ct: CENTER };
+  if (d._moh) o.mo = String(d._moh);
+  for (const [k, f] of Object.entries(CARD_F)) { const v = cl(d[f]); if (v) o[k] = v; }
+  const wa = String((S.data.engWa || "")).replace(/\D/g, ""); if (wa) o.wa = wa;
+  return new Response(JSON.stringify({ ok: true, d: o }), { headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "public, max-age=60" } });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   const url = new URL(req.url), action = url.searchParams.get("action");
   try {
     if (action === "report") return await report(req);
+    if (action === "card") return await card(url);
     if (action === "signup") return await signup(req);
     if (action === "cron-backup" || action === "cron-daily") { const c = await cfg(true); if (!c.secret || req.headers.get("x-cron-key") !== c.secret) return J({ error: "forbidden" }, 403);
       if (action === "cron-daily") return J(await daily());
