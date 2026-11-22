@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1022"</script>
+<script>window.APP_VERSION="2026.11.22.1027"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -3850,14 +3850,15 @@ function wrapN(c,t,w,n){const ws=String(t).split(' '),L=[];let l='';ws.forEach(s
 /* باركود قصير: رابط صغير فيه رقم الجهاز فقط ← رمز كبير المربعات يُقرأ بسهولة من أي هاتف؛ البطاقة تُحمَّل محدّثة من النظام */
 const _qp=window.qrPayloadFor,_qe=window.qrEcl;
 window.shortLink=function(d){const base=(window.viewerURL&&viewerURL())||'https://fak123123fa-lang.github.io/burns-center-devices/';let w='';try{w=(db.engWa||localStorage.getItem('eng_wa')||'').replace(/\D/g,'')}catch(e){}return base.replace(/#.*$/,'')+'#i='+encodeURIComponent(d._uid)+(d._seq?'&s='+d._seq:'')+(w?'&w='+w:'')};
-window.qrPayloadFor=function(d){return (window.qrMode&&qrMode()==='link')?shortLink(d):_qp(d)};
-window.qrEcl=function(){return (window.qrMode&&qrMode()==='link')?'Q':(_qe?_qe():'M')};
+window.qrPayloadFor=function(d){return shortLink(d)};
+window.qrEcl=function(){return 'Q'};
+try{localStorage.setItem('medtech_qr_mode','link')}catch(e){}
 window.printLabelsFor=function(list){list=(list||[]).filter(Boolean);if(!list.length){toast('لا توجد أجهزة للطباعة',true);return}window.__lblL=list;const per=+LS.get('lbl_per','8');
  UI(`<h3 class="ma-st">🖨️ طباعة ملصقات الباركود — ${list.length} جهاز</h3>
  <p class="ma-hint">كل ملصق فيه: اسم الجهاز، تسلسلك، تسلسل الوزاري، القسم، الشركة، الموديل، S/N، التنصيب والضمان، مع الباركود وعبارة تنبيه.</p>
  <div class="lbl-opts">${[[8,'8 بالصفحة','حجم متوسط — موفّر للورق'],[6,'6 بالصفحة','حجم أكبر — أوضح للمسح'],[4,'4 بالصفحة','كبير — للأجهزة الكبيرة']].map(([n,t,s])=>`<button class="${per===n?'on':''}" onclick="lblGo(${n})"><span class="lbl-mini n${n}">${'<i></i>'.repeat(n)}</span><b>${t}</b><small>${s}</small></button>`).join('')}</div>
  <label class="ma-lbl">عبارة التنبيه أسفل كل ملصق</label><input id="lblNote" value="${E(LS.get('lbl_note2',NOTE_DEF))}">
- <button class="ma-link" onclick="uiClose2();printLabelsSmall(__lblL)">ملصقات صغيرة (باركود فقط، 9 بالصفحة) ←</button>`)};
+`)};
 window.uiClose2=UIclose;
 window.lblGo=function(n){const i=$('lblNote');if(i)LS.set('lbl_note2',i.value.trim()||NOTE_DEF);LS.set('lbl_per',String(n));UIclose();labelsPdf(window.__lblL,n)};
 function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
