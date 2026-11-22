@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1027"</script>
+<script>window.APP_VERSION="2026.11.22.1032"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -3086,10 +3086,10 @@ function applyRemote(data,ver){const photos={};(db.devices||[]).forEach(d=>{if(d
 async function pull(force){if(!C.session||busy)return;busy=true;setState('sync');try{await ensureToken();
  const v=await req('/rest/v1/burns_app_state?id=eq.main&select=version,updated_at');const rv=v&&v[0]?+v[0].version:0;
  if(!rv){if(C.role==='owner'){busy=false;C.dirty=true;saveC();return push()}setState('ok');return}
- if(rv>C.version||force){if(C.dirty&&C.role==='owner'&&!force){if(!confirm('☁️ توجد نسخة أحدث على الإنترنت (ربما عدّلت من جهاز آخر).\n\n«موافق» = اعتماد نسخة الإنترنت\n«إلغاء» = رفع بيانات هذا الجهاز فوقها')){busy=false;return push(true)}}
+ if(rv>C.version||force){if(C.dirty&&C.role==='owner'&&!force&&(db.devices||[]).length){if(!confirm('☁️ توجد نسخة أحدث على الإنترنت (ربما عدّلت من جهاز آخر).\n\n«موافق» = اعتماد نسخة الإنترنت\n«إلغاء» = رفع بيانات هذا الجهاز فوقها')){busy=false;return push(true)}}
   const d=await req('/rest/v1/burns_app_state?id=eq.main&select=data,version');if(d&&d[0]){applyRemote(d[0].data,+d[0].version);toast('☁️ تم تحديث البيانات من الإنترنت')}}
  setState(C.dirty?'dirty':'ok')}catch(e){fail(e)}finally{busy=false}}
-async function push(overwrite){if(!C.session||C.role!=='owner')return;if(!(db.devices||[]).length&&!overwrite){setState('ok');return}if(busy){schedule();return}busy=true;setState('sync');try{
+async function push(overwrite){if(!C.session||C.role!=='owner')return;if(!(db.devices||[]).length){setState('ok');return}if(busy){schedule();return}busy=true;setState('sync');try{
  const ver=await rpc('burns_save_state',{p_data:payload(),p_base:overwrite?null:(C.version||null)});C.version=+ver;C.dirty=false;C.last=new Date().toISOString();saveC();setState('ok')}
  catch(e){const m=String(e.message||'');if(/conflict/.test(m)){busy=false;return pull()}if(e.status===404||/burns_save_state/.test(m)&&/find|exist/i.test(m)){errMsg='setup';setState('err');return}fail(e)}finally{busy=false}}
 function schedule(){clearTimeout(pushT);pushT=setTimeout(()=>push(),2500)}
@@ -3123,7 +3123,7 @@ window.cloudAuth=async function(){const em=$('clEmail').value.trim(),pw=$('clPas
   let j;try{j=await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}})}catch(x){if(existed&&/Invalid login/i.test(String(x.message||'')))throw new Error('هذا البريد عنده حساب من قبل — اكتب كلمة السر القديمة واستخدم «تسجيل الدخول»');if(!up&&/not confirmed/i.test(String(x.message||''))){await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({email:em,password:pw})}).catch(()=>{});j=await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}})}else throw x}setSession(j);if(up)toast(existed?'✓ دخلت إلى حسابك':'✓ أُنشئ حسابك ودخلت مباشرة');const mustPw=!!(j.user&&j.user.user_metadata&&j.user.user_metadata.must_change)
   await refreshRole();C.version=0;saveC();closeModal();toast(C.role==='owner'?'👑 أهلًا بك — أنت المالك. جاري رفع بياناتك…':C.role==='viewer'?'👁 دخلت كمشاهد':'تم الدخول — بانتظار إضافتك من المالك');
   if(mustPw)setTimeout(()=>cloudPw(true),400);
-  if(C.role==='owner'){const v=await req('/rest/v1/burns_app_state?id=eq.main&select=version');if(v&&v[0]){C.dirty=true;saveC();await pull()}else{C.dirty=true;saveC();await push(true)}}else if(C.role==='viewer')await pull(true);setState(state==='sync'?'ok':state)}
+  if(C.role==='owner'){const v=await req('/rest/v1/burns_app_state?id=eq.main&select=version');if(v&&v[0]){if(!(db.devices||[]).length){C.dirty=false;saveC();await pull(true)}else{C.dirty=true;saveC();await pull()}}else{C.dirty=true;saveC();await push(true)}}else if(C.role==='viewer')await pull(true);setState(state==='sync'?'ok':state)}
  catch(err){const m=String(err.message||'');e.style.color='';e.textContent=err.net?'⚠️ لا يوجد اتصال بالإنترنت أو أن هذه الصفحة لا تسمح بالاتصال (داخل تطبيق Claude). افتح ملف البرنامج في Chrome أو Safari.':/Invalid login/i.test(m)?'البريد أو كلمة السر غير صحيحة':/not confirmed/i.test(m)?'لم تؤكد بريدك بعد — افتح رسالة التأكيد في بريدك':/already registered/i.test(m)?'هذا البريد مسجّل — استخدم «تسجيل الدخول»':m}
  finally{const g=$('clGo');if(g){g.disabled=false;g.textContent=g.dataset.t==='up'?'إنشاء الحساب':'دخول'}}};
 window.cloudPw=function(must){modal('🔑 '+(must?'اختر كلمة سر جديدة':'تغيير كلمة السر'),`${must?'<div class="notice">دخلت بكلمة سر مؤقتة. اختر الآن كلمة سرك الخاصة — لا يعرفها أحد غيرك.</div>':''}<div class="formfield"><label>كلمة السر الجديدة (6 أحرف على الأقل)</label><input class="field" id="pw1" type="password" autocomplete="new-password"></div><div class="formfield"><label>أعد كتابتها</label><input class="field" id="pw2" type="password" autocomplete="new-password"></div><div id="pwErr" style="color:var(--red);font-weight:700;min-height:20px"></div>`,`${must?'':'<button class="btn secondary" onclick="closeModal()">إلغاء</button>'}<button class="btn" id="pwGo" onclick="cloudPwSave()">حفظ كلمة السر</button>`)};
@@ -4040,7 +4040,7 @@ const openFaults=()=>(db.faults||[]).filter(f=>!CLOSED.test(String(f.status||'')
 const pmDue=()=>{const wk=new Date(Date.now()+7*864e5).toISOString().slice(0,10);return (db.preventive||[]).filter(p=>p.status!=='منجزة'&&p.date&&p.date<=wk).sort((a,b)=>String(a.date).localeCompare(String(b.date)))};
 
 /* ---------------- الرئيسية ---------------- */
-function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div class="ma-first"><i>📥</i><h2>حمّل بيانات أجهزتك</h2><p>هذه النسخة فارغة. اختر ملف البيانات (بيانات_الأجهزة….json) الذي أرسلته لك، أو سجّل الدخول للحفظ الأونلاين.</p><button class="ma-save" onclick="maImport()">📂 اختيار ملف البيانات</button><button class="ma-link" onclick="maCloud()">☁️ تسجيل الدخول للحفظ الأونلاين</button></div>`;return}
+function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div class="ma-first"><i>🔐</i><h2>بياناتك جاهزة على الخادم</h2><p>كل الأجهزة (119 جهاز) محفوظة أونلاين. سجّل الدخول ببريدك فتنزل كلها على هذا الهاتف مباشرة، وتبقى متزامنة مع أي جهاز آخر.</p><button class="ma-save" onclick="maCloud()">🔐 تسجيل الدخول وتحميل البيانات</button><button class="ma-link" onclick="maImport()">📂 أو اختر ملف بيانات (.json)</button></div>`;return}
  const D=db.devices||[],c={ok:0,bad:0,warn:0};D.forEach(d=>c[stc(ST(d))]++);const F=openFaults(),P=pmDue(),t=todayS();
  const h=new Date().getHours(),g=h<12?'صباح الخير':h<17?'نهارك سعيد':'مساء الخير';const B=(window.getBranding&&getBranding())||{};
  let pend=0;try{pend=window.MORE?MORE.pending().length:0}catch(e){}
