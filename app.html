@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1141"</script>
+<script>window.APP_VERSION="2026.11.22.1518"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1154,6 +1154,26 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .ma-rep{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px;font-size:12.5px}.ma-rep span{background:var(--ma-bg);border-radius:9px;padding:5px 9px;font-weight:700}
 .ma-rep a,.ma-rep button{border:0;background:color-mix(in srgb,var(--ma-pri) 12%,transparent);color:var(--ma-pri);border-radius:9px;padding:5px 10px;font:inherit;font-weight:800;text-decoration:none}
 .ma-fp{text-align:center;color:var(--ma-mut)}.ma-fp img{width:100%;border-radius:16px;display:block;margin-bottom:6px}
+.pc-ch{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.pc-ch button{display:flex;align-items:center;gap:12px;border:2px solid var(--ma-line);background:var(--ma-card);border-radius:18px;padding:14px;font:inherit;color:inherit;text-align:start}
+.pc-ch button i{font-style:normal;font-size:30px}.pc-ch button span{display:flex;flex-direction:column;gap:2px}.pc-ch button b{font-size:15.5px}.pc-ch button small{color:var(--ma-mut);font-size:12.5px}
+.pc-ch button.pri{border-color:var(--ma-pri);background:color-mix(in srgb,var(--ma-pri) 8%,var(--ma-card))}
+/* ===== الجرد السنوي الورقي ===== */
+.pi-new{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.pi-new button{border:2px solid var(--ma-line);background:var(--ma-card);border-radius:18px;padding:12px 6px;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center}
+.pi-new button i{font-style:normal;font-size:28px}.pi-new button b{font-size:13.5px}.pi-new button small{font-size:11px;color:var(--ma-mut)}
+.pi-new button.pri{border-color:var(--ma-pri);background:color-mix(in srgb,var(--ma-pri) 9%,var(--ma-card))}
+.pi-list{display:flex;flex-direction:column;gap:8px}.pi-list button{display:flex;align-items:center;gap:12px;border:0;background:var(--ma-card);border-radius:16px;padding:10px 12px;font:inherit;color:inherit;text-align:start}
+.pi-y{background:var(--ma-pri);color:#fff;font-weight:900;border-radius:12px;padding:8px 10px;font-size:15px}.pi-t{flex:1;display:flex;flex-direction:column;min-width:0}.pi-t b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pi-t small{color:var(--ma-mut);font-size:12px}.pi-list em{font-style:normal;color:var(--ma-mut)}
+.pi-pages{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}.pi-pages div{position:relative}.pi-pages img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:1px solid var(--ma-line);display:block}
+.pi-pages span{position:absolute;bottom:4px;inset-inline-start:4px;background:#000a;color:#fff;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px}.pi-pages button{position:absolute;top:3px;inset-inline-end:3px;border:0;background:#fffe;border-radius:8px;width:24px;height:24px;font-size:12px;padding:0}
+.pi-tw{overflow:auto;max-height:420px;border:1px solid var(--ma-line);border-radius:12px;margin-bottom:10px;background:#fff}
+.pi-t{border-collapse:collapse;min-width:100%;font-size:13px;color:#10202e}.pi-t th{position:sticky;top:0;background:#d9eee9;padding:8px 6px;border:1px solid #c8d4da;white-space:nowrap;cursor:pointer;font-size:12.5px}
+.pi-t td{border:1px solid #e1e8ec;padding:0}.pi-t td input{border:0!important;background:transparent!important;width:100%;min-width:110px;padding:8px 6px!important;font:inherit;color:inherit;border-radius:0!important}
+.pi-t td:first-child input{min-width:44px;text-align:center}.pi-t .x{width:34px;background:#fafafa}.pi-t .x button{border:0;background:none;color:#c0392b;font-weight:900;padding:6px}
+.pi-cm{display:grid;grid-template-columns:1.4fr 1fr 36px;gap:6px;margin-bottom:6px}.pi-cm button{border:0;background:none;color:#c0392b;font-weight:900}
+.pi-exp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.pi-exp button{border:0;background:var(--ma-card);border-radius:16px;padding:12px 4px;font:inherit;font-weight:800;font-size:13px;color:inherit;display:flex;flex-direction:column;align-items:center;gap:3px}.pi-exp button i{font-style:normal;font-size:22px}
+.pi-exp button.pri{background:var(--ma-pri);color:#fff}.pi-exp button:disabled,.ma-acts button:disabled{opacity:.4}
 
 </style>
 </head><body>
@@ -2431,6 +2451,7 @@ window.qrPayloadFor=function(d){return qrMode()==='link'&&viewerURL()?deviceCard
 
 /* ---- ماسح QR داخل البرنامج ---- */
 function findFromCode(txt){txt=String(txt||'').trim();
+ const si=txt.match(/#i=([^&]+)/);if(si){const id=decodeURIComponent(si[1]);const d=db.devices.find(x=>x._uid===id);if(d)return d}
  const h=txt.indexOf('#');if(h>-1){try{const o=JSON.parse(unb64url(txt.slice(h+1)));return db.devices.find(d=>d._uid===o.id)||db.devices.find(d=>String(d._seq)===String(o.s)&&(!o.sn||clean(d['سريال نمبر'])===o.sn))}catch(e){}}
  const m=txt.match(/(?:التسلسل|تسلسل البرنامج)\s*:\s*(\d+)/);if(m){const d=db.devices.find(x=>String(x._seq)===m[1]);if(d)return d}
  const u=txt.match(/معرّف الجهاز\s*:\s*(\S+)/);if(u)return db.devices.find(x=>x._uid===u[1]);
@@ -2442,8 +2463,17 @@ window.openScanner=function(cb,title){scanCb=cb||(d=>{closeScanner();viewDevice(
  <div class="scanmanual"><input class="field" id="scanManual" placeholder="أو اكتب رقم التسلسل / الرقم التسلسلي للجهاز" onkeydown="if(event.key==='Enter')scanManualGo()"><button class="btn" onclick="scanManualGo()">بحث</button></div><div id="scanLog" class="scanlog"></div>`,
  `<button class="btn secondary" onclick="closeScanner()">إغلاق</button>`);
  const mb=$('modalback');mb.dataset.scan='1';startCam()};
+/* آيفون/سفاري: قارئ QR بلغة JavaScript (jsQR) يُحمَّل عند الحاجة */
+function loadJsQR(){if(window.jsQR)return Promise.resolve();return new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js';sc.onload=()=>window.jsQR?res():rej();sc.onerror=rej;document.head.appendChild(sc)})}
+async function startCamJS(msg){msg.textContent='⏳ تجهيز قارئ الباركود…';
+ try{await loadJsQR()}catch(e){msg.innerHTML='⚠️ تعذّر تحميل قارئ الباركود (تحتاج إنترنت أول مرة).<br>بديل: امسح الملصق بكاميرا الهاتف العادية، أو اكتب رقم الجهاز في الخانة.';return}
+ try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280}},audio:false});const v=$('scanVideo');v.srcObject=scanStream;v.setAttribute('playsinline','');await v.play();msg.textContent='وجّه الكاميرا نحو ملصق الباركود…';
+  const cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true});
+  scanTimer=setInterval(()=>{try{if(!v.videoWidth)return;const W=Math.min(720,v.videoWidth),H=Math.round(v.videoHeight*W/v.videoWidth);cv.width=W;cv.height=H;cx.drawImage(v,0,0,W,H);const r=jsQR(cx.getImageData(0,0,W,H).data,W,H,{inversionAttempts:'dontInvert'});
+   if(r&&r.data){const raw=r.data;if(raw===lastHit)return;lastHit=raw;setTimeout(()=>lastHit='',2500);const d=findFromCode(raw);if(d){try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}scanCb(d)}else msg.textContent='⚠️ رمز غير معروف — ليس من ملصقات هذا البرنامج'}}catch(e){}},300)}
+ catch(e){msg.innerHTML='⚠️ لم يُسمح باستخدام الكاميرا. اسمح للمتصفح بالكاميرا من الإعدادات، أو اكتب رقم الجهاز في الخانة.'}}
 async function startCam(){const msg=$('scanMsg');
- if(!('BarcodeDetector' in window)){msg.innerHTML='⚠️ هذا المتصفح لا يدعم قراءة QR بالكاميرا داخل البرنامج (يعمل في Chrome على أندرويد وماك).<br>بديل سريع: امسح الملصق بكاميرا الهاتف العادية فتظهر بطاقة الجهاز مباشرة، أو اكتب رقم الجهاز في الخانة.';return}
+ if(!('BarcodeDetector' in window)){return startCamJS(msg)}
  try{const det=new BarcodeDetector({formats:['qr_code']});scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});const v=$('scanVideo');v.srcObject=scanStream;await v.play();
   scanTimer=setInterval(async()=>{try{const r=await det.detect(v);if(r&&r[0]){const raw=r[0].rawValue;if(raw===lastHit)return;lastHit=raw;setTimeout(()=>lastHit='',2500);const d=findFromCode(raw);
    if(d){try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}scanCb(d)}else{msg.textContent='⚠️ رمز غير معروف — ليس من ملصقات هذا البرنامج'}}}catch(e){}},280)}
@@ -3922,24 +3952,26 @@ window.printLabelsFor=function(list){list=(list||[]).filter(Boolean);if(!list.le
  <label class="ma-lbl">عبارة التنبيه أسفل كل ملصق</label><input id="lblNote" value="${E(LS.get('lbl_note2',NOTE_DEF))}">
 `)};
 window.uiClose2=UIclose;
-window.lblGo=function(n){const i=$('lblNote');if(i)LS.set('lbl_note2',i.value.trim()||NOTE_DEF);LS.set('lbl_per',String(n));UIclose();labelsPdf(window.__lblL,n)};
+window.lblGo=function(n){const i=$('lblNote');if(i)LS.set('lbl_note2',i.value.trim()||NOTE_DEF);LS.set('lbl_per',String(n));UIclose();const L=window.__lblL;const nd=new Set(L.map(LOC)).size;if(nd>1&&window.maSheetOpen&&document.body.classList.contains('mapp')){window.__qL=L;window.__qN=n;setTimeout(()=>lblChoice(L,n),250)}else labelsPdf(L,n)};
+function lblChoice(L,n){const deps={};L.forEach(d=>{const l=LOC(d);deps[l]=(deps[l]||0)+1});UI(`<h3 class="ma-st">🖨️ كيف تريد الطباعة؟</h3><p class="ma-hint">${L.length} ملصق • ${n} بالصفحة • ${Object.keys(deps).length} قسم</p><div class="pc-ch"><button onclick="uiClose2();labelsPdf(__qL,__qN)"><i>📄</i><span><b>كل الملصقات متتالية</b><small>أقل عدد من الأوراق</small></span></button><button class="pri" onclick="uiClose2();labelsPdf(__qL,__qN,{byDept:true})"><i>🏥</i><span><b>كل قسم بورقة مستقلة</b><small>كل قسم يبدأ بصفحة جديدة باسمه</small></span></button></div>`)}
 function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
 function fit(c,t,w){t=String(t);if(c.measureText(t).width<=w)return t;while(t.length>2&&c.measureText(t+'…').width>w)t=t.slice(0,-1);return t+'…'}
 function wrap2(c,t,w){const ws=String(t).split(' '),L=[];let l='';ws.forEach(s=>{const n=l?l+' '+s:s;if(c.measureText(n).width>w&&l){L.push(l);l=s}else l=n});if(l)L.push(l);if(L.length>2){L[1]=fit(c,L.slice(1).join(' '),w);L.length=2}return L.map(x=>fit(c,x,w))}
 function txt(c,t,x,y,align){c.direction=isLat(t)?'ltr':'rtl';c.textAlign=align||'right';c.fillText(t,x,y);c.direction='rtl'}
 const tick=()=>new Promise(r=>setTimeout(r,0));
-window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.length+' ملصق…');await tick();
- per=Math.max(1,Math.min(50,per|0||8));const W=2480,H=3508,M=90,HD=190,FT=120,G=per>12?22:36,[cols,rows]=gridFor(per,W-2*M,H-2*M-HD-FT-40,G),pagesN=Math.ceil(list.length/per);
+window.labelsPdf=async function(list,per,opt){opt=opt||{};toast('⏳ جاري تجهيز '+list.length+' ملصق…');await tick();
+ per=Math.max(1,Math.min(50,per|0||8));const W=2480,H=3508,M=90,HD=190,FT=120,G=per>12?22:36,[cols,rows]=gridFor(per,W-2*M,H-2*M-HD-FT-40,G),byD=!!opt.byDept;if(byD)list=list.slice().sort((a,b)=>LOC(a).localeCompare(LOC(b),'ar')||(+a._seq-+b._seq));
+ const PL=[];{let pos=0,pg=-1,prev=null;list.forEach(d=>{const l=LOC(d);if(pos%per===0||(byD&&l!==prev)){pg++;pos=0}PL.push([pos,pg,l]);pos++;prev=l})}const pagesN=PL.length?PL[PL.length-1][1]+1:0;
  const lw=(W-2*M-(cols-1)*G)/cols,lh=(H-2*M-HD-FT-40-(rows-1)*G)/rows,f=Math.min(1.3,lh/700),FULL=lw>=1000&&lh>=560;
  const B=(window.getBranding&&getBranding())||{};const center=B.center||'المركز التخصصي للحروق — الديوانية';const note=LS.get('lbl_note2',NOTE_DEF);
  /* قماش واحد يُعاد استخدامه بدقة 210dpi — خفيف على ذاكرة الهاتف */
  const SC=per>12?1:0.7,cv=document.createElement('canvas');cv.width=Math.round(W*SC);cv.height=Math.round(H*SC);const c=cv.getContext('2d');const jp=[];let first='';
  const flush=async()=>{if(!first)first=cv.toDataURL('image/jpeg',0.85);const b=await new Promise(r=>cv.toBlob(r,'image/jpeg',per>12?0.85:0.8));jp.push(new Uint8Array(await b.arrayBuffer()));await tick()};
- for(let i=0;i<list.length;i++){const k=i%per,pg=Math.floor(i/per);
+ for(let i=0;i<list.length;i++){const k=PL[i][0],pg=PL[i][1],dep=PL[i][2];
   if(k===0){if(i>0)await flush();c.setTransform(SC,0,0,SC,0,0);c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';c.direction='rtl';
    /* رأس الصفحة */
    const g=c.createLinearGradient(0,0,W,0);g.addColorStop(0,'#0b4f57');g.addColorStop(1,'#13a08f');c.fillStyle=g;rr(c,M,M,W-2*M,HD,30);c.fill();
-   c.fillStyle='#fff';c.font=`800 60px ${FONT}`;txt(c,'ملصقات تعريف الأجهزة الطبية',W-M-50,M+68);c.font=`600 36px ${FONT}`;c.globalAlpha=.9;txt(c,'وحدة إدارة الأجهزة الطبية — '+center,W-M-50,M+136);c.globalAlpha=1;
+   c.fillStyle='#fff';c.font=`800 60px ${FONT}`;txt(c,byD?'ملصقات '+dep+' — '+list.filter(x=>LOC(x)===dep).length+' جهاز':'ملصقات تعريف الأجهزة الطبية',W-M-50,M+68);c.font=`600 36px ${FONT}`;c.globalAlpha=.9;txt(c,'وحدة إدارة الأجهزة الطبية — '+center,W-M-50,M+136);c.globalAlpha=1;
    c.font=`700 34px ${FONT}`;txt(c,'صفحة '+(pg+1)+' من '+pagesN,M+50,M+68,'left');c.font=`500 30px ${FONT}`;txt(c,new Date().toLocaleDateString('ar-IQ',{year:'numeric',month:'long',day:'numeric'}),M+50,M+134,'left');
    /* تذييل الصفحة */
    c.fillStyle='#e3eaee';c.fillRect(M,H-M-FT+10,W-2*M,3);c.fillStyle='#0b4f57';c.font=`700 34px ${FONT}`;c.textAlign='center';c.fillText('وحدة إدارة الأجهزة الطبية — '+center,W/2,H-M-FT+60);
@@ -3971,7 +4003,7 @@ window.labelsPdf=async function(list,per){toast('⏳ جاري تجهيز '+list.
   c.fillStyle='#7a5a00';c.font=`800 ${Math.round(23*f)}px ${FONT}`;c.fillText(fit(c,'⚠ '+note,lw-40),x+lw/2,y+lh-nh/2+2);
   if(i%8===7)await tick()}
  await flush();cv.width=1;cv.height=1;
- try{const blob=jpegPdf(jp,Math.round(W*SC),Math.round(H*SC));const name='ملصقات_الباركود_'+per+'_بالصفحة_'+today()+'.pdf';window.__lastLbl={blob,name,n:list.length,p:jp.length,first};pdfReady(blob,name,list.length,jp.length)}catch(e){console.warn(e);toast('تعذّر إنشاء الملصقات',true)}
+ try{const blob=jpegPdf(jp,Math.round(W*SC),Math.round(H*SC));const name='ملصقات_الباركود_'+(byD?'حسب_القسم_':'')+per+'_بالصفحة_'+today()+'.pdf';window.__lastLbl={blob,name,n:list.length,p:jp.length,first};pdfReady(blob,name,list.length,jp.length)}catch(e){console.warn(e);toast('تعذّر إنشاء الملصقات',true)}
  return [{toDataURL:()=>first}]};
 /* أفضل تقسيم للصفحة لأي عدد من 1 إلى 50 */
 function gridFor(n,AW,AH,G){let best=null;for(let c=1;c<=8;c++){const r=Math.ceil(n/c);if(r>12)continue;const w=(AW-(c-1)*G)/c,h=(AH-(r-1)*G)/r;const tgt=n<=8?1.6:n<=20?1.25:1.0;const waste=(c*r-n)/(c*r);const sc=Math.abs(Math.log((w/h)/tgt))+waste*1.5;if(!best||sc<best[0])best=[sc,c,r]}return [best[1],best[2]]}
@@ -3992,15 +4024,17 @@ function drawCompact(c,d,col,x,y,lw,lh){const r=Math.min(26,Math.min(lw,lh)*.08)
   if(lines>1&&yy<bb){c.fillStyle=col;c.font=`800 ${fs*.74}px ${FONT}`;c.fillText(fit(c,'الوزاري '+(d._moh||'—')+' • '+LOC(d),lw-fs*.6),x+lw/2,yy)}}
  if(ft){c.fillStyle='#7a5a00';c.textAlign='center';c.direction='rtl';c.font=`800 ${Math.min(fs*.7,ft*.5)}px ${FONT}`;c.fillText(fit(c,'⚠ امسح الباركود للإبلاغ عن عطل • حافظ عليه من التلف والسوائل',lw-fs*.6),x+lw/2,y+lh-ft/2+1)}}
 /* ملف PDF خفيف من صور JPEG مباشرة (بدون مكتبات) */
-function jpegPdf(jpgs,wpx,hpx){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const add=x=>{const u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length};
- const PW=595.28,PH=841.89,n=jpgs.length,obj=(i,body)=>{offs[i]=len;add(i+' 0 obj\n');body();add('\nendobj\n')};
- add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');const kids=[];for(let i=0;i<n;i++)kids.push((3+i*3)+' 0 R');
+function jpegPdf(jpgs,wpx,hpx){return jpegPdfMixed(jpgs.map(u=>({u,w:wpx,h:hpx})))}
+function jpegPdfMixed(pages){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const add=x=>{const u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length};
+ const n=pages.length,obj=(i,body)=>{offs[i]=len;add(i+' 0 obj\n');body();add('\nendobj\n')};
+ add('%PDF-1.4\n');const kids=[];for(let i=0;i<n;i++)kids.push((3+i*3)+' 0 R');
  obj(1,()=>add('<< /Type /Catalog /Pages 2 0 R >>'));obj(2,()=>add('<< /Type /Pages /Count '+n+' /Kids ['+kids.join(' ')+'] >>'));
- jpgs.forEach((j,i)=>{const P=3+i*3,C=P+1,I=P+2;obj(P,()=>add('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+PW+' '+PH+'] /Resources << /XObject << /Im0 '+I+' 0 R >> >> /Contents '+C+' 0 R >>'));
+ pages.forEach((pg,i)=>{const j=pg.u,land=pg.w>pg.h,PW=land?841.89:595.28,PH=land?595.28:841.89,P=3+i*3,C=P+1,I=P+2;obj(P,()=>add('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+PW+' '+PH+'] /Resources << /XObject << /Im0 '+I+' 0 R >> >> /Contents '+C+' 0 R >>'));
   const cs='q '+PW+' 0 0 '+PH+' 0 0 cm /Im0 Do Q';obj(C,()=>add('<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream'));
-  obj(I,()=>{add('<< /Type /XObject /Subtype /Image /Width '+wpx+' /Height '+hpx+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+j.length+' >>\nstream\n');add(j);add('\nendstream')})});
+  obj(I,()=>{add('<< /Type /XObject /Subtype /Image /Width '+pg.w+' /Height '+pg.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+j.length+' >>\nstream\n');add(j);add('\nendstream')})});
  const N=3+n*3,xo=len;let x='xref\n0 '+N+'\n0000000000 65535 f \n';for(let i=1;i<N;i++)x+=String(offs[i]).padStart(10,'0')+' 00000 n \n';add(x+'trailer\n<< /Size '+N+' /Root 1 0 R >>\nstartxref\n'+xo+'\n%%EOF');
  return new Blob(parts,{type:'application/pdf'})}
+window.jpegPdfMixed=jpegPdfMixed;window.jpegPdfAny=(jps,W,H)=>jpegPdfMixed(jps.map(u=>({u,w:W,h:H})));
 /* بعد التجهيز: نافذة «الملف جاهز» — زر الطباعة/المشاركة يفتح قائمة الهاتف (طباعة، واتساب، حفظ) بضغطة */
 function pdfReady(blob,name,n,p,title){const kb=Math.round(blob.size/1024);window.__pdfR={blob,name};const isPdf=/pdf$/i.test(name),ic=isPdf?'📄':/xlsx$/i.test(name)?'📊':/docx$/i.test(name)?'📝':'📁';
  UI(`<div class="pdfok"><i>${ic}</i><h3>${title||'ملف الملصقات جاهز'}</h3><p>${n?n+' ملصق • '+p+' صفحة • ':E(name)+' • '}${kb>1024?(kb/1024).toFixed(1)+' MB':kb+' KB'}</p></div>
@@ -4146,6 +4180,137 @@ window.annualGo=function(fmt){const y=+(document.getElementById('aiY')||{}).valu
 </script>
 <script>
 /* =====================================================================
+   paper.js — «الجرد السنوي الورقي»: قسم مستقل عن بقية البرنامج
+   تصوّر أوراق الجرد بالكاميرا ← تُحفظ كصفحات ممسوحة ← يُرتَّب الجرد
+   في جدول قابل للتعديل (السنة، العنوان، الأعمدة، الصفوف، اللجنة، الملاحظات)
+   ← تصدير Word (.docx) أو PDF أو Excel، أو PDF من الصور الممسوحة.
+   ===================================================================== */
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cl=v=>{const s=String(v??'').replace(/\s+/g,' ').trim();return /[\p{L}\p{N}]/u.test(s)?s:''};
+const LOC=d=>cl(d['مكان تنصيب الجهاز'])||'غير محدد';
+const UI=h=>{if(document.body.classList.contains('mapp')&&window.maSheetOpen)maSheetOpen(h);else modal('🗓️ الجرد السنوي الورقي',h)};
+const CLOSE=()=>{try{if(document.body.classList.contains('mapp')&&window.maClose)maClose();else closeModal()}catch(e){}};
+const vib=()=>{try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}};
+const Y=()=>new Date().getFullYear();
+const list=()=>{db.paperInv=db.paperInv||[];return db.paperInv};
+const byId=id=>list().find(x=>x.id===id);
+const save=()=>{try{saveDB()}catch(e){}};
+const COLS=['ت','اسم الجهاز','الشركة','الموديل','الرقم التسلسلي','القسم','الحالة','ملاحظات'];
+const B=()=>(window.getBranding&&getBranding())||{};
+function blank(y){return {id:'pi'+Date.now().toString(36),year:y||Y(),title:'',org:['وزارة الصحة','دائرة صحة الديوانية',(B().center||'المركز التخصصي للحروق — الديوانية'),'وحدة إدارة الأجهزة الطبية'],cols:COLS.slice(),rows:[],committee:[{name:'',role:'رئيس اللجنة'},{name:'',role:'عضو'},{name:'',role:'عضو'}],notes:'',ocr:'',created:new Date().toISOString().slice(0,10)}}
+const titleOf=d=>d.title||('جرد الأجهزة الطبية لسنة '+d.year);
+const pagesKey=d=>'INV:'+d.id;
+
+/* ------------------------- القائمة ------------------------- */
+window.paperInv=function(){const L=list().slice().sort((a,b)=>b.year-a.year||String(b.created).localeCompare(String(a.created)));
+ UI(`<h3 class="ma-st">🗓️ الجرد السنوي الورقي</h3><p class="ma-hint">قسم مستقل: صوّر أوراق الجرد الموجودة عندك، فيُحفظ ويُرتَّب في جدول تعدّله كما تريد (السنة، العناوين، الأعمدة، اللجنة)، ثم صدّره Word أو PDF أو Excel. لا يغيّر شيئًا في بيانات الأجهزة.</p>
+ <div class="pi-new"><button class="pri" onclick="piNew('scan')"><i>📷</i><b>تصوير جرد ورقي</b><small>صوّر الصفحات بالكاميرا</small></button><button onclick="piNew('data')"><i>📋</i><b>من بيانات الأجهزة</b><small>يملأ الجدول تلقائيًا</small></button><button onclick="piNew('blank')"><i>📄</i><b>جرد فارغ</b><small>تكتبه بنفسك</small></button></div>
+ ${L.length?`<h4 class="ma-h4">الجرود المحفوظة</h4><div class="pi-list">${L.map(d=>{const n=(window.PH&&PH.count(pagesKey(d)))||0;return `<button onclick="piOpen('${d.id}')"><span class="pi-y">${E(d.year)}</span><span class="pi-t"><b>${E(titleOf(d))}</b><small>${d.rows.length} صف${n?' • '+n+' صفحة مصورة':''} • ${E(d.created||'')}</small></span><em>‹</em></button>`}).join('')}</div>`:'<div class="ma-empty"><i>🗂️</i><b>لا يوجد جرد محفوظ بعد</b><span>ابدأ بتصوير أوراق الجرد أو أنشئه من بيانات الأجهزة.</span></div>'}`)};
+window.piNew=function(kind){const d=blank();if(kind==='data'){const D=(db.devices||[]).slice().sort((a,b)=>LOC(a).localeCompare(LOC(b),'ar')||(+a._seq-+b._seq));let i=0;d.rows=D.map(x=>[String(++i),deviceName(x),cl(x['الشركه المصنعة']),cl(x['الموديــل']),cl(x['سريال نمبر']),LOC(x),statusText(x),''])}
+ list().push(d);save();if(kind==='scan'){piOpen(d.id);setTimeout(()=>piAddPage(d.id,true),350)}else piOpen(d.id)};
+
+/* ------------------------- المحرر ------------------------- */
+window.piOpen=async function(id){const d=byId(id);if(!d)return;let pages=[];try{pages=window.PH?await PH.list(pagesKey(d)):[]}catch(e){}
+ UI(`<div class="pi-head"><button class="ma-link" onclick="paperInv()">← كل الجرود</button></div>
+ <h3 class="ma-st">✏️ ${E(titleOf(d))}</h3>
+ <div class="ma-fsec"><h4>🗓️ السنة والعنوان</h4><div class="ma-2col"><div><label class="ma-lbl">السنة</label><input id="piY" type="number" value="${E(d.year)}" oninput="piSet('${id}','year',+this.value||${Y()})"></div><div><label class="ma-lbl">تاريخ الجرد</label><input id="piDt" type="date" value="${E(d.created||'')}" onchange="piSet('${id}','created',this.value)"></div></div>
+  <label class="ma-lbl">العنوان (اتركه فارغًا ليكون «جرد الأجهزة الطبية لسنة …»)</label><input value="${E(d.title)}" placeholder="${E('جرد الأجهزة الطبية لسنة '+d.year)}" oninput="piSet('${id}','title',this.value)">
+  <label class="ma-lbl">الجهة (كل سطر يظهر في رأس الصفحة)</label><textarea rows="4" oninput="piSet('${id}','org',this.value.split('\\n'))">${E(d.org.join('\n'))}</textarea></div>
+ <div class="ma-fsec"><h4>📷 الصفحات المصوّرة (${pages.length})</h4>
+  ${pages.length?`<div class="pi-pages">${pages.map((p,i)=>`<div><img src="${p.t}" onclick="piView('${id}','${p.id}')"><span>${i+1}</span><button onclick="piDelPage('${id}','${p.id}')">✕</button></div>`).join('')}</div>`:'<p class="ma-hint">لا توجد صفحات بعد. صوّر ورقة الجرد بوضوح، على سطح مستوٍ، وفي إضاءة جيدة.</p>'}
+  <div class="ma-acts three"><button onclick="piAddPage('${id}',true)"><i>📷</i>تصوير صفحة</button><button onclick="piAddPage('${id}',false)"><i>🖼️</i>من المعرض</button><button onclick="piOCR('${id}')" ${pages.length?'':'disabled'}><i>🔤</i>استخراج النص</button></div>
+  ${d.ocr?`<label class="ma-lbl">النص المستخرج — صحّحه ثم حوّله إلى صفوف</label><textarea id="piOcr" rows="6" dir="auto" oninput="piSet('${id}','ocr',this.value)">${E(d.ocr)}</textarea><button class="ma-link" onclick="piOcrRows('${id}')">⬇️ تحويل الأسطر إلى صفوف في الجدول</button>`:''}</div>
+ <div class="ma-fsec"><h4>📋 جدول الجرد — ${d.rows.length} صف</h4><p class="ma-hint">اضغط على أي خانة للتعديل. اضغط على عنوان العمود لتغيير اسمه أو حذفه.</p>
+  <div class="pi-tw"><table class="pi-t" id="piT"><thead><tr>${d.cols.map((c,j)=>`<th onclick="piCol('${id}',${j})">${E(c)}</th>`).join('')}<th class="x"></th></tr></thead><tbody>${d.rows.map((r,i)=>`<tr>${d.cols.map((c,j)=>`<td><input value="${E(r[j]??'')}" dir="auto" oninput="piCell('${id}',${i},${j},this.value)"></td>`).join('')}<td class="x"><button onclick="piDelRow('${id}',${i})">✕</button></td></tr>`).join('')}</tbody></table></div>
+  <div class="ma-acts three"><button onclick="piAddRow('${id}')"><i>➕</i>صف جديد</button><button onclick="piAddCol('${id}')"><i>📑</i>عمود جديد</button><button onclick="piRenum('${id}')"><i>🔢</i>ترقيم تلقائي</button></div></div>
+ <div class="ma-fsec"><h4>✍️ لجنة الجرد (تظهر للتوقيع في آخر الملف)</h4>${d.committee.map((m,i)=>`<div class="pi-cm"><input placeholder="الاسم" value="${E(m.name)}" oninput="piCm('${id}',${i},'name',this.value)"><input placeholder="الصفة" value="${E(m.role)}" oninput="piCm('${id}',${i},'role',this.value)"><button onclick="piCmDel('${id}',${i})">✕</button></div>`).join('')}<button class="ma-link" onclick="piCmAdd('${id}')">➕ إضافة عضو</button></div>
+ <div class="ma-fsec"><h4>📝 ملاحظات</h4><textarea rows="3" oninput="piSet('${id}','notes',this.value)">${E(d.notes)}</textarea></div>
+ <h4 class="ma-h4">⬇️ التصدير</h4><div class="pi-exp"><button class="pri" onclick="piDocx('${id}')"><i>📝</i>Word</button><button onclick="piPdf('${id}')"><i>📄</i>PDF</button><button onclick="piXlsx('${id}')"><i>📊</i>Excel</button><button onclick="piScanPdf('${id}')" ${pages.length?'':'disabled'}><i>🖨️</i>PDF الصور</button></div>
+ <div class="ma-acts two" style="margin-top:12px"><button onclick="piCopy('${id}')"><i>📑</i>نسخة لسنة جديدة</button><button onclick="piDel('${id}')"><i>🗑️</i>حذف الجرد</button></div>`)};
+let sT;const later=()=>{clearTimeout(sT);sT=setTimeout(save,500)};
+window.piSet=(id,k,v)=>{const d=byId(id);if(!d)return;d[k]=v;later()};
+window.piCell=(id,i,j,v)=>{const d=byId(id);if(!d)return;(d.rows[i]=d.rows[i]||[])[j]=v;later()};
+window.piAddRow=id=>{const d=byId(id);d.rows.push(d.cols.map((c,j)=>j===0&&/^ت$|تسلسل/.test(c)?String(d.rows.length+1):''));save();piOpen(id).then(()=>{const t=$('piT');if(t){const r=t.querySelector('tbody tr:last-child input');r&&r.scrollIntoView({block:'center'});r&&r.focus()}})};
+window.piDelRow=(id,i)=>{const d=byId(id);d.rows.splice(i,1);save();piOpen(id)};
+window.piRenum=id=>{const d=byId(id);d.rows.forEach((r,i)=>r[0]=String(i+1));save();piOpen(id);toast('✓ أُعيد الترقيم')};
+window.piAddCol=id=>{const n=prompt('اسم العمود الجديد:','');if(!n)return;const d=byId(id);d.cols.push(n.trim());d.rows.forEach(r=>r.push(''));save();piOpen(id)};
+window.piCol=(id,j)=>{const d=byId(id);const n=prompt('اسم العمود (اتركه فارغًا واضغط موافق لحذف العمود):',d.cols[j]);if(n===null)return;if(!n.trim()){if(!confirm('حذف العمود «'+d.cols[j]+'» وكل ما فيه؟'))return;d.cols.splice(j,1);d.rows.forEach(r=>r.splice(j,1))}else d.cols[j]=n.trim();save();piOpen(id)};
+window.piCm=(id,i,k,v)=>{const d=byId(id);d.committee[i][k]=v;later()};
+window.piCmAdd=id=>{const d=byId(id);d.committee.push({name:'',role:'عضو'});save();piOpen(id)};
+window.piCmDel=(id,i)=>{const d=byId(id);d.committee.splice(i,1);save();piOpen(id)};
+window.piCopy=id=>{const s=byId(id);const d=JSON.parse(JSON.stringify(s));d.id='pi'+Date.now().toString(36);d.year=(+s.year||Y())+1;d.title='';d.created=new Date().toISOString().slice(0,10);d.ocr='';list().push(d);save();toast('✓ نسخة لسنة '+d.year+' — عدّل ما تريد');piOpen(d.id)};
+window.piDel=async id=>{if(!confirm('حذف هذا الجرد وصفحاته المصوّرة؟'))return;const d=byId(id);try{const P=await PH.list(pagesKey(d));for(const p of P)await PH.del(pagesKey(d),p.id)}catch(e){}db.paperInv=list().filter(x=>x.id!==id);save();paperInv()};
+
+/* ------------------------- تصوير الصفحات ------------------------- */
+async function enhance(file){/* تحسين كالماسح الضوئي: رمادي + تباين تلقائي */
+ const img=await new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();i.onload=()=>{res(i);setTimeout(()=>URL.revokeObjectURL(u),500)};i.onerror=rej;i.src=u});
+ const r=Math.min(1,2200/Math.max(img.width,img.height)),w=Math.round(img.width*r),h=Math.round(img.height*r),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(img,0,0,w,h);
+ const id=x.getImageData(0,0,w,h),p=id.data,hist=new Uint32Array(256);for(let i=0;i<p.length;i+=4){const g=(p[i]*0.299+p[i+1]*0.587+p[i+2]*0.114)|0;p[i]=g;hist[g]++}
+ let lo=0,hi=255,acc=0,N=w*h;for(;lo<255;lo++){acc+=hist[lo];if(acc>N*0.02)break}acc=0;for(;hi>0;hi--){acc+=hist[hi];if(acc>N*0.06)break}const k=255/Math.max(30,hi-lo);
+ for(let i=0;i<p.length;i+=4){let g=(p[i]-lo)*k;g=g<0?0:g>255?255:g;g=g>200?255:g;p[i]=p[i+1]=p[i+2]=g}x.putImageData(id,0,0);
+ const b=await new Promise(res=>c.toBlob(res,'image/jpeg',0.85));return new File([b],'page.jpg',{type:'image/jpeg'})}
+window.piAddPage=function(id,cam){const d=byId(id);if(!d)return;phPick(cam,async files=>{toast('⏳ تحسين الصفحة وحفظها…');try{const ok=[];for(const f of files)ok.push(await enhance(f));await PH.add(pagesKey(d),ok);toast('✓ حُفظت '+ok.length+' صفحة');piOpen(id)}catch(e){console.warn(e);toast('تعذّر حفظ الصورة',true)}})};
+window.piDelPage=async(id,pid)=>{if(!confirm('حذف هذه الصفحة؟'))return;await PH.del(pagesKey(byId(id)),pid);piOpen(id)};
+window.piView=async(id,pid)=>{const p=(await PH.list(pagesKey(byId(id)))).find(x=>x.id===pid);if(!p)return;const v=document.createElement('div');v.className='ma-phview';v.innerHTML=`<img src="${p.f}"><button>✕</button>`;v.onclick=()=>v.remove();(document.getElementById('mApp')||document.body).appendChild(v)};
+
+/* ------------------------- استخراج النص (OCR) ------------------------- */
+function loadTess(){if(window.Tesseract)return Promise.resolve();return new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';s.onload=()=>window.Tesseract?res():rej();s.onerror=rej;document.head.appendChild(s)})}
+window.piOCR=async function(id){const d=byId(id);const P=await PH.list(pagesKey(d));if(!P.length)return;
+ toast('⏳ تحميل قارئ النصوص (أول مرة قد يأخذ دقيقة)…');try{await loadTess()}catch(e){toast('تعذّر تحميل قارئ النصوص — تحتاج إنترنت',true);return}
+ let out='';try{const w=await Tesseract.createWorker(['ara','eng']);for(let i=0;i<P.length;i++){toast('🔤 قراءة الصفحة '+(i+1)+' من '+P.length+'…');const r=await w.recognize(P[i].f);out+=(out?'\n':'')+r.data.text.trim()}await w.terminate()}catch(e){console.warn(e);toast('تعذّرت قراءة النص',true);return}
+ d.ocr=out.replace(/\n{3,}/g,'\n\n');save();toast('✓ استُخرج النص — راجعه وصحّحه');piOpen(id)};
+window.piOcrRows=function(id){const d=byId(id);const t=($('piOcr')||{}).value||d.ocr||'';const lines=t.split('\n').map(s=>s.trim()).filter(s=>/[\p{L}\p{N}]/u.test(s));if(!lines.length){toast('لا توجد أسطر',true);return}
+ let n=0;lines.forEach(l=>{const cells=l.split(/\t|\s{2,}|\s*\|\s*/).map(s=>s.trim()).filter(Boolean);const row=d.cols.map(()=>'');if(cells.length===1){row[1]=cells[0]}else cells.slice(0,d.cols.length).forEach((v,j)=>row[j]=v);d.rows.push(row);n++});
+ save();toast('✓ أُضيف '+n+' صف — راجعها وعدّلها');piOpen(id)};
+
+/* ------------------------- التصدير ------------------------- */
+const fname=(d,ext)=>(titleOf(d)).replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')+'.'+ext;
+const X=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function wP(text,o){o=o||{};return `<w:p><w:pPr><w:bidi/><w:jc w:val="${o.jc||'right'}"/><w:spacing w:before="${o.before||0}" w:after="${o.after??60}"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>${o.b?'<w:b/><w:bCs/>':''}<w:rtl/><w:sz w:val="${o.sz||24}"/><w:szCs w:val="${o.sz||24}"/>${o.color?`<w:color w:val="${o.color}"/>`:''}</w:rPr><w:t xml:space="preserve">${X(text)}</w:t></w:r></w:p>`}
+function wTbl(cols,rows,widths,head){const bd=`<w:tblBorders>${['top','left','bottom','right','insideH','insideV'].map(s=>`<w:${s} w:val="single" w:sz="6" w:color="555555"/>`).join('')}</w:tblBorders>`;
+ const cell=(t,w,h)=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${h?'<w:shd w:val="clear" w:color="auto" w:fill="D9EEE9"/>':''}<w:vAlign w:val="center"/></w:tcPr>${wP(t,{jc:'center',sz:h?21:20,b:h,after:0})}</w:tc>`;
+ return `<w:tbl><w:tblPr><w:bidiVisual/><w:tblW w:w="0" w:type="auto"/><w:jc w:val="center"/>${bd}<w:tblLayout w:type="fixed"/><w:tblCellMar><w:left w:w="60" w:type="dxa"/><w:right w:w="60" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${widths.map(w=>`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>`+
+  (head?`<w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>${cols.map((c,j)=>cell(c,widths[j],true)).join('')}</w:tr>`:'')+rows.map(r=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cols.map((c,j)=>cell(r[j]??'',widths[j],false)).join('')}</w:tr>`).join('')+`</w:tbl>`}
+function widthsFor(d,total){const L=d.cols.map((c,j)=>Math.max(String(c).length,...d.rows.slice(0,200).map(r=>String(r[j]??'').length)));const w=L.map(n=>Math.max(3,Math.min(28,n)));const s=w.reduce((a,b)=>a+b,0);return w.map(x=>Math.round(total*x/s))}
+window.piDocx=function(id){const d=byId(id);const land=d.cols.length>6;const W=land?15400:10400;
+ let body=d.org.filter(s=>s.trim()).map((s,i)=>wP(s,{jc:'center',b:i<2,sz:i<2?24:22,after:20})).join('')+wP(titleOf(d),{jc:'center',b:true,sz:34,before:200,after:120,color:'0B4F57'})+wP('تاريخ الجرد: '+(d.created||'')+'     •     عدد الأجهزة: '+d.rows.length,{jc:'center',sz:20,after:160,color:'555555'});
+ body+=wTbl(d.cols,d.rows,widthsFor(d,W),true);
+ if(cl(d.notes))body+=wP('ملاحظات:',{b:true,before:240})+String(d.notes).split('\n').map(s=>wP(s)).join('');
+ const C=d.committee.filter(m=>cl(m.name)||cl(m.role));if(C.length){body+=wP('لجنة الجرد',{b:true,jc:'center',before:360,after:120,sz:26});const cw=Math.round(W/C.length);body+=wTbl(C.map(m=>m.role||''),[C.map(m=>m.name||''),C.map(()=> 'التوقيع: ..................')],C.map(()=>cw),true)}
+ const sect=`<w:sectPr>${land?'<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>':'<w:pgSz w:w="11906" w:h="16838"/>'}<w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="360" w:footer="360" w:gutter="0"/><w:bidi/></w:sectPr>`;
+ const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}${sect}</w:body></w:document>`;
+ const files=[{name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'},
+  {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'},
+  {name:'word/document.xml',data:doc}];
+ downloadBlob(new Blob([makeZip(files)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}),fname(d,'docx'))};
+window.piXlsx=function(id){const d=byId(id);XP.fromRows(titleOf(d),d.cols,d.rows,'xlsx')};
+/* PDF مرسوم صفحة صفحة (نفس شكل ملف Word) */
+window.piPdf=async function(id){const d=byId(id);toast('⏳ تجهيز PDF…');const land=d.cols.length>6,W=land?2339:1654,H=land?1654:2339,M=70,F='"IBM Plex Sans Arabic",Tahoma,Arial,sans-serif';
+ const cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');const jp=[];let y=0,pg=0;
+ const wr=(t,w)=>{const ws=String(t??'').split(' '),L=[];let l='';ws.forEach(s=>{const n=l?l+' '+s:s;if(c.measureText(n).width>w&&l){L.push(l);l=s}else l=n});if(l)L.push(l);return L.length?L:['']};
+ const T=(t,x,yy,al,font,col)=>{c.font=font;c.fillStyle=col||'#111';c.textAlign=al||'right';c.direction=/[\u0600-\u06FF]/.test(t)?'rtl':'ltr';c.fillText(t,x,yy);c.direction='rtl'};
+ const flush=async()=>{c.fillStyle='#888';c.textAlign='center';c.font=`500 18px ${F}`;c.fillText('صفحة '+(pg+1),W/2,H-28);const b=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.86));jp.push(new Uint8Array(await b.arrayBuffer()));pg++};
+ const newPage=()=>{c.setTransform(1,0,0,1,0,0);c.fillStyle='#fff';c.fillRect(0,0,W,H);c.textBaseline='middle';y=M};
+ const widths=widthsFor(d,W-2*M);const head=()=>{let x=W-M;c.font=`700 19px ${F}`;const hl=Math.max(...d.cols.map((h,j)=>wr(h,widths[j]-12).length));const hh=hl*24+16;d.cols.forEach((h,j)=>{c.fillStyle='#d9eee9';c.fillRect(x-widths[j],y,widths[j],hh);c.strokeStyle='#555';c.lineWidth=1.2;c.strokeRect(x-widths[j],y,widths[j],hh);wr(h,widths[j]-12).forEach((l,k)=>T(l,x-widths[j]/2,y+14+k*24+4,'center',`700 19px ${F}`));x-=widths[j]});y+=hh};
+ newPage();d.org.filter(s=>s.trim()).forEach((s,i)=>{T(s,W/2,y+16,'center',`${i<2?700:500} ${i<2?24:21}px ${F}`,'#222');y+=32});y+=16;T(titleOf(d),W/2,y+20,'center',`800 40px ${F}`,'#0b4f57');y+=58;T('تاريخ الجرد: '+(d.created||'')+'   •   عدد الأجهزة: '+d.rows.length,W/2,y+10,'center',`500 20px ${F}`,'#555');y+=40;head();
+ for(const r of d.rows){c.font=`500 18px ${F}`;const ls=d.cols.map((h,j)=>wr(r[j]??'',widths[j]-12));const rh=Math.max(...ls.map(l=>l.length))*23+14;if(y+rh>H-M-30){await flush();newPage();head()}
+  let x=W-M;d.cols.forEach((h,j)=>{c.strokeStyle='#555';c.lineWidth=1;c.strokeRect(x-widths[j],y,widths[j],rh);ls[j].forEach((l,k)=>T(l,x-widths[j]/2,y+12+k*23+6,'center',`500 18px ${F}`));x-=widths[j]});y+=rh}
+ if(cl(d.notes)){if(y+90>H-M){await flush();newPage()}y+=30;T('ملاحظات:',W-M,y,'right',`700 21px ${F}`);y+=30;String(d.notes).split('\n').forEach(l=>{T(l,W-M,y,'right',`500 19px ${F}`);y+=28})}
+ const C=d.committee.filter(m=>cl(m.name)||cl(m.role));if(C.length){if(y+200>H-M){await flush();newPage()}y+=50;T('لجنة الجرد',W/2,y,'center',`800 26px ${F}`,'#0b4f57');y+=50;const cw=(W-2*M)/C.length;C.forEach((m,i)=>{const cx=W-M-cw*i-cw/2;T(m.role||'',cx,y,'center',`700 21px ${F}`);T(m.name||'',cx,y+38,'center',`500 20px ${F}`);T('التوقيع: .................',cx,y+90,'center',`500 19px ${F}`,'#555')})}
+ await flush();cv.width=1;
+ const pdf=window.jpegPdfAny?jpegPdfAny(jp,W,H,land):null;if(pdf)downloadBlob(pdf,fname(d,'pdf'))};
+window.piScanPdf=async function(id){const d=byId(id);const P=await PH.list(pagesKey(d));if(!P.length)return;toast('⏳ تجهيز PDF من الصفحات المصوّرة…');
+ const jp=[];let W=1654,H=2339;for(const p of P){const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=p.f});const land=im.width>im.height;const cw=land?2339:1654,ch=land?1654:2339;const c=document.createElement('canvas');c.width=cw;c.height=ch;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cw,ch);const r=Math.min((cw-80)/im.width,(ch-80)/im.height);x.drawImage(im,(cw-im.width*r)/2,(ch-im.height*r)/2,im.width*r,im.height*r);
+  const b=await new Promise(rs=>c.toBlob(rs,'image/jpeg',0.85));jp.push({u:new Uint8Array(await b.arrayBuffer()),w:cw,h:ch})}
+ downloadBlob(jpegPdfMixed(jp),fname(d,'pdf').replace('.pdf','_الصفحات_المصورة.pdf'))};
+})();
+
+</script>
+<script>
+/* =====================================================================
    mapp.js — واجهة «تطبيق الهاتف»: 4 تبويبات + زر ➕ ، نماذج قصيرة، سريع
    تعمل على نفس البيانات (db) — والنظام الكامل يبقى متاحًا بضغطة
    ===================================================================== */
@@ -4209,7 +4374,7 @@ function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div 
  <section class="ma-tiles"><div class="ma-tiles-h"><b>الأدوات الرئيسية</b><small>اضغط للبدء</small></div><div class="ma-tgrid">${[['🏥','الأجهزة',"maView2('list')",'#0f8a7e','#14b8a6'],['📋','الجرد Excel','maInv()','#1d7a45','#34c26f'],['🔳','الباركود',"maView2('qr')",'#5b3cc4','#8b6cf0'],['🏷️','طباعة الملصقات','printLabelsFor(db.devices)','#b4235f','#ec5f95'],
  ['🖨️','طباعة الجرد',"XP.run('devices','pdf',{})",'#2a5fb4','#5b8def'],['📑','التقارير','reportsHub()','#0b6f8a','#2bb3d6'],['🚨','بلاغ عطل','maFault()','#b3261e','#ef6352'],['🔧','صيانة','maMaint()','#0b7a70','#2fc0b0'],
  ['📥','تحديث من Excel','xlsUpdate()','#7a4b0b','#e39a2d'],['⭐','تقييم الأجهزة','evalView()','#a17700','#f2c21b'],['📷','مسح باركود','maScan()','#37474f','#78909c'],['↗','مشاركة','maShareAll()','#4527a0','#7e57c2'],
- ['🗓️','الجرد السنوي','annualInv()','#00695c','#26a69a'],['📢','البلاغات',"maTab('work')",'#c62828','#ff7043'],['🛡️','الضمانات','rpWarr()','#1565c0','#42a5f5'],['🤖','بوت تلغرام','maBot()','#0277bd','#29b6f6']].map(([i,t,f,a,b])=>`<button onclick="${f}" style="--a:${a};--b:${b}"><i>${i}</i><span>${t}</span></button>`).join('')}</div></section>
+ ['🗓️','الجرد السنوي','paperInv()','#00695c','#26a69a'],['📢','البلاغات',"maTab('work')",'#c62828','#ff7043'],['🛡️','الضمانات','rpWarr()','#1565c0','#42a5f5'],['🤖','بوت تلغرام','maBot()','#0277bd','#29b6f6']].map(([i,t,f,a,b])=>`<button onclick="${f}" style="--a:${a};--b:${b}"><i>${i}</i><span>${t}</span></button>`).join('')}</div></section>
  <section class="ma-week"><div class="ma-week-h"><b>آخر 7 أيام</b><span><i class="f"></i>أعطال <i class="m"></i>صيانات</span></div><div class="ma-bars">${wk.map((x,i)=>`<div><span><i class="f" style="height:${Math.round(x.n/mx*100)}%"></i><i class="m" style="height:${Math.round(x.m/mx*100)}%"></i></span><small>${dn[new Date(x.d).getDay()]}</small></div>`).join('')}</div></section>
  <h3 class="ma-h">يحتاج انتباهك ${items.length?`<em>${items.length}</em>`:''}</h3>
  ${items.length?`<div class="ma-list">${items.map(x=>`<div class="ma-item ${x.c}"><i>${x.i}</i><div><b>${E(x.t)}</b><small>${E(x.s)}</small></div><button onclick="${x.a}">${x.b}</button></div>`).join('')}</div>`:`<div class="ma-empty"><i>✅</i><b>كل شيء تمام</b><span>لا بلاغات مفتوحة ولا صيانة مستحقة.</span></div>`}`}
@@ -4275,7 +4440,14 @@ window.maQCustom=function(){const v=+LS.get('lbl_custom','12');sheet(`<h3 class=
  <button class="ma-save" onclick="maQCgo()">🖨️ طباعة <span id="lcT">${v}</span> بالصفحة</button>`);maQCv(0,v)};
 window.maQCv=function(dlt,val){const r=$('lcR');let n=val!=null?+val:(+r.value)+dlt;n=Math.max(1,Math.min(50,n));r.value=n;$('lcN').textContent=n;$('lcT').textContent=n;const [c,rw]=window.lblGrid(n);$('lcPrev').style.gridTemplateColumns=`repeat(${c},1fr)`;$('lcPrev').innerHTML='<i></i>'.repeat(n)+'<b></b>'.repeat(c*rw-n)};
 window.maQCgo=function(){const n=+$('lcR').value;LS.set('lbl_custom',String(n));maClose();maQPrintN(n)};
-window.maQPrintN=function(n){vib();const L=qsel.size?(db.devices||[]).filter(d=>qsel.has(d._uid)):filtered();if(!L.length){toast('لا توجد أجهزة',true);return}LS.set('lbl_per',String(n));labelsPdf(L,n)};
+window.maQPrintN=function(n){vib();const L=qsel.size?(db.devices||[]).filter(d=>qsel.has(d._uid)):filtered();if(!L.length){toast('لا توجد أجهزة',true);return}LS.set('lbl_per',String(n));window.__qL=L;window.__qN=n;
+ const deps={};L.forEach(d=>{const l=LOC(d);deps[l]=(deps[l]||0)+1});const nd=Object.keys(deps).length;
+ if(nd<2){labelsPdf(L,n);return}
+ sheet(`<h3 class="ma-st">🖨️ كيف تريد الطباعة؟</h3><p class="ma-hint">${L.length} ملصق • ${n} بالصفحة • ${nd} قسم</p>
+ <div class="pc-ch"><button onclick="maClose();labelsPdf(__qL,__qN)"><i>📄</i><span><b>كل الملصقات متتالية</b><small>أقل عدد من الأوراق — الأقسام وراء بعض</small></span></button>
+ <button class="pri" onclick="maClose();labelsPdf(__qL,__qN,{byDept:true})"><i>🏥</i><span><b>كل قسم بورقة مستقلة</b><small>كل قسم يبدأ بصفحة جديدة وعنوانها اسم القسم — أسهل للتوزيع</small></span></button></div>
+ <h4 class="ma-h4">أو قسم واحد فقط</h4><div class="ma-menu">${Object.entries(deps).sort((a,b)=>a[0].localeCompare(b[0],'ar')).map(([l,c])=>`<button onclick="maQDep(this.dataset.l)" data-l="${E(l)}"><i style="color:${locColor(l)}">●</i><span>${E(l)}</span><em>${c}</em><b>‹</b></button>`).join('')}</div>`)};
+window.maQDep=function(l){maClose();labelsPdf(window.__qL.filter(d=>LOC(d)===l),window.__qN,{byDept:true})};
 window.maQMode=function(){vib();qselMode=!qselMode;if(!qselMode)qsel.clear();renderDevices2()};
 window.maQTap=function(u,el){if(!qselMode){maQR(u);return}vib();qsel.has(u)?qsel.delete(u):qsel.add(u);el.classList.toggle('sel');qUpd()};
 window.maQAll=function(){if(qsel.size)qsel.clear();else filtered().forEach(d=>qsel.add(d._uid));renderDevices2()};
@@ -4428,7 +4600,7 @@ window.maWork=k=>{vib();workSeg=k;renderWork()};
 /* ---------------- المزيد ---------------- */
 function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}catch(e){}
  const G=(t,rows)=>`<h4 class="ma-h4">${t}</h4><div class="ma-menu">${rows.map(([i,l,f,x])=>`<button onclick="${f}"><i>${i}</i><span>${l}</span>${x?`<em>${x}</em>`:''}<b>‹</b></button>`).join('')}</div>`;
- $('maBody').innerHTML=G('الجرد والتقارير',[['🗓️','الجرد السنوي','annualInv()'],['📑','مركز التقارير','reportsHub()'],['📊','الجرد العام — Excel',"maInv()"],['🖨️','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['⭐','تقييم الأجهزة','evalView()'],['🗓️','تقرير الشهر','openMonthly()']])+
+ $('maBody').innerHTML=G('الجرد والتقارير',[['🗓️','الجرد السنوي الورقي (تصوير وتعديل)','paperInv()'],['📋','جرد سنوي من بيانات الأجهزة','annualInv()'],['📑','مركز التقارير','reportsHub()'],['📊','الجرد العام — Excel',"maInv()"],['🖨️','الجرد العام — PDF',"XP.run('devices','pdf',{})"],['⭐','تقييم الأجهزة','evalView()'],['🗓️','تقرير الشهر','openMonthly()']])+
  G('الباركود والصور',[['🏷️','طباعة ملصقات الباركود (6–8 بالصفحة)','printLabelsFor(db.devices)'],['🔳','قسم الباركود',"maView2('qr')"],['📷','مسح باركود','maScan()'],['📸','صور الأجهزة',"maTour()",(()=>{const S=PH.stats();return (S.own+S.type)+'/'+S.total})()],['↗','مشاركة كل الأجهزة','maShareAll()']])+
  G('الوزارة والمتابعة',[['📌','بانتظار النقل للوزاري',"maFull('mohq')",pend||''],['🏛️','البرنامج الوزاري (مطابقة Excel)',"maFull('moh')"],['⚡','السلامة الكهربائية والمعايرة',"maFull('safety')"],['♻️','خطة الإحلال',"maFull('lifecycle')"],['🏢','الشركات والوكلاء',"maFull('vendors')"],['📝','الكتب الرسمية',"maFull('letters')"]])+
  G('البيانات',[['📥','تحديث الأجهزة من Excel','xlsUpdate()'],['📂','استيراد نسخة بيانات (JSON)','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()'],['💾','حفظ نسخة مع الصور','exportWithPhotos()']])+
