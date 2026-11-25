@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
-<script>window.__HOSTED=1;try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.22.1528"</script>
+<script>window.__HOSTED=1;window.BIP=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.BIP=e});try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
+<script>window.APP_VERSION="2026.11.25.1857"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1181,6 +1181,33 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .dp-it:has(input:checked){background:color-mix(in srgb,var(--ma-pri) 9%,var(--ma-card))}
 .dp-go{position:sticky;bottom:0;padding:8px 0 4px;background:linear-gradient(transparent,var(--ma-bg) 35%)}.dp-go .ma-save:disabled{opacity:.45}
 .dp-it input[type=checkbox]{width:22px!important;height:22px!important;min-width:22px!important;max-width:22px!important;padding:0!important;margin:0!important;border:0!important;box-shadow:none!important;flex:0 0 22px!important;appearance:auto!important;-webkit-appearance:checkbox!important;background:none!important}
+/* ===== زر تثبيت التطبيق ===== */
+#instBar{position:fixed;z-index:99990;inset-inline:12px;bottom:calc(84px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;border-radius:18px;background:linear-gradient(135deg,#0F5C60,#0B2B30);color:#fff;box-shadow:0 14px 34px rgba(11,43,48,.35);direction:rtl;font-family:inherit;transform:translateY(30px);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s}
+#instBar.on{transform:none;opacity:1}
+#instBar .ib-ic{flex:none;width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:22px}
+#instBar .ib-tx{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35}
+#instBar .ib-tx b{font-size:14.5px}#instBar .ib-tx span{font-size:12px;color:#BFD8D5}
+#instBar .ib-go{flex:none;border:0;border-radius:12px;background:#D9A441;color:#14262E;font:inherit;font-weight:800;font-size:14.5px;padding:10px 16px;cursor:pointer}
+#instBar .ib-x{flex:none;border:0;background:none;color:#BFD8D5;font-size:16px;width:30px;height:30px;cursor:pointer}
+@media(min-width:900px){#instBar{inset-inline:auto;left:24px;bottom:24px;width:400px}}
+#instSheet{position:fixed;inset:0;z-index:99995;direction:rtl;pointer-events:none}
+#instSheet .is-bg{position:absolute;inset:0;background:rgba(8,20,24,.5);opacity:0;transition:opacity .25s}
+#instSheet .is-box{position:absolute;inset-inline:0;bottom:0;max-width:520px;margin:0 auto;background:var(--ma-card,#fff);color:var(--ma-ink,#14262E);border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);font-family:inherit}
+#instSheet.on{pointer-events:auto}#instSheet.on .is-bg{opacity:1}#instSheet.on .is-box{transform:none}
+#instSheet h3{margin:0 0 8px;font-size:19px}#instSheet p{margin:0 0 10px;font-size:14px;color:var(--ma-mut,#4A5D66);line-height:1.6}
+.ib-steps{list-style:none;margin:6px 0 12px;padding:0;display:flex;flex-direction:column;gap:9px}
+.ib-steps li{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,#138F7C 9%,transparent);border-radius:14px;padding:10px 12px;font-size:14.5px;line-height:1.5}
+.ib-steps li>span{flex:none;width:28px;height:28px;border-radius:50%;background:#0F5C60;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+.ib-share,.ib-plus{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:#fff;color:#007AFF;border:1px solid #d6dde0;vertical-align:middle;font-style:normal;font-weight:800}
+.ib-arrow{text-align:center;font-size:30px;color:#D9A441;animation:ibb 1s ease-in-out infinite}
+@keyframes ibb{50%{transform:translateY(8px)}}
+.ib-link{display:flex;gap:8px;margin:8px 0}.ib-link input{flex:1!important;width:auto!important;min-width:0;border:1px solid #d6dde0;border-radius:12px;padding:10px;font-size:12px;background:#f6f8f8;color:#14262E}
+.ib-link button{flex:none;border:0;border-radius:12px;background:#0F5C60;color:#fff;font:inherit;font-weight:700;padding:0 14px}
+.ib-big{display:block;width:100%;text-align:center;border:0;border-radius:14px;background:#0F5C60;color:#fff;font:inherit;font-weight:800;font-size:15px;padding:13px;margin-top:8px;text-decoration:none;cursor:pointer}
+.ib-big.ghost{background:color-mix(in srgb,#0F5C60 10%,transparent);color:#0F5C60}
+.ib-mut{font-size:12.5px!important}
+.ib-steps li{display:block;position:relative;padding-inline-start:50px;min-height:48px}
+.ib-steps li>span{position:absolute;inset-inline-start:12px;top:50%;margin-top:-14px}
 
 </style>
 </head><body>
@@ -3528,7 +3555,7 @@ window.backupToTelegram=async function(){try{const SB='https://jmvbxnmvoqvumsljs
 /* =====================================================================
    6) تثبيت البرنامج على الهاتف
    ===================================================================== */
-window.BIP=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.BIP=e});
+window.BIP=window.BIP||null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.BIP=e});
 const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 window.openInstall=function(){const hosted=/^https?:/.test(location.protocol)&&!/claude|anthropic/.test(location.host);
  modal('📲 تثبيت البرنامج على الهاتف',standalone?`<div class="panel emptyok"><div style="font-size:46px">✅</div><h3>البرنامج مثبّت ويعمل كتطبيق</h3></div>`:
@@ -4687,6 +4714,68 @@ setTimeout(onStart,1200);
 setInterval(()=>appCheckUpdate(false),30*60e3);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')appCheckUpdate(false)});
 window.APP_VER_LABEL=V;
+})();
+
+</script>
+<script>
+/* =====================================================================
+   زر تثبيت التطبيق — يظهر مباشرة عند فتح البرنامج (أندرويد + آيفون)
+   ===================================================================== */
+(function(){
+const UA=navigator.userAgent||'';
+const IOS=/iphone|ipad|ipod/i.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const IOS_OTHER=IOS&&/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(UA);            // كروم/فايرفوكس على آيفون
+const INAPP=/FBAN|FBAV|Instagram|WhatsApp|Telegram|Line\/|Snapchat|TikTok/i.test(UA); // متصفح داخل تطبيق
+const ANDROID=/android/i.test(UA);
+const STANDALONE=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const HOSTED=/^https:/.test(location.protocol)&&!/claude|anthropic/.test(location.host);
+const URL_APP='https://fak123123fa-lang.github.io/burns-center-devices/app.html';
+const LS='inst_hide_until';
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window.BIP=e;show()});
+window.addEventListener('appinstalled',()=>{window.BIP=null;hide();try{localStorage.setItem(LS,String(Date.now()+3650*864e5))}catch(e){};toastI('✅ تم تثبيت التطبيق على هاتفك')});
+
+function toastI(t){if(typeof toast==='function')toast(t);}
+function hidden(){try{return Date.now()<+(localStorage.getItem(LS)||0)}catch(e){return false}}
+function hide(){const b=document.getElementById('instBar');if(b)b.remove()}
+function show(){
+ if(STANDALONE()||hidden()||document.getElementById('instBar'))return;
+ if(!HOSTED&&!IOS&&!ANDROID)return;   // على الحاسبة من ملف محلي: لا داعي
+ const b=document.createElement('div');b.id='instBar';b.setAttribute('role','dialog');
+ b.innerHTML=`<div class="ib-ic">📲</div><div class="ib-tx"><b>ثبّت التطبيق على هاتفك</b><span>يفتح بضغطة من الشاشة الرئيسية مثل أي تطبيق</span></div>
+ <button class="ib-go" onclick="instGo()">تثبيت</button><button class="ib-x" aria-label="إغلاق" onclick="instLater()">✕</button>`;
+ document.body.appendChild(b);requestAnimationFrame(()=>b.classList.add('on'));
+}
+window.instLater=function(){hide();try{localStorage.setItem(LS,String(Date.now()+3*864e5))}catch(e){}};
+window.instGo=function(){
+ if(window.BIP){const p=window.BIP;p.prompt();p.userChoice.then(r=>{if(r&&r.outcome==='accepted'){hide()}window.BIP=null}).catch(()=>{});return}
+ sheetI(guide());
+};
+function guide(){
+ const copy=`<div class="ib-link"><input dir="ltr" readonly value="${URL_APP}" onclick="this.select()"><button onclick="instCopy()">نسخ الرابط</button></div>`;
+ if(!HOSTED) return `<h3>📲 تثبيت التطبيق</h3><p>التثبيت يعمل من نسخة الإنترنت. افتح الرابط في <b>${IOS?'Safari':'Chrome'}</b> ثم اضغط «تثبيت»:</p>${copy}<a class="ib-big" href="${URL_APP}">فتح نسخة الإنترنت</a>`;
+ if(IOS&&(INAPP||IOS_OTHER)) return `<h3>📲 افتح الرابط في Safari أولًا</h3><p>على الآيفون يتم التثبيت من متصفح <b>Safari</b> فقط.</p><ol class="ib-steps"><li><span>1</span>انسخ الرابط من الزر بالأسفل.</li><li><span>2</span>افتح <b>Safari</b> والصق الرابط.</li><li><span>3</span>اضغط زر «تثبيت» الذي يظهر لك.</li></ol>${copy}`;
+ if(IOS) return `<h3>📲 تثبيت التطبيق على الآيفون</h3><p>ثلاث لمسات فقط (أبل لا تسمح بالتثبيت بزر واحد):</p>
+  <ol class="ib-steps"><li><span>1</span>اضغط زر <b>المشاركة</b> <i class="ib-share">${SHARE}</i> ${/ipad/i.test(UA)?'أعلى':'أسفل'} الشاشة في Safari.</li>
+  <li><span>2</span>مرّر للأسفل واختر <b>«إضافة إلى الشاشة الرئيسية»</b> <i class="ib-plus">＋</i></li>
+  <li><span>3</span>اضغط <b>«إضافة»</b> — تظهر أيقونة البرنامج على شاشتك.</li></ol>
+  ${/ipad/i.test(UA)?'':'<div class="ib-arrow">⬇</div>'}`;
+ if(INAPP) return `<h3>📲 افتح الرابط في Chrome أولًا</h3><p>أنت داخل متصفح تطبيق آخر. اضغط القائمة <b>⋮</b> واختر «فتح في Chrome»، أو انسخ الرابط:</p>${copy}`;
+ return `<h3>📲 تثبيت التطبيق</h3><ol class="ib-steps"><li><span>1</span>افتح قائمة المتصفح <b>⋮</b> أعلى الشاشة.</li><li><span>2</span>اختر <b>«تثبيت التطبيق»</b> أو «إضافة إلى الشاشة الرئيسية».</li><li><span>3</span>اضغط <b>تثبيت</b>.</li></ol><p class="ib-mut">إذا لم يظهر الخيار، حدّث الصفحة وانتظر ثوانٍ ثم اضغط «تثبيت» مرة أخرى.</p>`;
+}
+const SHARE='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 11v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/></svg>';
+window.instCopy=function(){const t=URL_APP;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toastI('✅ تم نسخ الرابط')).catch(()=>{const i=document.querySelector('.ib-link input');if(i){i.select();try{document.execCommand('copy');toastI('✅ تم نسخ الرابط')}catch(e){}}})};
+function sheetI(html){
+ let s=document.getElementById('instSheet');if(!s){s=document.createElement('div');s.id='instSheet';document.body.appendChild(s)}
+ s.innerHTML=`<div class="is-bg" onclick="instClose()"></div><div class="is-box">${html}<button class="ib-big ghost" onclick="instClose()">حسنًا</button></div>`;
+ requestAnimationFrame(()=>s.classList.add('on'));
+}
+window.instClose=function(){const s=document.getElementById('instSheet');if(s){s.classList.remove('on');setTimeout(()=>s.remove(),250)}};
+// ربط زر الإعدادات القديم بالنافذة الجديدة
+window.openInstall=function(){if(STANDALONE()){toastI('✅ التطبيق مثبّت ويعمل كتطبيق');return}instGo()};
+window.instShowBar=function(){try{localStorage.removeItem(LS)}catch(e){};show()};
+// الإظهار عند الفتح (آيفون لا يرسل حدث التثبيت، فنُظهر الزر مباشرة)
+function boot(){setTimeout(()=>{if(IOS||!ANDROID||INAPP)show();else setTimeout(show,2500)},900)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 
 </script>
