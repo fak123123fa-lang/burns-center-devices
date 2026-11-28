@@ -72,14 +72,27 @@ async function card(url, o) {
 }
 /* ---------------- تلغرام (بوت المسؤول) ---------------- */
 const Hh = (x) => String(x ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-let TG = null;
-async function tgCfg() { if (TG)
-    return TG; const c = await rest("burns_tg_config?id=eq.1&select=bot_token"); const u = await rest("burns_tg_users?role=eq.owner&select=chat_id"); TG = { token: Deno.env.get("TELEGRAM_BOT_TOKEN") || (c && c[0] && c[0].bot_token) || "", chats: (u || []).map((x) => x.chat_id) }; return TG; }
+// بوت الإدارة (منفصل) إن كان مفعّلًا، وإلا بوت المركز
+async function tgCfg(org) {
+    try {
+        const m = await rest("mgmt_tg_config?id=eq.1&select=bot_token");
+        if (m && m[0] && m[0].bot_token && org) {
+            const r = await rest("rpc/org_recipients", { method: "POST", body: { p_org: org } });
+            const chats = (r || []).map((x) => +(x.org_recipients ?? x));
+            if (chats.length)
+                return { token: m[0].bot_token, chats };
+        }
+    }
+    catch (_) { /* */ }
+    const c = await rest("burns_tg_config?id=eq.1&select=bot_token");
+    const u = await rest("burns_tg_users?role=eq.owner&select=chat_id");
+    return { token: (c && c[0] && c[0].bot_token) || "", chats: (u || []).map((x) => x.chat_id) };
+}
 const LINE = "━━━━━━━━━━━━━━━━";
 const head = (O) => `🏢 <b>${Hh(O.name)}</b>${O.directorate ? " · " + Hh(O.directorate) : ""}`;
-async function notify(text, kb, photo) {
+async function notify(text, kb, photo, org) {
     try {
-        const c = await tgCfg();
+        const c = await tgCfg(org);
         if (!c.token || !c.chats.length)
             return;
         for (const chat of c.chats) {
@@ -131,7 +144,7 @@ async function event(req, o) {
     const S = await loadState(o);
     const n = (S && S.data && S.data.devices || []).length;
     const txt = `${LINE}\n${head(O)}\n${EVT[kind]}\n👤 ${Hh(who)} (${role === "owner" ? "مالك" : "مشاهد"})\n🕐 ${T.date} — الساعة ${T.time}\n📟 الأجهزة المسجّلة: ${n}\n${LINE}`;
-    await notify(txt);
+    await notify(txt, undefined, undefined, o);
     await logAct(o, kind, EVT[kind] + " — " + who, who, true);
     return J({ ok: true });
 }
@@ -154,7 +167,7 @@ async function digest(req) {
         const actors = [...new Set(list.map((x) => x.actor).filter(Boolean))].join("، ");
         const body = list.slice(-8).map((x) => Hh(x.summary)).join("\n");
         const txt = `${LINE}\n${head(O)}\n📝 <b>نشاط جديد</b>${actors ? " — 👤 " + Hh(actors) : ""}\n🕐 ${t0.slice(0, 10)} ${t0.slice(11, 16)}${t1.slice(11, 16) !== t0.slice(11, 16) ? "–" + t1.slice(11, 16) : ""}\n\n${body}${list.length > 8 ? "\n… و" + (list.length - 8) + " تحديثًا آخر" : ""}\n${LINE}`;
-        await notify(txt);
+        await notify(txt, undefined, undefined, o);
     }
     await rest("org_activity?id=in.(" + rows.map((r) => r.id).join(",") + ")", { method: "PATCH", prefer: "return=minimal", body: { sent: true } });
     return J({ ok: true, sent: rows.length });
@@ -206,7 +219,7 @@ async function report(req, o) {
     });
     const txt = `${LINE}\n${head(O)}\n🚨 <b>بلاغ عطل جديد ${num}</b> (من ملصق الباركود)\n🕐 ${T.date} — الساعة ${T.time}\n\n📟 <b>${Hh(d._seq ? d._seq + ". " : "")}${Hh(dname(d))}</b>\n📍 ${Hh(loc(d))}${cl(d["سريال نمبر"]) ? "\n🔢 S/N: " + Hh(cl(d["سريال نمبر"])) : ""}\n\n📝 ${Hh(desc)}\n\n👤 ${Hh(who || "بدون اسم")}${phone ? " — 📞 " + Hh(phone) : ""}\n${LINE}`;
     const kb = phone ? { inline_keyboard: [[{ text: "💬 واتساب المبلّغ", url: "https://wa.me/" + phone.replace(/^0/, "964").replace(/^\+/, "") }]] } : undefined;
-    await notify(txt, kb, photo || undefined);
+    await notify(txt, kb, photo || undefined, o);
     await logAct(o, "fault", "🚨 بلاغ " + num + " — " + dname(d) + " (" + loc(d) + ")", who || "QR", true);
     return J({ ok: true, number: num });
 }
