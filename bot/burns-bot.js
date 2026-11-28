@@ -374,7 +374,7 @@ async function report(req) {
   await mutate((data) => { data.faults = data.faults || []; num = "FLT-" + String(data.faults.length + 1).padStart(4, "0");
     data.faults.push({ id: fid, number: num, deviceId: d._uid, deviceName: dname(d), location: loc(d), date: T.date, time: T.time, priority: "متوسطة", reporter: "QR — " + (who || "بدون اسم") + (phone ? " (" + phone + ")" : ""), reporterName: who, reporterPhone: phone, status: "جديد", description: desc, via: "qr", hasPhoto: !!photo, photoId: pid });
     (data.history = data.history || []).push({ t: nowStr(), u: d._uid, k: "fault", to: desc.slice(0, 120), ref: num, via: "qr" }); });
-  const cap = `🚨 <b>بلاغ عطل جديد ${num}</b> (من ملصق QR)\n🕐 ${T.date} — الساعة ${T.time}\n\n🏥 <b>${H(d._seq)}. ${H(dname(d))}</b>${d._moh ? " — 🏛 وزاري " + H(d._moh) : ""}\n📍 ${H(loc(d))}\n🔢 S/N: ${H(cl(d["سريال نمبر"]) || "—")}\n\n📝 ${H(desc)}\n\n👤 ${H(who || "بدون اسم")}${phone ? " — 📞 " + H(phone) : ""}`;
+  const cap = `━━━━━━━━━━━━━━━━\n🏥 <b>${H(CENTER)}</b>\n🚨 <b>بلاغ عطل جديد ${num}</b> (من ملصق الباركود)\n🕐 ${T.date} — الساعة ${T.time}\n\n📟 <b>${H(d._seq)}. ${H(dname(d))}</b>${d._moh ? " — 🏛 وزاري " + H(d._moh) : ""}\n📍 ${H(loc(d))}\n🔢 S/N: ${H(cl(d["سريال نمبر"]) || "—")}\n\n📝 ${H(desc)}\n\n👤 ${H(who || "بدون اسم")}${phone ? " — 📞 " + H(phone) : ""}`;
   const kb = { inline_keyboard: [[B("📋 بطاقة الجهاز", "dev:" + d._uid), B("🔴 عاطل", "st:" + d._uid + ":1")], ...(phone ? [[{ text: "💬 واتساب المبلّغ", url: "https://wa.me/" + phone.replace(/^0/, "964").replace(/^\+/, "") }]] : [])] };
   const c = await cfg();
   for (const chat of await owners()) {

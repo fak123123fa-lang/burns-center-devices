@@ -70,6 +70,95 @@ async function card(url, o) {
         r.wa = wa;
     return new Response(JSON.stringify({ ok: true, d: r }), { headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "public, max-age=60" } });
 }
+/* ---------------- تلغرام (بوت المسؤول) ---------------- */
+const Hh = (x) => String(x ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+let TG = null;
+async function tgCfg() { if (TG)
+    return TG; const c = await rest("burns_tg_config?id=eq.1&select=bot_token"); const u = await rest("burns_tg_users?role=eq.owner&select=chat_id"); TG = { token: Deno.env.get("TELEGRAM_BOT_TOKEN") || (c && c[0] && c[0].bot_token) || "", chats: (u || []).map((x) => x.chat_id) }; return TG; }
+const LINE = "━━━━━━━━━━━━━━━━";
+const head = (O) => `🏢 <b>${Hh(O.name)}</b>${O.directorate ? " · " + Hh(O.directorate) : ""}`;
+async function notify(text, kb, photo) {
+    try {
+        const c = await tgCfg();
+        if (!c.token || !c.chats.length)
+            return;
+        for (const chat of c.chats) {
+            if (photo) {
+                const bin = Uint8Array.from(atob(photo.split(",")[1]), (ch) => ch.charCodeAt(0));
+                const fd = new FormData();
+                fd.append("chat_id", String(chat));
+                fd.append("caption", text.slice(0, 1020));
+                fd.append("parse_mode", "HTML");
+                if (kb)
+                    fd.append("reply_markup", JSON.stringify(kb));
+                fd.append("photo", new Blob([bin], { type: "image/jpeg" }), "fault.jpg");
+                await fetch(`https://api.telegram.org/bot${c.token}/sendPhoto`, { method: "POST", body: fd });
+            }
+            else
+                await fetch(`https://api.telegram.org/bot${c.token}/sendMessage`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true, ...(kb ? { reply_markup: kb } : {}) }) });
+        }
+    }
+    catch (e) {
+        console.error("tg", e);
+    }
+}
+async function logAct(o, kind, summary, actor, sent) { try {
+    await rest("org_activity", { method: "POST", prefer: "return=minimal", body: { org_id: o, kind, summary, actor, sent } });
+}
+catch (_) { /* الجدول غير موجود بعد */ } }
+async function userOf(req) { const a = req.headers.get("authorization") || ""; if (!a.startsWith("Bearer "))
+    return null; const r = await fetch(SB + "/auth/v1/user", { headers: { apikey: SK, Authorization: a } }); return r.ok ? await r.json() : null; }
+async function roleOf(req, o) { const a = req.headers.get("authorization") || ""; const r = await fetch(SB + "/rest/v1/rpc/org_role", { method: "POST", headers: { apikey: Deno.env.get("SUPABASE_ANON_KEY") || SK, Authorization: a, "Content-Type": "application/json" }, body: JSON.stringify({ p_org: o }) }); return r.ok ? await r.json() : null; }
+const EVT = { login: "🔐 تسجيل دخول", open: "📲 فتح التطبيق" };
+async function event(req, o) {
+    const b = await req.json().catch(() => ({}));
+    const kind = EVT[b.kind] ? b.kind : "";
+    if (!kind)
+        return J({ error: "kind" }, 400);
+    const u = await userOf(req);
+    if (!u)
+        return J({ error: "login" }, 401);
+    const role = await roleOf(req, o);
+    if (!role)
+        return J({ error: "forbidden" }, 403);
+    const O = await org(o);
+    if (!O)
+        return J({ error: "org" }, 404);
+    const admin = await (async () => { const r = await rest(`org_admins?user_id=eq.${u.id}&select=user_id`); return r && r.length; })();
+    if (admin)
+        return J({ ok: true, skipped: "admin" });
+    const who = String(u.email || "").split("@")[0], T = bagh();
+    const S = await loadState(o);
+    const n = (S && S.data && S.data.devices || []).length;
+    const txt = `${LINE}\n${head(O)}\n${EVT[kind]}\n👤 ${Hh(who)} (${role === "owner" ? "مالك" : "مشاهد"})\n🕐 ${T.date} — الساعة ${T.time}\n📟 الأجهزة المسجّلة: ${n}\n${LINE}`;
+    await notify(txt);
+    await logAct(o, kind, EVT[kind] + " — " + who, who, true);
+    return J({ ok: true });
+}
+async function digest(req) {
+    const b = await req.json().catch(() => ({}));
+    const s = await rest("org_secrets?k=eq.digest&select=v");
+    if (!s || !s[0] || b.secret !== s[0].v)
+        return J({ error: "forbidden" }, 403);
+    const rows = await rest("org_activity?sent=eq.false&kind=in.(edit,import)&select=id,org_id,summary,actor,created_at&order=created_at&limit=200");
+    if (!rows || !rows.length)
+        return J({ ok: true, sent: 0 });
+    const by = {};
+    for (const r of rows)
+        (by[r.org_id] = by[r.org_id] || []).push(r);
+    for (const [o, list] of Object.entries(by)) {
+        const O = await org(o);
+        if (!O)
+            continue;
+        const t0 = new Date(new Date(list[0].created_at).getTime() + 3 * 3600e3).toISOString(), t1 = new Date(new Date(list[list.length - 1].created_at).getTime() + 3 * 3600e3).toISOString();
+        const actors = [...new Set(list.map((x) => x.actor).filter(Boolean))].join("، ");
+        const body = list.slice(-8).map((x) => Hh(x.summary)).join("\n");
+        const txt = `${LINE}\n${head(O)}\n📝 <b>نشاط جديد</b>${actors ? " — 👤 " + Hh(actors) : ""}\n🕐 ${t0.slice(0, 10)} ${t0.slice(11, 16)}${t1.slice(11, 16) !== t0.slice(11, 16) ? "–" + t1.slice(11, 16) : ""}\n\n${body}${list.length > 8 ? "\n… و" + (list.length - 8) + " تحديثًا آخر" : ""}\n${LINE}`;
+        await notify(txt);
+    }
+    await rest("org_activity?id=in.(" + rows.map((r) => r.id).join(",") + ")", { method: "PATCH", prefer: "return=minimal", body: { sent: true } });
+    return J({ ok: true, sent: rows.length });
+}
 const HITS = new Map();
 async function report(req, o) {
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "x";
@@ -115,6 +204,10 @@ async function report(req, o) {
         data.faults.push({ id: fid, number: num, deviceId: d._uid, deviceName: dname(d), location: loc(d), date: T.date, time: T.time, priority: "متوسطة", reporter: "QR — " + (who || "بدون اسم") + (phone ? " (" + phone + ")" : ""), reporterName: who, reporterPhone: phone, status: "جديد", description: desc, via: "qr", hasPhoto: !!photo, photoId: photo ? o + "-" + pid : "" });
         (data.history = data.history || []).push({ t: nowStr(), u: d._uid, k: "fault", to: desc.slice(0, 120), ref: num, via: "qr" });
     });
+    const txt = `${LINE}\n${head(O)}\n🚨 <b>بلاغ عطل جديد ${num}</b> (من ملصق الباركود)\n🕐 ${T.date} — الساعة ${T.time}\n\n📟 <b>${Hh(d._seq ? d._seq + ". " : "")}${Hh(dname(d))}</b>\n📍 ${Hh(loc(d))}${cl(d["سريال نمبر"]) ? "\n🔢 S/N: " + Hh(cl(d["سريال نمبر"])) : ""}\n\n📝 ${Hh(desc)}\n\n👤 ${Hh(who || "بدون اسم")}${phone ? " — 📞 " + Hh(phone) : ""}\n${LINE}`;
+    const kb = phone ? { inline_keyboard: [[{ text: "💬 واتساب المبلّغ", url: "https://wa.me/" + phone.replace(/^0/, "964").replace(/^\+/, "") }]] } : undefined;
+    await notify(txt, kb, photo || undefined);
+    await logAct(o, "fault", "🚨 بلاغ " + num + " — " + dname(d) + " (" + loc(d) + ")", who || "QR", true);
     return J({ ok: true, number: num });
 }
 Deno.serve(async (req) => {
@@ -124,12 +217,16 @@ Deno.serve(async (req) => {
     try {
         if (!action)
             return J({ ok: true, service: "org-api" });
+        if (action === "digest" && req.method === "POST")
+            return await digest(req);
         if (!okId(o))
             return J({ error: "org" }, 400);
         if (action === "info") {
             const O = await org(o);
             return O && O.active ? J({ ok: true, name: O.name, directorate: O.directorate || "" }) : J({ error: "org" }, 404);
         }
+        if (action === "event" && req.method === "POST")
+            return await event(req, o);
         if (action === "card")
             return await card(url, o);
         if (action === "report" && req.method === "POST")
