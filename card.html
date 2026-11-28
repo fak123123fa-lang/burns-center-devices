@@ -52,6 +52,13 @@ h1{margin:6px 0 10px;font-size:23px;line-height:1.35;text-align:right;unicode-bi
 <div class="top"><div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg></div><div><b style="color:#fff;font-size:14px" id="ctr">بطاقة جهاز طبي</b><br>وحدة إدارة الأجهزة الطبية</div></div></div>
 <div class="wrap" id="app"></div>
 <script>var __O=(location.hash.match(/[#&]o=([a-z0-9]{4,40})/)||location.search.match(/[?&]o=([a-z0-9]{4,40})/)||[])[1]||'';
+function repQueue(u,b,n){var q;try{q=JSON.parse(localStorage.getItem('rep_queue')||'[]')}catch(e){q=[]}q.push({u:u,b:b,n:n||'',at:Date.now()});if(q.length>10)q=q.slice(-10);try{localStorage.setItem('rep_queue',JSON.stringify(q))}catch(e){try{var o=JSON.parse(b);o.photo='';q[q.length-1].b=JSON.stringify(o);localStorage.setItem('rep_queue',JSON.stringify(q))}catch(x){}}}
+function repSavedHtml(){return '<div class="rep"><div class="done" style="background:#FFF6E5;color:#7a4b0b">📥<b>حُفظ البلاغ على هاتفك</b>لا يوجد اتصال بالإنترنت الآن.<br>سيُرسل البلاغ <b>تلقائيًا</b> عند عودة الإنترنت — افتح هذه الصفحة مرة أخرى إن أغلقتها.</div></div>'}
+function repNote(t){var n=document.createElement('div');n.textContent=t;n.style.cssText='position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0F5C60;color:#fff;padding:12px 18px;border-radius:14px;font-weight:700;z-index:99;max-width:92vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)';document.body.appendChild(n);setTimeout(function(){n.remove()},6000)}
+function repFlush(){var q;try{q=JSON.parse(localStorage.getItem('rep_queue')||'[]')}catch(e){q=[]}if(!q.length||!navigator.onLine)return;var it=q[0];
+ fetch(it.u,{method:'POST',headers:{'Content-Type':'application/json'},body:it.b}).then(function(r){return r.json()}).then(function(j){if(j&&(j.ok||j.error==='device'||j.error==='missing'||j.error==='org')){q.shift();try{localStorage.setItem('rep_queue',JSON.stringify(q))}catch(e){}if(j.ok)repNote('✅ أُرسل بلاغك المحفوظ'+(it.n?' ('+it.n+')':'')+' — رقم '+(j.number||''));setTimeout(repFlush,800)}}).catch(function(){})}
+window.addEventListener('online',function(){setTimeout(repFlush,1200)});setTimeout(repFlush,1500);
+
 (function(){
 var app=document.getElementById('app');
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -81,9 +88,11 @@ try{
  document.getElementById('rGo').onclick=function(){var btn=this,desc=document.getElementById('rD').value.trim(),E=document.getElementById('rE');E.textContent='';if(desc.length<3){E.textContent='اكتب وصف العطل أولًا';return}
   var nm=document.getElementById('rN').value.trim(),ph=document.getElementById('rP').value.trim();if(nm.length<3){E.textContent='اكتب اسمك الكامل';document.getElementById('rN').focus();return}var phd=ph.replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c)}).replace(/\D/g,'');if(!/^(07\d{9}|9647\d{9})$/.test(phd)){E.textContent='اكتب رقم هاتف صحيح مثل 07801234567';document.getElementById('rP').focus();return}ph=phd;try{localStorage.setItem('rep_me',JSON.stringify({n:nm,p:ph}))}catch(e){}
   btn.disabled=true;btn.textContent='⏳ جاري الإرسال…';
-  fetch('https://jmvbxnmvoqvumsljsqff.supabase.co/functions/v1/org-api?o='+__O+'&action=report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:d.id,n:d.n,sn:d.sn,desc:desc,name:nm,phone:ph,photo:photo,hp:document.getElementById('rH').value})})
+  var RU='https://jmvbxnmvoqvumsljsqff.supabase.co/functions/v1/org-api?o='+__O+'&action=report',RB=JSON.stringify({uid:d.id,n:d.n,sn:d.sn,desc:desc,name:nm,phone:ph,photo:photo,hp:document.getElementById('rH').value});
+  if(!navigator.onLine){repQueue(RU,RB,d.n);b.innerHTML=repSavedHtml();return}
+  fetch(RU,{method:'POST',headers:{'Content-Type':'application/json'},body:RB})
   .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}},function(){return {ok:false,j:{error:'server'}}})}).then(function(x){if(x.ok&&x.j.ok){b.innerHTML='<div class="rep"><div class="done">✅<b>وصل البلاغ</b>رقم البلاغ: '+esc(x.j.number||'')+'<br>🕐 '+new Date().toLocaleString('ar-IQ',{dateStyle:'medium',timeStyle:'short'})+'<br>شكرًا لك — سيتابعه مهندس الأجهزة الطبية فورًا.</div></div>'}else{var M={no_state:'الخادم لم يستلم بيانات الأجهزة بعد.',device:'هذا الجهاز غير موجود في النظام الأونلاين.',too_many:'وصلت بلاغات كثيرة لهذا الجهاز الآن — انتظر قليلًا.',missing:'اكتب وصف العطل.'};E.textContent=M[x.j.error]||'تعذّر الوصول للخادم الآن.';if(x.j.error!=='missing'&&x.j.error!=='too_many')waFb(desc,nm,ph);btn.disabled=false;btn.textContent='إرسال البلاغ'}})
-  .catch(function(){E.textContent='تعذّر الوصول للخادم الآن.';waFb(desc,nm,ph);btn.disabled=false;btn.textContent='إرسال البلاغ'})}};
+  .catch(function(){repQueue(RU,RB,d.n);b.innerHTML=repSavedHtml();var x=document.createElement('p');x.id='rE';b.querySelector('.rep').appendChild(x);waFb(desc,nm,ph)})}};
  document.getElementById('shareBtn').onclick=function(){if(navigator.share)navigator.share({title:d.n,url:location.href});else{navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent='✓ نُسخ الرابط'}};
  }
  var HS=location.hash;
@@ -95,5 +104,6 @@ try{
 }catch(e){app.innerHTML='<div class="err"><div style="font-size:42px">▦</div><h2>بطاقة جهاز طبي</h2><p style="color:#6b7f92;line-height:1.9">هذه الصفحة تعرض بيانات الجهاز عند مسح ملصق QR الخاص به بكاميرا الهاتف.<br>امسح الملصق الملصوق على الجهاز لعرض بطاقته.</p></div>'}
 })();
 </script>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(function(){});</script>
 </body>
 </html>

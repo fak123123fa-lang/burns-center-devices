@@ -1,5 +1,5 @@
 // يعمل البرنامج بدون إنترنت: يفتح فورًا من الذاكرة إذا انقطع الاتصال أو ضعف، ويجلب أحدث نسخة عند توفر الإنترنت
-const C='medtech-2026.11.28.0707',FILES=['app.html','org.html','admin.html','index.html','card.html','manifest.webmanifest','org.webmanifest','icon-192.png','icon-512.png','icon-180.png'];
+const C='medtech-2026.11.28.0801',FILES=['app.html','org.html','admin.html','index.html','card.html','manifest.webmanifest','org.webmanifest','icon-192.png','icon-512.png','icon-180.png'];
 const LIBS=/^https:\/\/(cdn\.jsdelivr\.net|unpkg\.com|fonts\.(googleapis|gstatic)\.com)\//;
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(FILES.map(f=>c.add(new Request(f,{cache:'reload'})).catch(()=>{})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C&&x!=='medtech-libs').map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});

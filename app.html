@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;window.BIP=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.BIP=e});try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.28.0707"</script>
+<script>window.APP_VERSION="2026.11.28.0801"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1238,6 +1238,24 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .org-first .org-steps{display:flex;flex-direction:column;gap:8px;margin:14px 0 6px;text-align:right}
 .org-first .org-steps div{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--ma-pri,#0F5C60) 7%,transparent);border-radius:12px;padding:9px 12px;font-size:13.5px}
 .org-first .org-steps b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ma-pri,#0F5C60);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px}
+.xm-r{display:flex;flex-direction:column;gap:5px;margin:0 0 10px;font-weight:700;font-size:13.5px}
+.xm-r select{width:100%!important;border:1px solid var(--ma-line,#d6dde0);border-radius:12px;padding:10px;background:var(--ma-card,#fff);color:inherit}
+#syncChip{display:inline-flex;margin-top:4px;border:0;border-radius:99px;padding:3px 10px;font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#syncChip.sc-ok{background:#E3F4EC;color:#1E7A52}#syncChip.sc-up{background:#E6F0FB;color:#2a5fb4}#syncChip.sc-off{background:#FFF1DE;color:#8A5507}
+.org-start{background:var(--ma-card,#fff);border-radius:22px;padding:14px;margin:0 0 14px;box-shadow:0 6px 20px rgba(11,43,48,.08);border:1px solid color-mix(in srgb,var(--ma-pri,#0F5C60) 18%,transparent)}
+.os-h{display:flex;align-items:center;gap:8px}.os-h b{flex:1;font-size:15.5px}.os-h span{font-size:12px;color:var(--ma-mut,#5A6B73);font-weight:700}.os-h button{border:0;background:none;color:var(--ma-mut);font-size:15px;cursor:pointer}
+.os-bar{height:6px;border-radius:9px;background:color-mix(in srgb,var(--ma-pri,#0F5C60) 12%,transparent);margin:10px 0}.os-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#14b8a6,#0F5C60);transition:width .4s}
+.os-i{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:9px 4px;font:inherit;font-size:14px;color:inherit;text-align:right;cursor:pointer;border-top:1px solid var(--ma-line,#e5ecea)}
+.os-i span{flex:none;width:30px;height:30px;border-radius:10px;background:color-mix(in srgb,var(--ma-pri,#0F5C60) 10%,transparent);display:flex;align-items:center;justify-content:center}
+.os-i em{margin-inline-start:auto;font-style:normal;color:var(--ma-mut)}.os-i.ok{opacity:.55;text-decoration:line-through}.os-i.ok span{background:#1E9E6A;color:#fff;font-weight:800}
+.oc-score{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#0F5C60,#0B2B30);color:#fff;border-radius:18px;padding:14px 16px;margin-bottom:10px}.oc-score b{font-size:30px;color:#D9A441}.oc-score span{font-size:14px}
+.oc-g{background:var(--ma-card,#fff);border:1px solid var(--ma-line,#e5ecea);border-radius:16px;margin-bottom:8px;overflow:hidden}
+.oc-g summary{display:flex;align-items:center;gap:10px;padding:12px;cursor:pointer;list-style:none}.oc-g summary b{flex:1;font-size:14.5px}.oc-g summary em{font-style:normal;font-weight:800;border-radius:99px;padding:2px 10px;font-size:12.5px}
+.oc-g summary em.bad{background:#FBE9E5;color:#C0503A}.oc-g summary em.ok{background:#E3F4EC;color:#1E9E6A}
+.oc-g p{margin:0 12px 8px;color:var(--ma-mut);font-size:12.5px}
+.oc-g button{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;width:100%;border:0;border-top:1px solid var(--ma-line,#eef2f1);background:none;padding:9px 12px;font:inherit;color:inherit;text-align:right;cursor:pointer}
+.oc-g button b{font-size:13.5px}.oc-g button small{flex-basis:100%;color:var(--ma-mut);font-size:12px}.oc-g button i{position:absolute;left:14px;font-style:normal;color:var(--ma-pri,#0F5C60);font-size:12px}.oc-g button{position:relative}
+.org-ol{line-height:2;font-size:14.5px;padding-inline-start:22px}
 
 </style>
 </head><body>
@@ -4117,7 +4135,7 @@ window.pdfSave=function(){const r=window.__pdfR;if(!r)return;const u=URL.createO
    ========================================================= */
 const F=["الترميز","أسم الجهاز","الشركه المصنعة","الموديــل","سريال نمبر","الحالة","بلد المنشاء","مكان تنصيب الجهاز","توافر الأجهزة","المكتب المجهز","جهة الشراء","رقم عقد التجهيز","رقم عقد الضمان","تأريخ التنصيب","تأريخ بدء الضمان","تأريخ انتهاء الضمان","الملاحظات"];
 const nk=v=>cl(v).toLowerCase().replace(/[\sـ\-_/.]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');
-const ALIAS={'اسمالجهاز':'أسم الجهاز','الجهاز':'أسم الجهاز','الشركهالمصنعه':'الشركه المصنعة','الشركه':'الشركه المصنعة','الموديل':'الموديــل','موديل':'الموديــل','الرقمالتسلسلي':'سريال نمبر','سريالنمبر':'سريال نمبر','sn':'سريال نمبر','serialnumber':'سريال نمبر','serial':'سريال نمبر','مكانالتنصيب':'مكان تنصيب الجهاز','القسم':'مكان تنصيب الجهاز','مكانتنصيبالجهاز':'مكان تنصيب الجهاز','بلدالمنشا':'بلد المنشاء','بلدالمنشاء':'بلد المنشاء','تاريخالتنصيب':'تأريخ التنصيب','تاريخبدءالضمان':'تأريخ بدء الضمان','تاريخانتهاءالضمان':'تأريخ انتهاء الضمان','ملاحظات':'الملاحظات'};
+const ALIAS={'اسمالجهاز':'أسم الجهاز','الجهاز':'أسم الجهاز','الشركهالمصنعه':'الشركه المصنعة','الشركه':'الشركه المصنعة','الموديل':'الموديــل','موديل':'الموديــل','الرقمالتسلسلي':'سريال نمبر','سريالنمبر':'سريال نمبر','sn':'سريال نمبر','serialnumber':'سريال نمبر','serial':'سريال نمبر','مكانالتنصيب':'مكان تنصيب الجهاز','القسم':'مكان تنصيب الجهاز','مكانتنصيبالجهاز':'مكان تنصيب الجهاز','بلدالمنشا':'بلد المنشاء','بلدالمنشاء':'بلد المنشاء','تاريخالتنصيب':'تأريخ التنصيب','تاريخبدءالضمان':'تأريخ بدء الضمان','تاريخانتهاءالضمان':'تأريخ انتهاء الضمان','ملاحظات':'الملاحظات','الملاحظه':'الملاحظات','notes':'الملاحظات','remarks':'الملاحظات','اسمالجهازالطبي':'أسم الجهاز','نوعالجهاز':'أسم الجهاز','الجهازالطبي':'أسم الجهاز','اسم':'أسم الجهاز','devicename':'أسم الجهاز','device':'أسم الجهاز','equipment':'أسم الجهاز','equipmentname':'أسم الجهاز','name':'أسم الجهاز','الماركه':'الشركه المصنعة','الشركهالصانعه':'الشركه المصنعة','المصنع':'الشركه المصنعة','manufacturer':'الشركه المصنعة','brand':'الشركه المصنعة','make':'الشركه المصنعة','model':'الموديــل','الطراز':'الموديــل','رقمتسلسلي':'سريال نمبر','الرقمالمتسلسل':'سريال نمبر','الرقمالتسلسليللجهاز':'سريال نمبر','سيريال':'سريال نمبر','سيريالنمبر':'سريال نمبر','location':'مكان تنصيب الجهاز','department':'مكان تنصيب الجهاز','dept':'مكان تنصيب الجهاز','ward':'مكان تنصيب الجهاز','الوحده':'مكان تنصيب الجهاز','الردهه':'مكان تنصيب الجهاز','الشعبه':'مكان تنصيب الجهاز','الموقع':'مكان تنصيب الجهاز','مكانالجهاز':'مكان تنصيب الجهاز','status':'الحالة','حالهالجهاز':'الحالة','وضعالجهاز':'الحالة','condition':'الحالة','country':'بلد المنشاء','origin':'بلد المنشاء','بلدالصنع':'بلد المنشاء','المنشا':'بلد المنشاء','supplier':'المكتب المجهز','المجهز':'المكتب المجهز','الشركهالمجهزه':'المكتب المجهز','installationdate':'تأريخ التنصيب','تاريخالتشغيل':'تأريخ التنصيب','تاريخالتجهيز':'تأريخ التنصيب','warranty':'تأريخ انتهاء الضمان','warrantyend':'تأريخ انتهاء الضمان','نهايهالضمان':'تأريخ انتهاء الضمان','انتهاءالضمان':'تأريخ انتهاء الضمان','code':'الترميز','الرمز':'الترميز'};
 const colKey=h=>{const n=nk(h);if(!n)return null;for(const k of F)if(nk(k)===n)return k;if(ALIAS[n])return ALIAS[n];if(/وزاري/.test(n))return '_moh';if(/برنامجي|تسلسلي|^ت$|^تسلسل$/.test(n))return '_seqx';return null};
 const xdate=(k,v)=>{const s=cl(v);if(/تأريخ/.test(k)&&/^\d{5}(\.\d+)?$/.test(s)){const d=new Date(Math.round((+s-25569)*864e5));return d.toISOString().slice(0,10)}return s};
 let XU=null;
@@ -4126,7 +4144,7 @@ window.xlsUpdate=function(){UI(`<h3 class="ma-st">📥 تحديث الأجهزة
  <label class="lbl-drop"><input type="file" accept=".xlsx" hidden onchange="xlsRead(this.files[0])"><i>📊</i><b>اختيار ملف Excel</b><small>.xlsx</small></label>
  <div class="ma-card" style="padding:10px 14px;font-size:13px;line-height:1.8">✓ لا يحذف أي جهاز من عندك<br>✓ الخانة الفارغة في الملف لا تمسح بياناتك<br>✓ إذا كان الملف من البرنامج الوزاري يُحدَّث تسلسل الوزاري تلقائيًا</div>`)};
 window.xlsRead=async function(file){if(!file)return;toast('⏳ أقرأ الملف…');let rows;try{rows=await readXlsxRows(file)}catch(e){toast(e.message||'تعذّرت قراءة الملف',true);return}
- if(!rows.length){toast('الملف فارغ',true);return}const H=Object.keys(rows[0]);const map={};H.forEach(h=>{const k=colKey(h);if(k&&!Object.values(map).includes(k))map[h]=k});
+ if(!rows.length){toast('الملف فارغ',true);return}const H=Object.keys(rows[0]);const map={};H.forEach(h=>{const k=colKey(h);if(k&&!Object.values(map).includes(k))map[h]=k});if(window.__xlsMap){Object.keys(map).forEach(h=>delete map[h]);Object.assign(map,window.__xlsMap);window.__xlsMap=null}else if(!Object.values(map).includes('أسم الجهاز')){window.__xlsFile=file;return xlsMapUI(H,rows,map)}
  const hasMohCol=Object.values(map).includes('_moh'),isMoh=!hasMohCol&&!Object.values(map).includes('_seqx')&&H.some(h=>/مسار المؤسسة|دائرة الصحة/.test(h));
  const D=db.devices||[],bySN={},byNL={};D.forEach(d=>{const s=nk(d['سريال نمبر']);if(s&&s.length>2)(bySN[s]=bySN[s]||[]).push(d);const nl=nk(d['أسم الجهاز'])+'|'+nk(d['مكان تنصيب الجهاز']);(byNL[nl]=byNL[nl]||[]).push(d)});
  const used=new Set(),upd=[],add=[],same=[];
@@ -4142,6 +4160,12 @@ window.xlsRead=async function(file){if(!file)return;toast('⏳ أقرأ المل
  ${upd.length?`<h4 class="ma-h4">✏️ التغييرات</h4><div class="xu-list">${upd.slice(0,60).map(x=>`<div class="ma-card xu-it"><b>${E(x.d._seq)}. ${E(deviceName(x.d))}</b>${x.ch.map(([k,a,b])=>`<div class="xu-ch"><span>${E(lab(k))}</span><s>${E(a)||'فارغ'}</s><em>${E(b)}</em></div>`).join('')}</div>`).join('')}${upd.length>60?`<p class="ma-hint">و${upd.length-60} جهاز آخر…</p>`:''}</div>`:''}
  ${add.length?`<h4 class="ma-h4">➕ أجهزة جديدة</h4><div class="ma-card">${add.slice(0,40).map(x=>`<div class="xu-new"><b dir="auto">${E(cl(x.o['أسم الجهاز']))}</b><small>${E(cl(x.o['مكان تنصيب الجهاز'])||'—')} • S/N ${E(cl(x.o['سريال نمبر'])||'—')}</small></div>`).join('')}</div>`:''}
  ${upd.length||add.length||isMoh?'<button class="ma-save" onclick="xlsApply()">✓ تطبيق التحديث</button>':'<div class="ma-empty"><i>✅</i><b>بياناتك مطابقة للملف</b><span>لا يوجد شيء لتحديثه.</span></div>'}`)};
+const XMK=[['أسم الجهاز','اسم الجهاز *'],['مكان تنصيب الجهاز','القسم / مكان التنصيب'],['سريال نمبر','الرقم التسلسلي S/N'],['الحالة','الحالة'],['الشركه المصنعة','الشركة المصنعة'],['الموديــل','الموديل'],['تأريخ انتهاء الضمان','تاريخ انتهاء الضمان']];
+window.xlsMapUI=function(H,rows,map){const inv={};Object.entries(map).forEach(([h,k])=>inv[k]=h);const ex=h=>{const v=rows.slice(0,3).map(r=>cl(r[h])).filter(Boolean)[0]||'';return v?' — مثال: '+String(v).slice(0,24):''};
+ UI(`<h3 class="ma-st">🧭 ساعدنا نفهم أعمدة ملفك</h3><p class="ma-hint">لم نتعرّف تلقائيًا على عمود «اسم الجهاز». اختر لكل معلومة العمود المناسب من ملفك، ثم اضغط متابعة.</p>
+ ${XMK.map(([k,l])=>`<label class="xm-r"><span>${l}</span><select data-k="${k}"><option value="">— غير موجود —</option>${H.map(h=>`<option value="${E(h)}" ${inv[k]===h?'selected':''}>${E(h)}${E(ex(h))}</option>`).join('')}</select></label>`).join('')}
+ <button class="ma-save" onclick="xlsMapGo()">متابعة ←</button>`)};
+window.xlsMapGo=function(){const m={};document.querySelectorAll('.xm-r select').forEach(s=>{if(s.value)m[s.value]=s.dataset.k});if(!Object.values(m).includes('أسم الجهاز')){toast('اختر عمود اسم الجهاز',true);return}window.__xlsMap=m;xlsRead(window.__xlsFile)};
 window.xlsApply=function(){if(!XU)return;const now=new Date().toISOString().slice(0,19).replace('T',' ');let n=0,a=0;
  XU.upd.forEach(({d,ch})=>{ch.forEach(([k,,v])=>{if(k==='_moh'){d._moh=+v;d._mohManual=1}else d[k]=v});d['عدل في']=now;n++});
  if(XU.add.length&&(!$('xuAdd')||$('xuAdd').checked)){let mx=Math.max(0,...db.devices.map(x=>+x._seq||0));XU.add.forEach(({o})=>{const d={_uid:'dev-'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),_seq:++mx,'الحالة':'صالـــح','أدخل في':now};F.forEach(k=>{if(cl(o[k]))d[k]=cl(o[k])});if(o._moh){d._moh=+o._moh;d._mohManual=1}db.devices.push(d);a++})}
@@ -4851,6 +4875,19 @@ window.appShareQr=function(){
    else if(window.downloadBlob)downloadBlob(b,'باركود_التطبيق.png');else{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='باركود_التطبيق.png';a.click()}},'image/png')};
  img.src=el.tagName==='IMG'?el.src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(el));
 };
+// ===== شارة الرفع الدائمة =====
+function syncChip(){const sub=document.getElementById('maSub');if(!sub)return;let c=document.getElementById('syncChip');
+ let C=null;try{C=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'null')}catch(e){}
+ if(!C||!C.session){if(c)c.remove();return}
+ if(!c){c=document.createElement('button');c.id='syncChip';c.type='button';c.onclick=()=>{try{window.cloudSync?cloudSync():openCloud()}catch(e){}};sub.after(c)}
+ const tgt=window.__ORG?'المنظومة':'الخادم',t=C.last?new Date(C.last).toLocaleTimeString('ar-IQ',{hour:'2-digit',minute:'2-digit'}):'';
+ let k,txt;
+ if(C.role==='viewer'){k='ok';txt='👁 مشاهدة — تتحدّث تلقائيًا'}
+ else if(C.dirty&&!navigator.onLine){k='off';txt='📴 محفوظ على الهاتف — يُرفع عند عودة الإنترنت'}
+ else if(C.dirty){k='up';txt='⏳ جاري الرفع إلى '+tgt+'…'}
+ else{k='ok';txt='✅ كل البيانات مرفوعة إلى '+tgt+(t?' • '+t:'')}
+ c.className='sc-'+k;if(c.textContent!==txt)c.textContent=txt}
+setInterval(syncChip,2000);window.addEventListener('online',syncChip);window.addEventListener('offline',syncChip);
 // ===== مؤشر بدون إنترنت =====
 function net(){let b=document.getElementById('netBar');
  if(navigator.onLine){if(b){b.classList.remove('on');setTimeout(()=>b&&!navigator.onLine||b&&b.remove(),400)}return}
