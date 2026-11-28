@@ -11,7 +11,7 @@ try{var F=IDBFactory.prototype,op=F.open,dl=F.deleteDatabase;F.open=function(n,v
 })();</script>
 <link rel="manifest" href="org.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="أجهزة المؤسسة">
 <script>window.__HOSTED=1;window.BIP=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.BIP=e});try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.28.0801"</script>
+<script>window.APP_VERSION="2026.11.28.1151"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1264,6 +1264,7 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .oc-g button{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;width:100%;border:0;border-top:1px solid var(--ma-line,#eef2f1);background:none;padding:9px 12px;font:inherit;color:inherit;text-align:right;cursor:pointer}
 .oc-g button b{font-size:13.5px}.oc-g button small{flex-basis:100%;color:var(--ma-mut);font-size:12px}.oc-g button i{position:absolute;left:14px;font-style:normal;color:var(--ma-pri,#0F5C60);font-size:12px}.oc-g button{position:relative}
 .org-ol{line-height:2;font-size:14.5px;padding-inline-start:22px}
+#orgLogin .ol-fg{border:0;background:none;color:#9fe3d6;font:inherit;font-size:13.5px;font-weight:700;margin-top:12px;cursor:pointer}
 
 </style>
 </head><body>
@@ -4958,7 +4959,7 @@ function loginScreen(){
  <label>اسم المستخدم</label><input id="olU" dir="ltr" autocapitalize="off" autocomplete="username" spellcheck="false" value="${E(u)}">
  <label>كلمة السر</label><div class="ol-pw"><input id="olP" type="password" dir="ltr" autocomplete="current-password" onkeydown="if(event.key==='Enter')orgLogin()"><button type="button" onclick="const i=document.getElementById('olP');i.type=i.type==='password'?'text':'password'">👁</button></div>
  <div class="ol-err" id="olE"></div><button class="ol-go" id="olGo" onclick="orgLogin()">دخول</button>
- <p class="ol-help">اسم المستخدم وكلمة السر يعطيك إياهما مسؤول المنظومة.</p></div><p class="ol-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`;
+ <button class="ol-fg" type="button" onclick="orgForgot()">🔑 نسيت كلمة السر؟</button><p class="ol-help">اسم المستخدم وكلمة السر يعطيك إياهما مسؤول المنظومة.</p></div><p class="ol-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`;
  document.body.appendChild(el);setTimeout(()=>{const f=document.getElementById(u?'olP':'olU');f&&f.focus()},300);
  fetch(URL_+'/functions/v1/org-api?o='+O+'&action=info').then(r=>r.json()).then(j=>{const t=document.getElementById('olOrg');if(j&&j.name){if(t)t.textContent=j.name+(j.directorate?' — '+j.directorate:'');if(!info())applyName({name:j.name,directorate:j.directorate})}else if(t){t.textContent='⚠️ هذه المؤسسة غير موجودة أو موقوفة';t.style.color='#ffb4a8'}}).catch(()=>{});
 }
@@ -4972,11 +4973,28 @@ window.orgLogin=async function(){const u=document.getElementById('olU').value.tr
   const rr=await fetch(URL_+'/rest/v1/rpc/org_role',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+j.access_token,'Content-Type':'application/json'},body:JSON.stringify({p_org:O})});const role=rr.ok?await rr.json():null;
   if(!role){e.textContent='هذا الحساب لا يتبع هذه المؤسسة، أو أن المؤسسة موقوفة';b.disabled=false;b.textContent='دخول';return}
   try{localStorage.setItem('__org_user',u)}catch(x){}
+  if(j.user&&j.user.user_metadata&&j.user.user_metadata.must_change){const np=await orgNewPw(j.access_token);if(!np){b.disabled=false;b.textContent='دخول';return}}
   const C={session:{access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),email:j.user&&j.user.email,uid:j.user&&j.user.id},version:0,dirty:false,role:role,last:null,proj:'jmvbxnmvoqvumsljsqff'};
   localStorage.setItem('medtech_cloud_v1',JSON.stringify(C));
   try{localStorage.setItem('__open_day',new Date().toISOString().slice(0,10))}catch(x){}await Promise.race([sendEvent('login',j.access_token),new Promise(r=>setTimeout(r,2500))]);
   b.textContent='✓ تم — جاري تجهيز البيانات…';setTimeout(()=>location.replace(location.pathname+'?o='+O),400)}
  catch(x){e.textContent='لا يوجد اتصال بالإنترنت — الدخول أول مرة يحتاج إنترنت';b.disabled=false;b.textContent='دخول'}};
+// ===== نسيت كلمة السر: طلب موافقة عبر بوت الإدارة =====
+const MB=URL_+'/functions/v1/mgmt-bot?action=';
+const card=h=>{const c=document.querySelector('#orgLogin .ol-card');if(c)c.innerHTML=h};
+window.orgForgot=async function(){const u=(document.getElementById('olU')||{}).value||'';if(!u.trim()){const e=document.getElementById('olE');if(e)e.textContent='اكتب اسم المستخدم أولًا';return}
+ const e=document.getElementById('olE');e.textContent='⏳ جاري إرسال الطلب…';
+ try{const r=await fetch(MB+'pw_request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u.trim().toLowerCase()})});const j=await r.json();
+  if(!r.ok){e.textContent={no_approver:'لا يوجد مسؤول متاح للموافقة الآن — تواصل مع مسؤول المنظومة',not_found:'اسم المستخدم غير موجود',too_many:'محاولات كثيرة، انتظر قليلًا'}[j.error]||'تعذّر الإرسال';return}
+  card(`<div class="ol-logo">⏳</div><h1>بانتظار موافقة المسؤول</h1><p class="ol-help" style="font-size:14px;line-height:1.8">أُرسل طلبك إلى مسؤول المنظومة. اترك هذه الشاشة مفتوحة — تظهر كلمة السر المؤقتة هنا تلقائيًا.</p><button class="ol-fg" onclick="location.reload()">إلغاء</button>`);
+  const t=setInterval(async()=>{try{const s2=await fetch(MB+'pw_status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:j.id,token:j.token})}).then(x=>x.json());
+   if(s2.status==='approved'){clearInterval(t);card(`<div class="ol-logo">✅</div><h1>وافق المسؤول</h1><label>كلمة السر المؤقتة</label><input id="olP" dir="ltr" readonly value="${E(s2.password)}"><input id="olU" type="hidden" value="${E(s2.username)}"><div class="ol-err" id="olE"></div><button class="ol-go" id="olGo" onclick="orgLogin()">دخول الآن</button><p class="ol-help">بعد الدخول تختار كلمة سر جديدة خاصة بك.</p>`)}
+   else if(s2.status==='rejected'||s2.status==='expired'){clearInterval(t);card(`<div class="ol-logo">${s2.status==='rejected'?'❌':'⌛'}</div><h1>${s2.status==='rejected'?'رُفض الطلب':'انتهت المهلة'}</h1><p class="ol-help">تواصل مع مسؤول المنظومة، أو أرسل طلبًا جديدًا.</p><button class="ol-go" onclick="location.reload()">رجوع</button>`)}}catch(x){}},4000)}
+ catch(x){e.textContent='لا يوجد اتصال بالإنترنت'}};
+function orgNewPw(tok){return new Promise(res=>{card(`<div class="ol-logo">🔐</div><h1>اختر كلمة سر جديدة</h1><p class="ol-help" style="margin:0 0 8px">دخلت بكلمة مؤقتة — اختر كلمتك الخاصة (6 أحرف على الأقل).</p><label>كلمة السر الجديدة</label><input id="np1" type="password" dir="ltr" autocomplete="new-password"><label>أعد كتابتها</label><input id="np2" type="password" dir="ltr" autocomplete="new-password"><div class="ol-err" id="npE"></div><button class="ol-go" id="npB">حفظ والدخول</button>`);
+ document.getElementById('npB').onclick=async()=>{const a=document.getElementById('np1').value,b2=document.getElementById('np2').value,er=document.getElementById('npE');if(a.length<6){er.textContent='6 أحرف على الأقل';return}if(a!==b2){er.textContent='الكلمتان غير متطابقتين';return}
+  const r=await fetch(URL_+'/auth/v1/user',{method:'PUT',headers:{apikey:KEY,Authorization:'Bearer '+tok,'Content-Type':'application/json'},body:JSON.stringify({password:a,data:{must_change:false}})}).catch(()=>null);
+  if(r&&r.ok)res(true);else er.textContent='تعذّر الحفظ، حاول مرة أخرى'}})}
 // زر ☁️ بدون دخول يفتح شاشة الدخول
 const _oc=window.openCloud;window.openCloud=function(){if(!sess())return loginScreen();return _oc&&_oc.apply(this,arguments)};
 // ===== شاشة البداية للمؤسسة الجديدة: رفع Excel =====

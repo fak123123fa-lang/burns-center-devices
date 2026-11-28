@@ -121,9 +121,11 @@ function setSess(j){S={access_token:j.access_token,refresh_token:j.refresh_token
 async function ensure(){if(!S)throw new Error('login');if(S.expires_at&&Date.now()/1000>S.expires_at-60){try{setSess(await req('/auth/v1/token?grant_type=refresh_token',{method:'POST',auth:false,body:{refresh_token:S.refresh_token}}))}catch(e){S=null;saveS();throw new Error('login')}}}
 const rpc=async(fn,body)=>{await ensure();return req('/rest/v1/rpc/'+fn,{method:'POST',body:body||{}})};
 async function fn(action,body){await ensure();const r=await fetch(URL_+'/functions/v1/org-admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+S.access_token},body:JSON.stringify({action,...body})});const j=await r.json().catch(()=>({}));if(!r.ok||j.error)throw new Error(j.error||('خطأ '+r.status));return j}
+async function mb(action,body,auth=true){if(auth)await ensure();const h={'Content-Type':'application/json'};if(auth&&S)h.Authorization='Bearer '+S.access_token;const r=await fetch(URL_+'/functions/v1/mgmt-bot?action='+action,{method:'POST',headers:h,body:JSON.stringify(body||{})});const j=await r.json().catch(()=>({}));if(!r.ok||j.error){const e=new Error(j.error||('خطأ '+r.status));e.code=j.error;throw e}return j}
+async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('medtech:'+t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 function err(e){const m=String(e&&e.message||e);
  if(/username_taken/.test(m))return 'اسم المستخدم مستخدم، اختر غيره';if(/not_admin|not_allowed|forbidden/.test(m))return 'ليست لديك صلاحية لهذا الإجراء';if(/confirm_mismatch/.test(m))return 'رمز التأكيد غير مطابق';
- if(/not_empty/.test(m))return 'لا يمكن الحذف: تحتوي على قطاعات أو مؤسسات';if(/cannot_remove_self/.test(m))return 'لا يمكنك حذف حسابك';if(/Invalid login/i.test(m))return 'اسم المستخدم أو كلمة السر غير صحيحة';return m}
+ if(/not_empty/.test(m))return 'لا يمكن الحذف: تحتوي على قطاعات أو مؤسسات';if(/cannot_remove_self/.test(m))return 'لا يمكنك حذف حسابك';if(/Invalid login/i.test(m))return 'اسم المستخدم أو كلمة السر غير صحيحة';if(/no_approver/.test(m))return 'لا يوجد مسؤول مرتبط ببوت الإدارة للموافقة — تواصل مع مسؤول المنظومة';if(/not_found/.test(m))return 'اسم المستخدم غير موجود';if(/not_org_account/.test(m))return 'هذا الحساب يُستعاد من مسؤول المنظومة مباشرة';if(/bad_token/.test(m))return 'التوكن غير صحيح — انسخه كاملًا من BotFather';if(/not_configured/.test(m))return 'بوت الإدارة غير مفعّل بعد';if(/too_many/.test(m))return 'محاولات كثيرة، انتظر قليلًا';if(/expired/.test(m))return 'انتهت صلاحية الرمز';return m}
 function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('✅ تم النسخ')).catch(()=>toast('انسخ النص يدويًا'))}
 function sheet(h){$('sheet').innerHTML=h;$('back').classList.add('on');$('sheet').scrollTop=0}
 function closeS(){$('back').classList.remove('on')}
@@ -134,15 +136,37 @@ function loginView(){$('topBtns').innerHTML='';$('lvl').innerHTML='';
  $('app').innerHTML=`<div class="login"><h2>🔐 تسجيل الدخول</h2><p>لحسابات الوزارة ودوائر الصحة والقطاعات. اسم المستخدم وكلمة السر من مسؤول المنظومة.</p>
  <div class="f"><label>اسم المستخدم</label><input id="em" dir="ltr" autocapitalize="off" autocomplete="username" value="${E(u?decodeURIComponent(u):(S&&uname(S.email))||'')}"></div>
  <div class="f"><label>كلمة السر</label><input id="pw" type="password" dir="ltr" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
- <button class="btn" style="width:100%" id="lgB" onclick="doLogin()">دخول</button></div><p class="foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`;
+ <button class="btn" style="width:100%" id="lgB" onclick="doLogin()">دخول</button>
+ <button class="btn ghost" style="width:100%;margin-top:8px" onclick="forgot()">🔑 نسيت كلمة السر؟</button>
+ <button class="btn ghost" style="width:100%;margin-top:8px" onclick="const c=prompt('اكتب رمز الدخول الظاهر تحت الباركود:');if(c)qlRedeem(c.trim().toUpperCase())">📱 لدي رمز دخول من جهاز آخر</button></div><p class="foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`;
  setTimeout(()=>{const f=$(u?'pw':'em');f&&f.focus()},200)}
 async function doLogin(){let em=$('em').value.trim().toLowerCase(),pw=$('pw').value;if(!em||!pw)return toast('اكتب اسم المستخدم وكلمة السر');if(!em.includes('@'))em+=DOM;$('lgB').disabled=true;
  try{setSess(await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}}));await start()}catch(e){toast(err(e))}finally{const b=$('lgB');if(b)b.disabled=false}}
-function logout(){S=null;saveS();loginView()}
+function logout(){S=null;saveS();try{localStorage.removeItem('adm_pin')}catch(e){}loginView()}
+/* ---------- نسيت كلمة السر (موافقة عبر بوت الإدارة) ---------- */
+function forgot(){const u=($('em')&&$('em').value.trim().toLowerCase())||'';sheet(`<h2>🔑 نسيت كلمة السر</h2><p style="color:var(--mut);font-size:13.5px;margin:0 0 10px">يُرسل طلبك إلى المسؤول على بوت الإدارة. عند موافقته تظهر لك هنا كلمة سر مؤقتة.</p>
+ <div class="f"><label>اسم المستخدم</label><input id="fgU" dir="ltr" autocapitalize="off" value="${E(u.replace(DOM,''))}"></div><div class="sbtns"><button class="btn" id="fgB" onclick="forgotGo()">إرسال الطلب</button><button class="btn ghost" onclick="closeS()">إلغاء</button></div>`)}
+async function forgotGo(){const u=$('fgU').value.trim().toLowerCase();if(!u)return toast('اكتب اسم المستخدم');$('fgB').disabled=true;
+ try{const r=await mb('pw_request',{username:u},false);pwWait(r.id,r.token,u)}catch(e){toast(err(e));$('fgB').disabled=false}}
+function pwWait(id,token,u){sheet(`<div style="text-align:center;padding:10px"><div style="font-size:46px">⏳</div><h2>بانتظار موافقة المسؤول</h2><p style="color:var(--mut);font-size:13.5px">أُرسل طلبك. اترك هذه الصفحة مفتوحة — تظهر كلمة السر المؤقتة هنا تلقائيًا عند الموافقة.</p><button class="btn ghost" onclick="clearInterval(window.__pw);closeS()">إلغاء</button></div>`);
+ clearInterval(window.__pw);window.__pw=setInterval(async()=>{try{const r=await mb('pw_status',{id,token},false);
+  if(r.status==='approved'){clearInterval(window.__pw);sheet(`<h2>✅ وافق المسؤول</h2><div class="cred" style="grid-template-columns:1fr"><div><span>كلمة السر المؤقتة</span><b dir="ltr">${E(r.password)}</b></div></div><p style="color:var(--mut);font-size:13px">سيُطلب منك اختيار كلمة سر جديدة بعد الدخول.</p><div class="sbtns"><button class="btn" onclick="$('em').value=${JSON.stringify(r.username)};$('pw').value=${JSON.stringify(r.password)};closeS();doLogin()">دخول الآن</button></div>`)}
+  else if(r.status==='rejected'||r.status==='expired'){clearInterval(window.__pw);sheet(`<div class="empty">${r.status==='rejected'?'❌ رُفض الطلب. تواصل مع مسؤول المنظومة.':'⌛ انتهت مهلة الطلب. أرسل طلبًا جديدًا.'}</div><div class="sbtns"><button class="btn ghost" onclick="closeS()">إغلاق</button></div>`)}}catch(e){}},4000)}
+/* ---------- تغيير كلمة السر الإجباري بعد الكلمة المؤقتة ---------- */
+async function mustChange(){try{const u=await req('/auth/v1/user');if(!(u&&u.user_metadata&&u.user_metadata.must_change))return false}catch(e){return false}
+ return new Promise(res=>{sheet(`<h2>🔐 اختر كلمة سر جديدة</h2><p style="color:var(--mut);font-size:13.5px;margin:0 0 10px">دخلت بكلمة مؤقتة. اختر كلمتك الخاصة (6 أحرف على الأقل).</p>
+ <div class="f"><input id="np1" type="password" dir="ltr" placeholder="كلمة السر الجديدة" autocomplete="new-password"></div><div class="f"><input id="np2" type="password" dir="ltr" placeholder="أعد كتابتها" autocomplete="new-password"></div>
+ <div class="sbtns"><button class="btn" id="npB">حفظ والمتابعة</button></div>`);$('back').onclick=null;
+ $('npB').onclick=async()=>{const a=$('np1').value,b=$('np2').value;if(a.length<6)return toast('6 أحرف على الأقل');if(a!==b)return toast('الكلمتان غير متطابقتين');$('npB').disabled=true;
+  try{await req('/auth/v1/user',{method:'PUT',body:{password:a,data:{must_change:false}}});toast('✅ حُفظت كلمة السر');$('back').onclick=e=>{if(e.target===$('back'))closeS()};closeS();res(true)}catch(e){toast(err(e));$('npB').disabled=false}}})}
+/* ---------- قفل برمز 4 أرقام ---------- */
+async function pinGate(){let h=null;try{h=localStorage.getItem('adm_pin')}catch(e){}if(!h||window.__pinOk)return;
+ await new Promise(res=>{$('app').innerHTML=`<div class="login" style="text-align:center"><div style="font-size:42px">🔒</div><h2>أدخل رمزك</h2><p>${E(S&&uname(S.email)||'')}</p><input id="pinIn" type="password" inputmode="numeric" maxlength="4" dir="ltr" style="width:180px;text-align:center;font-size:30px;letter-spacing:12px;border:1px solid var(--line);border-radius:14px;padding:10px" autocomplete="off"><p id="pinE" style="color:var(--red);min-height:20px;margin:10px 0 0"></p><button class="btn ghost" onclick="logout()">نسيت الرمز؟ دخول بكلمة السر</button></div>`;
+  const i=$('pinIn');i.focus();i.oninput=async()=>{if(i.value.length===4){if(await sha(i.value)===h){window.__pinOk=1;res()}else{$('pinE').textContent='رمز غير صحيح';i.value=''}}}})}
 
 /* ================= التحميل ================= */
-async function start(){$('app').innerHTML='<div class="empty">⏳ جاري التحميل…</div>';
- try{ME=await rpc('dash_me');
+async function start(){await pinGate();$('app').innerHTML='<div class="empty">⏳ جاري التحميل…</div>';
+ try{ME=await rpc('dash_me');await mustChange();
   if(!ME||!ME.level){$('app').innerHTML=`<div class="login"><h2>⛔ لا توجد صلاحية</h2><p>الحساب ${E(S&&uname(S.email))} ليس حساب وزارة أو دائرة. حسابات المؤسسات تدخل من رابط مؤسستها.</p><button class="btn ghost" onclick="logout()">تسجيل خروج</button></div>`;return}
   $('lvl').innerHTML=ME.level==='ministry'?'<span class="lvl">🏛 حساب الوزارة — صلاحية كاملة</span>':`<span class="lvl">🏥 ${E(ME.units.map(u=>u.name).join('، '))}${ME.units.some(u=>u.role==='manager')?' — مدير':' — مشاهد'}</span>`;
   $('topBtns').innerHTML=`<button class="ib" onclick="refresh()">🔄</button> <button class="ib" onclick="logout()">خروج</button>`;
@@ -174,8 +198,8 @@ function render(){const A=agg(O),p=A.devices?Math.round((A.devices-A.broken-A.ma
   <div class="kpi"><b style="color:${col(p)}">${p==null?'—':p+'%'}</b><span>الجاهزية العامة</span></div>
   <div class="kpi r"><b>${A.broken+A.maint}</b><span>عاطل / صيانة</span></div>
   <div class="kpi p"><b>${A.open_faults}</b><span>بلاغًا مفتوحًا</span></div></div>
- <div class="tabs">${[['tree','🌳 الهيكل'],['orgs','🏥 المؤسسات'],['feed','📡 النشاطات'+(FEED&&FEED.length?' ('+Math.min(FEED.length,99)+')':'')],...(ME.level==='ministry'?[['acc','🏛 حسابات الوزارة']]:[])].map(([k,t])=>`<button class="${TAB===k?'on':''}" onclick="TAB='${k}';render()">${t}</button>`).join('')}</div>
- <div id="tabBody">${TAB==='tree'?treeView():TAB==='orgs'?orgsView():TAB==='feed'?feedView():accView()}</div>
+ <div class="tabs">${[['tree','🌳 الهيكل'],['orgs','🏥 المؤسسات'],['feed','📡 النشاطات'+(FEED&&FEED.length?' ('+Math.min(FEED.length,99)+')':'')],...(ME.level==='ministry'?[['acc','🏛 حسابات الوزارة']]:[]),['set','⚙️ الإعدادات']].map(([k,t])=>`<button class="${TAB===k?'on':''}" onclick="TAB='${k}';render()">${t}</button>`).join('')}</div>
+ <div id="tabBody">${TAB==='tree'?treeView():TAB==='orgs'?orgsView():TAB==='feed'?feedView():TAB==='set'?setView():accView()}</div>
  <p class="foot">كل مستوى يرى ما تحته فقط • تتحدّث تلقائيًا كل دقيقة<br>مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
 
 function treeView(){const top=ME.level==='ministry'?`<div class="bar"><button class="btn gold" onclick="unitForm(null)">＋ دائرة صحة</button><button class="btn ghost" onclick="orgForm(null)">＋ مؤسسة تتبع الوزارة مباشرة</button></div>`:'';
@@ -224,10 +248,32 @@ const KI={login:'🔐',open:'📲',fault:'🚨',import:'📥',edit:'📝'};
 function feedView(){if(!FEED)return '<div class="empty">سجل النشاطات غير متاح</div>';if(!FEED.length)return '<div class="empty">لا نشاطات بعد. ستظهر هنا عمليات الدخول ورفع البيانات والبلاغات والتعديلات.</div>';
  return FEED.map(a=>`<div class="fi k-${a.kind}" onclick="detail('${a.org_id}')"><span class="fic">${KI[a.kind]||'•'}</span><div><b>${E(a.org)}</b><p>${E(a.summary).replace(/\n/g,'<br>')}</p><small>${new Date(a.at).toLocaleString('ar-IQ',{dateStyle:'medium',timeStyle:'short'})}${a.actor?' • 👤 '+E(a.actor):''}</small></div></div>`).join('')}
 
-function accView(){return `<div class="bar"><button class="btn gold" onclick="newAcc('ministry','')">＋ حساب وزاري جديد</button></div>
+function accView(){return `<div class="bar"><input id="aU" dir="ltr" placeholder="اسم المستخدم (مثل moh) — اختياري" autocapitalize="off" style="max-width:280px"><button class="btn gold" id="aB" onclick="newAcc('ministry','')">＋ حساب وزاري جديد</button></div>
  <div class="unit open" style="padding:12px 14px"><p style="margin:0 0 8px;color:var(--mut);font-size:13px">الحساب الوزاري يرى ويتحكم بكل الدوائر والقطاعات والمؤسسات.</p>
  ${(MIN||[]).map(m=>`<div class="mem"><em>🏛 وزاري</em><span>${E(uname(m.email))}${m.me?' (أنت)':''}</span>${!m.me&&String(m.email).endsWith(DOM)?`<button class="btn sm ghost" onclick="resetPw('ministry','','${m.user_id}')">🔑 كلمة سر جديدة</button>`:''}${m.me?'':`<button class="btn sm red" onclick="remAcc('ministry','','${m.user_id}')">إزالة</button>`}</div>`).join('')}</div>`}
 
+/* ---------- الإعدادات ---------- */
+let BOT=null;
+function setView(){if(!BOT){mb('status').then(r=>{BOT=r;if(TAB==='set')render()}).catch(e=>{BOT={err:err(e)};if(TAB==='set')render()});return '<div class="empty">⏳</div>'}
+ const pinOn=!!localStorage.getItem('adm_pin');
+ const bot=BOT.err?`<div class="empty">${E(BOT.err)}</div>`:!BOT.configured?(BOT.admin?`<p style="color:var(--mut);font-size:13.5px;line-height:1.9;margin:0 0 8px">بوت مستقل للإدارة (منفصل عن بوت مركزك). أنشئه مرة واحدة:<br>1️⃣ افتح تلغرام وابحث عن <b>@BotFather</b><br>2️⃣ أرسل <b>/newbot</b> واختر اسمًا مثل «إدارة الأجهزة الطبية»<br>3️⃣ انسخ <b>التوكن</b> الذي يعطيك إياه والصقه هنا (لا ترسله لأي أحد).</p>
+  <div class="f"><input id="tgTok" type="password" dir="ltr" placeholder="123456789:AA..." autocomplete="off"></div><button class="btn" id="tgB" onclick="botSetup()">تفعيل بوت الإدارة</button>`:'<div class="empty">بوت الإدارة لم يُفعَّل بعد من حساب الوزارة.</div>')
+  :`<p style="margin:0 0 8px">✅ البوت مفعّل: <b dir="ltr">@${E(BOT.username)}</b></p>${BOT.linked.length?`<p style="color:var(--grn);font-weight:700;margin:0 0 8px">🔗 حسابك مربوط — تصلك التنبيهات</p><div class="sbtns"><button class="btn ghost" onclick="window.open('https://t.me/${E(BOT.username)}','_blank')">فتح البوت</button><button class="btn red" onclick="botUnlink()">فك الربط</button></div>`:`<p style="color:var(--mut);font-size:13.5px;margin:0 0 8px">اربط حسابك لتصلك تنبيهات مؤسساتك وطلبات كلمات السر، وتسأل البوت عن أي مؤسسة.</p><button class="btn" onclick="botLink()">🔗 ربط حسابي بتلغرام</button>`}${BOT.admin?`<details style="margin-top:10px"><summary style="cursor:pointer;color:var(--mut);font-size:13px">تغيير توكن البوت</summary><div class="f" style="margin-top:8px"><input id="tgTok" type="password" dir="ltr" placeholder="توكن جديد"></div><button class="btn ghost" id="tgB" onclick="botSetup()">حفظ</button></details>`:''}`;
+ return `<div class="unit open" style="padding:14px"><h3 style="margin:0 0 10px">🤖 بوت الإدارة</h3>${bot}</div>
+ <div class="unit open" style="padding:14px"><h3 style="margin:0 0 6px">📱 دخول جهاز آخر بالباركود</h3><p style="color:var(--mut);font-size:13.5px;margin:0 0 10px">افتح كاميرا الآيباد أو الحاسبة وامسح الباركود، فيدخل مباشرة بحسابك بدون كتابة. الباركود صالح 3 دقائق ولمرة واحدة.</p><button class="btn" onclick="qrShow()">إظهار باركود الدخول</button></div>
+ <div class="unit open" style="padding:14px"><h3 style="margin:0 0 6px">🔒 قفل برمز 4 أرقام</h3><p style="color:var(--mut);font-size:13.5px;margin:0 0 10px">${pinOn?'مفعّل على هذا الجهاز — يُطلب الرمز عند فتح اللوحة.':'تبقى مسجّل الدخول، ويُطلب رمز سريع عند فتح اللوحة.'}</p>${pinOn?'<button class="btn red" onclick="pinOff()">إيقاف القفل</button>':'<button class="btn" onclick="pinSet()">تفعيل القفل</button>'}</div>
+ <div class="unit open" style="padding:14px"><h3 style="margin:0 0 6px">🔐 كلمة السر</h3><button class="btn ghost" onclick="pwChange()">تغيير كلمة السر</button></div>`}
+async function botSetup(){const t=$('tgTok').value.trim();if(!t)return toast('الصق التوكن');$('tgB').disabled=true;try{const r=await mb('setup',{token:t});BOT=null;toast('✅ فُعّل البوت @'+r.username);render()}catch(e){toast(err(e));$('tgB').disabled=false}}
+async function botLink(){try{const r=await mb('link_code');window.open(r.url,'_blank');toast('اضغط «Start» في تلغرام لإكمال الربط');setTimeout(()=>{BOT=null;if(TAB==='set')render()},15000)}catch(e){toast(err(e))}}
+async function botUnlink(){if(!confirm('فك ربط تلغرام؟ لن تصلك التنبيهات.'))return;try{await mb('unlink');BOT=null;render()}catch(e){toast(err(e))}}
+async function qrShow(){try{const r=await mb('qr_create');const L=BASE+'admin.html#ql='+r.code;let left=180;
+ sheet(`<div style="text-align:center"><h2>📱 امسح للدخول</h2><img alt="باركود الدخول" style="width:240px;height:240px;border-radius:16px;background:#fff;padding:8px" src="https://api.qrserver.com/v1/create-qr-code/?size=480x480&margin=0&data=${encodeURIComponent(L)}"><p style="color:var(--mut);margin:10px 0 0">صالح لمدة <b id="qrT">3:00</b> — لمرة واحدة</p><p style="font-size:12px;color:var(--mut)">أو اكتب الرمز في شاشة الدخول: <b dir="ltr">${r.code}</b></p><button class="btn ghost" onclick="clearInterval(window.__qt);closeS()">إغلاق</button></div>`);
+ clearInterval(window.__qt);window.__qt=setInterval(()=>{left--;const t=$('qrT');if(!t||left<=0){clearInterval(window.__qt);if(t)t.textContent='انتهى';return}t.textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0')},1000)}catch(e){toast(err(e))}}
+function pinSet(){sheet(`<h2>🔒 اختر رمزًا من 4 أرقام</h2><div class="f"><input id="p1" type="password" inputmode="numeric" maxlength="4" dir="ltr" placeholder="••••" style="text-align:center;font-size:24px;letter-spacing:10px"></div><div class="f"><input id="p2" type="password" inputmode="numeric" maxlength="4" dir="ltr" placeholder="أعد الرمز" style="text-align:center;font-size:24px;letter-spacing:10px"></div><div class="sbtns"><button class="btn" onclick="pinSave()">حفظ</button><button class="btn ghost" onclick="closeS()">إلغاء</button></div>`)}
+async function pinSave(){const a=$('p1').value,b=$('p2').value;if(!/^\d{4}$/.test(a))return toast('4 أرقام');if(a!==b)return toast('الرمزان غير متطابقين');localStorage.setItem('adm_pin',await sha(a));window.__pinOk=1;closeS();toast('✅ فُعّل القفل');render()}
+function pinOff(){localStorage.removeItem('adm_pin');toast('أُوقف القفل');render()}
+function pwChange(){sheet(`<h2>🔐 تغيير كلمة السر</h2><div class="f"><input id="np1" type="password" dir="ltr" placeholder="كلمة السر الجديدة" autocomplete="new-password"></div><div class="f"><input id="np2" type="password" dir="ltr" placeholder="أعد كتابتها" autocomplete="new-password"></div><div class="sbtns"><button class="btn" id="npB" onclick="pwSave()">حفظ</button><button class="btn ghost" onclick="closeS()">إلغاء</button></div>`)}
+async function pwSave(){const a=$('np1').value,b=$('np2').value;if(a.length<6)return toast('6 أحرف على الأقل');if(a!==b)return toast('غير متطابقتين');try{await ensure();await req('/auth/v1/user',{method:'PUT',body:{password:a,data:{must_change:false}}});closeS();toast('✅ تغيّرت كلمة السر')}catch(e){toast(err(e))}}
 function scopeName(sc,id){return sc==='ministry'?'الوزارة':sc==='unit'?(uById(id)||{}).name:(oById(id)||{}).name}
 function accounts(sc,id){const list=sc==='unit'?(uById(id)||{}).members||[]:(oById(id)||{}).members||[];const R=sc==='unit'?{manager:'👑 مدير',viewer:'👁 مشاهد'}:{owner:'👑 مالك',viewer:'👁 مشاهد'};
  sheet(`<h2>👥 حسابات ${E(scopeName(sc,id))}</h2>
@@ -288,7 +334,9 @@ function exportCsv(){const H=['المؤسسة','تتبع','المحافظة','ا
  const csv='﻿'+[H,...rows].map(r=>r.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
  const b=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='المؤسسات_'+new Date().toISOString().slice(0,10)+'.csv';a.click()}
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-S?start():loginView();
+async function qlRedeem(code){$('app').innerHTML='<div class="empty">⏳ جاري الدخول بالباركود…</div>';try{const r=await mb('qr_redeem',{code},false);const j=await req('/auth/v1/verify',{method:'POST',auth:false,body:{type:'magiclink',token_hash:r.token_hash}});setSess(j);history.replaceState(null,'',location.pathname);window.__pinOk=1;await start()}catch(e){toast(err(e));history.replaceState(null,'',location.pathname);loginView()}}
+const QL=(location.hash.match(/ql=([A-Z0-9]{6,12})/)||[])[1];
+if(QL)qlRedeem(QL);else S?start():loginView();
 </script>
 </body>
 </html>
