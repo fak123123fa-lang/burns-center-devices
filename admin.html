@@ -65,6 +65,9 @@ button,input,select,textarea{font:inherit}
 #toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(120px);background:var(--dk);color:#fff;padding:11px 18px;border-radius:14px;font-weight:700;z-index:99;transition:transform .3s;max-width:90vw;text-align:center}
 #toast.on{transform:translateX(-50%)}
 .cred{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.cred div{background:#0B2B30;color:#fff;border-radius:14px;padding:12px;text-align:center}.cred span{display:block;font-size:12px;color:#BFD8D5}.cred b{font-size:20px;letter-spacing:.5px;color:#D9A441;user-select:all}
+.feed{background:#fff;border-radius:18px;margin:0 0 12px;box-shadow:0 4px 14px rgba(11,43,48,.06);overflow:hidden}.feed summary{padding:13px 16px;font-weight:800;cursor:pointer;list-style:none}.feed summary small{color:var(--mut);font-weight:500;font-size:12px}
+.fl{max-height:340px;overflow:auto;padding:0 12px 10px}.fi{display:flex;gap:10px;padding:9px 4px;border-top:1px solid var(--line)}.fic{flex:none;width:32px;height:32px;border-radius:10px;background:#EEF4F2;display:flex;align-items:center;justify-content:center}
+.fi b{font-size:13.5px}.fi p{margin:2px 0;font-size:13px;line-height:1.6}.fi small{color:var(--mut);font-size:11.5px}.k-fault .fic{background:#FBE9E5}.k-login .fic,.k-open .fic{background:#E6F0FB}
 .foot{text-align:center;color:var(--mut);font-size:12px;margin-top:24px}
 @media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.top h1{font-size:17px}}
 </style>
@@ -81,7 +84,7 @@ const BASE='https://fak123123fa-lang.github.io/burns-center-devices/';
 const SK='adm_session_v1';
 const $=id=>document.getElementById(id);
 const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let S=null,DATA=[],Q='',PF='';
+let S=null,DATA=[],FEED=null,Q='',PF='';
 try{S=JSON.parse(localStorage.getItem(SK)||'null')}catch(e){}
 function toast(t){const x=$('toast');x.textContent=t;x.classList.add('on');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('on'),2600)}
 function saveS(){try{S?localStorage.setItem(SK,JSON.stringify(S)):localStorage.removeItem(SK)}catch(e){}}
@@ -121,7 +124,7 @@ async function start(){
  try{const ok=await rpc('org_is_admin');if(!ok){$('app').innerHTML=`<div class="login"><h2>⛔ لا توجد صلاحية</h2><p>الحساب ${E(S.email||'')} ليس مسؤولًا عن المنظومة.</p><button class="btn ghost" onclick="logout()">تسجيل خروج</button></div>`;return}
   $('topBtns').innerHTML=`<button class="ib" onclick="refresh()">🔄</button> <button class="ib" onclick="logout()">خروج</button>`;
   await refresh()}catch(e){if(String(e.message)==='login')return loginView();$('app').innerHTML=`<div class="empty">⚠️ ${E(err(e))}<br><br><button class="btn" onclick="start()">إعادة المحاولة</button></div>`}}
-async function refresh(){try{DATA=await rpc('org_overview')||[];render()}catch(e){if(String(e.message)==='login')return loginView();toast(err(e))}}
+async function refresh(){try{DATA=await rpc('org_overview')||[];try{FEED=await rpc('org_activity_feed',{p_limit:40})}catch(e){FEED=null}render()}catch(e){if(String(e.message)==='login')return loginView();toast(err(e))}}
 function pct(o){const n=+o.devices||0;if(!n)return null;return Math.round((n-(+o.broken||0)-(+o.maint||0))*100/n)}
 function ago(t){if(!t)return '—';const d=(Date.now()-new Date(t))/1000;if(d<60)return 'الآن';if(d<3600)return 'قبل '+Math.round(d/60)+' دقيقة';if(d<86400)return 'قبل '+Math.round(d/3600)+' ساعة';return 'قبل '+Math.round(d/86400)+' يوم'}
 function link(o){return o.main?BASE+'app.html':BASE+'org.html?o='+o.id}
@@ -138,8 +141,11 @@ function render(){
  <div class="bar"><input placeholder="🔍 ابحث باسم المؤسسة أو المحافظة أو البريد" value="${E(Q)}" oninput="Q=this.value;render();this.focus();this.setSelectionRange(this.value.length,this.value.length)">
   <select onchange="PF=this.value;render()"><option value="">كل المحافظات</option>${provs.map(p=>`<option ${p===PF?'selected':''}>${E(p)}</option>`).join('')}</select>
   <button class="btn gold" onclick="newOrg()">＋ مؤسسة جديدة</button><button class="btn ghost" onclick="exportCsv()">⬇ Excel</button></div>
+ ${feedHtml()}
  ${list.length?`<div class="grid">${list.map(card).join('')}</div>`:`<div class="empty">${orgs.length?'لا نتائج للبحث':'لا توجد مؤسسات بعد. اضغط «＋ مؤسسة جديدة» لإضافة أول مؤسسة.'}</div>`}
  <p class="foot">كل مؤسسة لها بياناتها ورابطها المستقل، ولا تؤثر على تطبيق المركز التخصصي للحروق.<br>مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
+const KI={login:'🔐',open:'📲',fault:'🚨',import:'📥',edit:'📝'};
+function feedHtml(){if(!FEED||!FEED.length)return '';return `<details class="feed" ${localStorage.getItem('adm_feed')==='0'?'':'open'} ontoggle="localStorage.setItem('adm_feed',this.open?'1':'0')"><summary>📡 آخر النشاطات <small>(تصلك أيضًا على بوت تلغرام)</small></summary><div class="fl">${FEED.map(a=>`<div class="fi k-${a.kind}"><span class="fic">${KI[a.kind]||'•'}</span><div><b>${E(a.org)}</b><p>${E(a.summary).replace(/\n/g,'<br>')}</p><small>${new Date(a.at).toLocaleString('ar-IQ',{dateStyle:'medium',timeStyle:'short'})}${a.actor?' • 👤 '+E(a.actor):''}</small></div></div>`).join('')}</div></details>`}
 function card(o){const p=pct(o),c=p==null?'#9AA9AE':p>=85?'var(--grn)':p>=65?'var(--amb)':'var(--red)';const own=o.members.filter(m=>m.role==='owner').map(m=>uname(m.email));
  return `<div class="org ${o.main?'main':''} ${o.active?'':'off'}">
  <div class="oh"><div class="t"><h3>${E(o.name)}</h3><small>${E([o.directorate,o.province].filter(Boolean).join(' • ')||'—')}</small></div>${o.main?'<span class="tag mn">مؤسستك</span>':o.active?'<span class="tag on">فعّالة</span>':'<span class="tag off">موقوفة</span>'}</div>

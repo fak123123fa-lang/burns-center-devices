@@ -11,7 +11,7 @@ try{var F=IDBFactory.prototype,op=F.open,dl=F.deleteDatabase;F.open=function(n,v
 })();</script>
 <link rel="manifest" href="org.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="أجهزة المؤسسة">
 <script>window.__HOSTED=1;window.BIP=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.BIP=e});try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.28.0641"</script>
+<script>window.APP_VERSION="2026.11.28.0707"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1243,6 +1243,9 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 #orgLogin .ol-help{color:#9fc2bd;font-size:12px;text-align:center;margin:12px 0 0}
 #orgLogin .ol-foot{color:#7FA9A4;font-size:11.5px;margin-top:16px}
 #orgLogin .ol-pw input{padding-left:44px}
+.org-first .org-steps{display:flex;flex-direction:column;gap:8px;margin:14px 0 6px;text-align:right}
+.org-first .org-steps div{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--ma-pri,#0F5C60) 7%,transparent);border-radius:12px;padding:9px 12px;font-size:13.5px}
+.org-first .org-steps b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ma-pri,#0F5C60);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px}
 
 </style>
 </head><body>
@@ -4429,7 +4432,7 @@ const openFaults=()=>(db.faults||[]).filter(f=>!CLOSED.test(String(f.status||'')
 const pmDue=()=>{const wk=new Date(Date.now()+7*864e5).toISOString().slice(0,10);return (db.preventive||[]).filter(p=>p.status!=='منجزة'&&p.date&&p.date<=wk).sort((a,b)=>String(a.date).localeCompare(String(b.date)))};
 
 /* ---------------- الرئيسية ---------------- */
-function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`<div class="ma-first"><i>🔐</i><h2>بياناتك جاهزة على الخادم</h2><p>كل الأجهزة (119 جهاز) محفوظة أونلاين. سجّل الدخول ببريدك فتنزل كلها على هذا الهاتف مباشرة، وتبقى متزامنة مع أي جهاز آخر.</p><button class="ma-save" onclick="maCloud()">🔐 تسجيل الدخول وتحميل البيانات</button><button class="ma-link" onclick="maImport()">📂 أو اختر ملف بيانات (.json)</button></div>`;return}
+function renderHome2(){if(!(db.devices||[]).length){$('maBody').innerHTML=`${window.orgEmptyHTML?orgEmptyHTML():""}`;return}
  const D=db.devices||[],c={ok:0,bad:0,warn:0};D.forEach(d=>c[stc(ST(d))]++);const F=openFaults(),P=pmDue(),t=todayS();
  const h=new Date().getHours(),g=h<12?'صباح الخير':h<17?'نهارك سعيد':'مساء الخير';const B=(window.getBranding&&getBranding())||{};
  let pend=0;try{pend=window.MORE?MORE.pending().length:0}catch(e){}
@@ -4937,13 +4940,29 @@ window.orgLogin=async function(){const u=document.getElementById('olU').value.tr
   try{localStorage.setItem('__org_user',u)}catch(x){}
   const C={session:{access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),email:j.user&&j.user.email,uid:j.user&&j.user.id},version:0,dirty:false,role:role,last:null,proj:'jmvbxnmvoqvumsljsqff'};
   localStorage.setItem('medtech_cloud_v1',JSON.stringify(C));
+  try{localStorage.setItem('__open_day',new Date().toISOString().slice(0,10))}catch(x){}await Promise.race([sendEvent('login',j.access_token),new Promise(r=>setTimeout(r,2500))]);
   b.textContent='✓ تم — جاري تجهيز البيانات…';setTimeout(()=>location.replace(location.pathname+'?o='+O),400)}
  catch(x){e.textContent='لا يوجد اتصال بالإنترنت — الدخول أول مرة يحتاج إنترنت';b.disabled=false;b.textContent='دخول'}};
 // زر ☁️ بدون دخول يفتح شاشة الدخول
 const _oc=window.openCloud;window.openCloud=function(){if(!sess())return loginScreen();return _oc&&_oc.apply(this,arguments)};
+// ===== شاشة البداية للمؤسسة الجديدة: رفع Excel =====
+const TPL_COLS=['تسلسل الوزاري','أسم الجهاز','مكان تنصيب الجهاز','الشركه المصنعة','الموديــل','سريال نمبر','بلد المنشاء','الحالة','المكتب المجهز','تأريخ التنصيب','تأريخ بدء الضمان','تأريخ انتهاء الضمان','الملاحظات'];
+window.orgTemplate=function(){XP.fromRows('نموذج أجهزة المؤسسة',TPL_COLS,[[1,'Patient Monitor','العناية المركزة','Mindray','iMEC 10','SN12345','China','صالح','شركة المجهز','2024-01-15','2024-01-15','2027-01-15',''],[2,'Infusion Pump','الردهة الجراحية','B. Braun','Infusomat','IP-7788','Germany','صالح','','2023-06-01','2023-06-01','2025-06-01','']],'xlsx')};
+function myRole(){try{const c=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'null');return c&&c.role}catch(e){return null}}
+window.orgEmptyHTML=function(){const I=info()||{},r=myRole();
+ if(r==='viewer')return `<div class="ma-first org-first"><i>🏥</i><h2>${E(I.name||'مؤسستك')}</h2><p>لا توجد أجهزة بعد. حين يرفع مالك المؤسسة بياناتها تظهر هنا تلقائيًا.</p></div>`;
+ return `<div class="ma-first org-first"><i>🏥</i><h2>أهلًا بك في ${E(I.name||'مؤسستك')}</h2>
+ <p>ارفع أجهزة مؤسستك بملف <b>Excel</b> — فتظهر فورًا كمؤسسة متكاملة: سجل الأجهزة والأقسام، ملصقات الباركود، البلاغات، الجرد والتقارير.</p>
+ <button class="ma-save" onclick="xlsUpdate()">📊 ارفع ملف Excel لأجهزة مؤسستك</button>
+ <div class="org-steps"><div><b>1</b>ملف «تصدير» البرنامج الوزاري يُقبل مباشرة</div><div><b>2</b>أو املأ النموذج الجاهز وارفعه</div><div><b>3</b>تُحفظ البيانات على حساب مؤسستك تلقائيًا</div></div>
+ <button class="ma-link" onclick="orgTemplate()">⬇️ تنزيل نموذج Excel جاهز</button>
+ <button class="ma-link" onclick="maEdit()">＋ أو أضف أول جهاز يدويًا</button></div>`};
+// إشعار الدخول وفتح التطبيق
+function sendEvent(kind,tok){if(!tok)return Promise.resolve();return fetch(URL_+'/functions/v1/org-api?o='+O+'&action=event',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify({kind})}).catch(()=>{})}
+function dailyOpen(){const c=sess();if(!c)return;const k='__open_day',d=new Date().toISOString().slice(0,10);try{if(localStorage.getItem(k)===d)return;localStorage.setItem(k,d)}catch(e){}setTimeout(()=>{const c2=sess();c2&&sendEvent('open',c2.session.access_token)},6000)}
 function bar(t){let b=document.getElementById('orgBar');if(!b){b=document.createElement('div');b.id='orgBar';document.body.appendChild(b)}b.textContent=t}
 function boot(){
- applyName(info()||{name:'مؤسستك',directorate:'دائرة الصحة'});
+ applyName(info()||{name:'مؤسستك',directorate:'دائرة الصحة'});dailyOpen();
  load().then(ok=>{if(!ok){let s=null;try{s=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'null')}catch(e){}
    if(!s||!s.session)loginScreen()}});
  setInterval(()=>{if(!info())load()},15000);
