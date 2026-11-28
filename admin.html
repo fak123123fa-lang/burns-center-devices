@@ -64,6 +64,7 @@ button,input,select,textarea{font:inherit}
 .login h2{margin:0 0 6px}.login p{color:var(--mut);margin:0 0 16px;font-size:13.5px}
 #toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(120px);background:var(--dk);color:#fff;padding:11px 18px;border-radius:14px;font-weight:700;z-index:99;transition:transform .3s;max-width:90vw;text-align:center}
 #toast.on{transform:translateX(-50%)}
+.cred{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}.cred div{background:#0B2B30;color:#fff;border-radius:14px;padding:12px;text-align:center}.cred span{display:block;font-size:12px;color:#BFD8D5}.cred b{font-size:20px;letter-spacing:.5px;color:#D9A441;user-select:all}
 .foot{text-align:center;color:var(--mut);font-size:12px;margin-top:24px}
 @media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.top h1{font-size:17px}}
 </style>
@@ -92,6 +93,13 @@ async function req(path,opt={}){
 async function ensure(){if(!S)throw new Error('login');if(S.expires_at&&Date.now()/1000>S.expires_at-60){try{const j=await req('/auth/v1/token?grant_type=refresh_token',{method:'POST',auth:false,body:{refresh_token:S.refresh_token}});setSess(j)}catch(e){S=null;saveS();throw new Error('login')}}}
 function setSess(j){S={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),email:(j.user&&j.user.email)||(S&&S.email)};saveS()}
 const rpc=async(fn,body)=>{await ensure();return req('/rest/v1/rpc/'+fn,{method:'POST',body:body||{}})};
+const DOM='@orgs.medtech.local';const uname=e=>String(e||'').replace(DOM,'');
+async function fn(action,body){await ensure();const r=await fetch(URL_+'/functions/v1/org-admin',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+S.access_token},body:JSON.stringify({action,...body})});const j=await r.json().catch(()=>({}));if(!r.ok||j.error)throw new Error(j.error||('خطأ '+r.status));return j}
+function credMsg(o,u,pw,role){const L=BASE+'org.html?o='+o.id+'&u='+encodeURIComponent(u);return `📲 تطبيق إدارة الأجهزة الطبية — ${o.name}\n\n1️⃣ افتح الرابط:\n${L}\n2️⃣ اضغط «تثبيت» ليصبح تطبيقًا على هاتفك.\n3️⃣ سجّل الدخول:\n👤 اسم المستخدم: ${u}\n🔑 كلمة السر: ${pw}\n\n${role==='viewer'?'صلاحيتك: مشاهدة فقط.':'صلاحيتك: مالك — تضيف الأجهزة وتعدّلها وتطبع الملصقات.'}`}
+function credView(o,u,pw,role,title){const msg=credMsg(o,u,pw,role);return `<h2>${title}</h2>
+ <div class="cred"><div><span>اسم المستخدم</span><b dir="ltr">${E(u)}</b></div><div><span>كلمة السر</span><b dir="ltr">${E(pw)}</b></div></div>
+ <div class="box" style="font-size:12.5px">${E(msg)}</div><div class="box warn">🔒 كلمة السر تظهر الآن فقط. أرسلها لصاحبها مباشرة، ويمكنك إنشاء كلمة سر جديدة متى شئت من «الأعضاء».</div>
+ <div class="sbtns">${navigator.share?`<button class="btn" onclick='navigator.share({text:${JSON.stringify(msg)}}).catch(()=>{})'>📤 مشاركة</button>`:''}<button class="btn" style="background:#25D366" onclick='window.open("https://wa.me/?text="+encodeURIComponent(${JSON.stringify(msg)}),"_blank")'>💬 واتساب</button><button class="btn ghost" onclick='copy(${JSON.stringify(msg)})'>📋 نسخ</button></div><div class="sbtns"><button class="btn ghost" onclick="closeS()">تم</button></div>`}
 function err(e){const m=String(e&&e.message||e);
  if(/user_not_found/.test(m))return 'هذا البريد ليس له حساب بعد';if(/not_admin/.test(m))return 'ليست لديك صلاحية مسؤول المنظومة';if(/confirm_mismatch/.test(m))return 'رمز التأكيد غير مطابق';
  if(/Invalid login/i.test(m))return 'البريد أو كلمة السر غير صحيحة';return m}
@@ -132,13 +140,13 @@ function render(){
   <button class="btn gold" onclick="newOrg()">＋ مؤسسة جديدة</button><button class="btn ghost" onclick="exportCsv()">⬇ Excel</button></div>
  ${list.length?`<div class="grid">${list.map(card).join('')}</div>`:`<div class="empty">${orgs.length?'لا نتائج للبحث':'لا توجد مؤسسات بعد. اضغط «＋ مؤسسة جديدة» لإضافة أول مؤسسة.'}</div>`}
  <p class="foot">كل مؤسسة لها بياناتها ورابطها المستقل، ولا تؤثر على تطبيق المركز التخصصي للحروق.<br>مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
-function card(o){const p=pct(o),c=p==null?'#9AA9AE':p>=85?'var(--grn)':p>=65?'var(--amb)':'var(--red)';const own=o.members.filter(m=>m.role==='owner').map(m=>m.email);
+function card(o){const p=pct(o),c=p==null?'#9AA9AE':p>=85?'var(--grn)':p>=65?'var(--amb)':'var(--red)';const own=o.members.filter(m=>m.role==='owner').map(m=>uname(m.email));
  return `<div class="org ${o.main?'main':''} ${o.active?'':'off'}">
  <div class="oh"><div class="t"><h3>${E(o.name)}</h3><small>${E([o.directorate,o.province].filter(Boolean).join(' • ')||'—')}</small></div>${o.main?'<span class="tag mn">مؤسستك</span>':o.active?'<span class="tag on">فعّالة</span>':'<span class="tag off">موقوفة</span>'}</div>
  <div class="ready"><div class="ring" style="--p:${p||0};--c:${c}"><i>${p==null?'—':p+'%'}</i></div>
   <div class="st"><div><b>${+o.devices||0}</b><span>جهاز</span></div><div class="r"><b>${+o.broken||0}</b><span>عاطل</span></div><div class="a"><b>${+o.maint||0}</b><span>صيانة</span></div><div class="f"><b>${+o.open_faults||0}</b><span>بلاغ</span></div></div></div>
  <div class="meta"><span>🕐 آخر تحديث: ${ago(o.updated_at)}</span>${o.main?'':`<span>👤 ${own.length?E(own.join('، ')):'<b style="color:var(--red)">بلا مالك</b>'}</span><span>👥 ${o.members.length} عضو</span>`}</div>
- <div class="acts"><button class="p" onclick="openApp('${o.id}')">فتح التطبيق</button><button onclick="shareOrg('${o.id}')">إرسال الرابط</button>${o.main?'':`<button onclick="members('${o.id}')">الأعضاء</button><button onclick="editOrg('${o.id}')">تعديل</button>`}</div></div>`}
+ <div class="acts"><button class="p" onclick="openApp('${o.id}')">فتح التطبيق</button><button onclick="shareOrg('${o.id}')">إرسال الرابط</button>${o.main?'':`<button onclick="members('${o.id}')">المستخدمون</button><button onclick="editOrg('${o.id}')">تعديل</button>`}</div></div>`}
 const byId=id=>DATA.find(o=>o.id===id);
 function openApp(id){window.open(link(byId(id)),'_blank')}
 function shareOrg(id){const o=byId(id),L=link(o);const t=`📲 تطبيق إدارة الأجهزة الطبية — ${o.name}\nافتح الرابط واضغط «تثبيت» ليصبح تطبيقًا على هاتفك، ثم سجّل الدخول من ☁️ بالحساب المخصّص لمؤسستك:\n${L}`;
@@ -152,19 +160,14 @@ function genPw(){const a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz2345678
 function newOrg(){sheet(`<h2>＋ مؤسسة جديدة</h2>
  <div class="f"><label>اسم المؤسسة *</label><input id="oN" placeholder="مثال: مستشفى الديوانية التعليمي"></div>
  <div class="row2"><div class="f"><label>دائرة الصحة</label><input id="oD" placeholder="دائرة صحة الديوانية"></div><div class="f"><label>المحافظة</label>${provSel('')}</div></div>
- <div class="f"><label>بريد مسؤول المؤسسة (المالك)</label><input id="oE" type="email" dir="ltr" placeholder="name@example.com"><small>إن لم يكن له حساب يُنشأ له حساب بكلمة سر مؤقتة تُرسلها له.</small></div>
+ <div class="f"><label>اسم المستخدم (اختياري)</label><input id="oU" dir="ltr" placeholder="يُنشأ تلقائيًا إن تركته فارغًا" autocapitalize="off"><small>يُعطى للمؤسسة اسم مستخدم وكلمة سر تلقائيًا — بدون بريد.</small></div>
  <div class="f"><label>ملاحظات</label><textarea id="oT" rows="2"></textarea></div>
  <div class="sbtns"><button class="btn" id="oB" onclick="createOrg()">إنشاء المؤسسة</button><button class="btn ghost" onclick="closeS()">إلغاء</button></div>`);setTimeout(()=>$('oN').focus(),100)}
-async function createOrg(){const n=$('oN').value.trim(),d=$('oD').value.trim(),p=$('oP').value,em=$('oE').value.trim().toLowerCase(),t=$('oT').value.trim();
- if(!n)return toast('اكتب اسم المؤسسة');if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return toast('البريد غير صحيح');$('oB').disabled=true;
- let pw='',created=false;
- try{if(em){pw=genPw();const r=await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});const j=await r.json().catch(()=>({}));
-   if(!r.ok)throw new Error(j.error==='rate'?'محاولات كثيرة، انتظر دقائق':'تعذّر تجهيز حساب المسؤول');created=!!j.created;if(!created)pw=''}
-  const id=await rpc('org_create',{p_name:n,p_directorate:d,p_province:p,p_owner_email:em||null,p_notes:t||null});
-  await refresh();const L=BASE+'org.html?o='+id;
-  const msg=`📲 تطبيق إدارة الأجهزة الطبية — ${n}\n\nالرابط:\n${L}\n\n${em?`الحساب: ${em}\n${created?`كلمة السر المؤقتة: ${pw}\n(غيّرها بعد أول دخول من ☁️)`:'سجّل الدخول بكلمة السر التي تستخدمها لهذا البريد.'}\n\n`:''}افتح الرابط ← اضغط «تثبيت» ← سجّل الدخول من ☁️ ← ابدأ بإضافة الأجهزة أو استيرادها من Excel.`;
-  sheet(`<h2>✅ أُنشئت المؤسسة</h2><p style="color:var(--mut);margin:0">أرسل هذه الرسالة لمسؤول المؤسسة:</p><div class="box">${E(msg)}</div>${created?'<div class="box warn">🔒 كلمة السر المؤقتة تظهر الآن فقط. أرسلها للمسؤول نفسه مباشرة.</div>':''}
-  <div class="sbtns"><button class="btn" style="background:#25D366" onclick='window.open("https://wa.me/?text="+encodeURIComponent(${JSON.stringify(msg)}),"_blank")'>💬 واتساب</button><button class="btn ghost" onclick='copy(${JSON.stringify(msg)})'>📋 نسخ</button></div><div class="sbtns"><button class="btn ghost" onclick="closeS()">تم</button></div>`)}
+async function createOrg(){const n=$('oN').value.trim(),d=$('oD').value.trim(),p=$('oP').value,u=$('oU').value.trim().toLowerCase(),t=$('oT').value.trim();
+ if(!n)return toast('اكتب اسم المؤسسة');if(u&&!/^[a-z][a-z0-9_.-]{2,30}$/.test(u))return toast('اسم المستخدم: حروف إنجليزية صغيرة وأرقام فقط، ويبدأ بحرف');$('oB').disabled=true;
+ try{const id=await rpc('org_create',{p_name:n,p_directorate:d,p_province:p,p_owner_email:null,p_notes:t||null});
+  let c;try{c=await fn('create_user',{org:id,role:'owner',username:u})}catch(e){if(/username_taken/.test(e.message))c=await fn('create_user',{org:id,role:'owner'});else throw e}
+  await refresh();sheet(credView(byId(id),c.username,c.password,'owner','✅ أُنشئت المؤسسة'))}
  catch(e){toast(err(e));const b=$('oB');if(b)b.disabled=false}}
 function editOrg(id){const o=byId(id);sheet(`<h2>✏️ تعديل المؤسسة</h2>
  <div class="f"><label>اسم المؤسسة</label><input id="oN" value="${E(o.name)}"></div>
@@ -176,27 +179,24 @@ function editOrg(id){const o=byId(id);sheet(`<h2>✏️ تعديل المؤسس�
  <div class="sbtns"><button class="btn red" onclick="delOrg('${id}')">🗑 حذف المؤسسة وكل بياناتها</button></div>`)}
 async function saveOrg(id){try{await rpc('org_update',{p_org:id,p_name:$('oN').value,p_directorate:$('oD').value,p_province:$('oP').value,p_active:$('oA').value==='1',p_notes:$('oT').value||null});closeS();toast('✅ حُفظت');refresh()}catch(e){toast(err(e))}}
 async function delOrg(id){const o=byId(id);const c=prompt(`حذف «${o.name}» نهائيًا مع كل أجهزتها وبلاغاتها.\nلا يمكن التراجع.\n\nللتأكيد اكتب رمز المؤسسة: ${o.id}`);if(c==null)return;
- try{await rpc('org_delete',{p_org:id,p_confirm:c.trim()});closeS();toast('🗑 حُذفت المؤسسة');refresh()}catch(e){toast(err(e))}}
+ try{if(c.trim()!==o.id)throw new Error('confirm_mismatch');for(const m of o.members){try{await fn('delete_user',{org:id,user_id:m.user_id})}catch(e){}}await rpc('org_delete',{p_org:id,p_confirm:c.trim()});closeS();toast('🗑 حُذفت المؤسسة');refresh()}catch(e){toast(err(e))}}
 
 /* ---------- الأعضاء ---------- */
-function members(id){const o=byId(id);sheet(`<h2>👥 أعضاء ${E(o.name)}</h2>
- ${o.members.length?o.members.map(m=>`<div class="mem"><em>${m.role==='owner'?'مالك':'مشاهد'}</em><span>${E(m.email)}</span><button onclick="remMem('${id}','${m.user_id}')">إزالة</button></div>`).join(''):'<p style="color:var(--mut)">لا يوجد أعضاء بعد.</p>'}
- <h3 style="margin:16px 0 8px;font-size:15px">إضافة عضو</h3>
- <div class="f"><input id="mE" type="email" dir="ltr" placeholder="البريد الإلكتروني"></div>
- <div class="f"><select id="mR"><option value="viewer">👁 مشاهد — يطّلع فقط</option><option value="owner">👑 مالك — يعدّل ويضيف أعضاء</option></select></div>
- <div class="f"><label><input type="checkbox" id="mC" checked style="width:auto"> إنشاء حساب بكلمة سر مؤقتة إن لم يكن له حساب</label></div>
- <div class="sbtns"><button class="btn" id="mB" onclick="addMem('${id}')">إضافة</button><button class="btn ghost" onclick="closeS()">إغلاق</button></div><div id="mOut"></div>`)}
-async function addMem(id){const em=$('mE').value.trim().toLowerCase(),role=$('mR').value;if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return toast('البريد غير صحيح');$('mB').disabled=true;let pw='',created=false;
- try{if($('mC').checked){pw=genPw();const r=await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});const j=await r.json().catch(()=>({}));created=r.ok&&!!j.created}
-  await rpc('org_add_member',{p_org:id,p_email:em,p_role:role});await refresh();members(id);
-  const o=byId(id),msg=`📲 تطبيق إدارة الأجهزة الطبية — ${o.name}\n${link(o)}\n\nالحساب: ${em}${created?`\nكلمة السر المؤقتة: ${pw}\n(غيّرها بعد أول دخول)`:''}`;
-  $('mOut').innerHTML=`<div class="box">${E(msg)}</div><div class="sbtns"><button class="btn" style="background:#25D366" onclick='window.open("https://wa.me/?text="+encodeURIComponent(${JSON.stringify(msg)}),"_blank")'>💬 إرسال</button><button class="btn ghost" onclick='copy(${JSON.stringify(msg)})'>📋 نسخ</button></div>`;toast('✅ أُضيف العضو')}
- catch(e){toast(err(e));const b=$('mB');if(b)b.disabled=false}}
-async function remMem(id,u){if(!confirm('إزالة هذا العضو من المؤسسة؟'))return;try{await rpc('org_remove_member',{p_org:id,p_user:u});await refresh();members(id);toast('تمت الإزالة')}catch(e){toast(err(e))}}
+function members(id){const o=byId(id);sheet(`<h2>👥 مستخدمو ${E(o.name)}</h2>
+ ${o.members.length?o.members.map(m=>`<div class="mem"><em>${m.role==='owner'?'مالك':'مشاهد'}</em><span>${E(uname(m.email))}</span>${String(m.email).endsWith(DOM)?`<button style="background:#E6EFEC;color:var(--tl)" onclick="resetPw('${id}','${m.user_id}')">🔑 كلمة سر جديدة</button>`:''}<button onclick="remMem('${id}','${m.user_id}')">إزالة</button></div>`).join(''):'<p style="color:var(--mut)">لا يوجد مستخدمون بعد.</p>'}
+ <h3 style="margin:16px 0 8px;font-size:15px">إضافة مستخدم جديد</h3>
+ <div class="row2"><div class="f"><select id="mR"><option value="owner">👑 مالك — يعدّل</option><option value="viewer">👁 مشاهد — يطّلع فقط</option></select></div><div class="f"><input id="mU" dir="ltr" placeholder="اسم المستخدم (اختياري)" autocapitalize="off"></div></div>
+ <div class="sbtns"><button class="btn" id="mB" onclick="addMem('${id}')">＋ إنشاء مستخدم وكلمة سر</button><button class="btn ghost" onclick="closeS()">إغلاق</button></div>`)}
+async function addMem(id){const role=$('mR').value,u=$('mU').value.trim().toLowerCase();if(u&&!/^[a-z][a-z0-9_.-]{2,30}$/.test(u))return toast('اسم المستخدم: حروف إنجليزية صغيرة وأرقام');$('mB').disabled=true;
+ try{const c=await fn('create_user',{org:id,role,username:u});await refresh();sheet(credView(byId(id),c.username,c.password,role,'✅ أُنشئ المستخدم'))}
+ catch(e){toast(/username_taken/.test(e.message)?'اسم المستخدم مستخدم، اختر غيره':err(e));const b=$('mB');if(b)b.disabled=false}}
+async function resetPw(id,u){if(!confirm('إنشاء كلمة سر جديدة لهذا المستخدم؟ القديمة ستتوقف.'))return;
+ try{const c=await fn('reset_password',{org:id,user_id:u});const o=byId(id),m=o.members.find(x=>x.user_id===u);sheet(credView(o,c.username,c.password,m&&m.role,'🔑 كلمة سر جديدة'))}catch(e){toast(err(e))}}
+async function remMem(id,u){if(!confirm('إزالة هذا المستخدم؟ لن يستطيع الدخول بعدها.'))return;try{await fn('delete_user',{org:id,user_id:u});await refresh();members(id);toast('تمت الإزالة')}catch(e){toast(err(e))}}
 
 /* ---------- تصدير ---------- */
 function exportCsv(){const H=['المؤسسة','الدائرة','المحافظة','الحالة','الأجهزة','عاطل','صيانة','الجاهزية %','بلاغات مفتوحة','المالك','الأعضاء','آخر تحديث','الرابط'];
- const rows=DATA.map(o=>[o.name,o.directorate||'',o.province||'',o.active?'فعّالة':'موقوفة',o.devices,o.broken,o.maint,pct(o)==null?'':pct(o),o.open_faults,o.members.filter(m=>m.role==='owner').map(m=>m.email).join(' / '),o.members.length,o.updated_at?new Date(o.updated_at).toLocaleString('ar-IQ'):'',link(o)]);
+ const rows=DATA.map(o=>[o.name,o.directorate||'',o.province||'',o.active?'فعّالة':'موقوفة',o.devices,o.broken,o.maint,pct(o)==null?'':pct(o),o.open_faults,o.members.filter(m=>m.role==='owner').map(m=>uname(m.email)).join(' / '),o.members.length,o.updated_at?new Date(o.updated_at).toLocaleString('ar-IQ'):'',link(o)]);
  const csv='﻿'+[H,...rows].map(r=>r.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
  const b=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='المؤسسات_'+new Date().toISOString().slice(0,10)+'.csv';a.click()}
 

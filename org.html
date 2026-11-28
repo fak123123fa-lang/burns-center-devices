@@ -5,12 +5,13 @@
 try{if(O)localStorage.setItem('__last_org',O);else O=localStorage.getItem('__last_org')}catch(e){}
 window.__ORG=O;if(O&&!m){try{history.replaceState(null,'',location.pathname+'?o='+O+location.hash)}catch(e){}}
 var P='o:'+(O||'none')+':',S=Storage.prototype,g=S.getItem,st=S.setItem,r=S.removeItem,k=S.key;
+try{if(!g.call(localStorage,P+'medtech_lock_v1'))sessionStorage.setItem('medtech_lock_later','1')}catch(e){}
 S.getItem=function(x){return g.call(this,this===localStorage?P+x:x)};S.setItem=function(x,v){return st.call(this,this===localStorage?P+x:x,v)};S.removeItem=function(x){return r.call(this,this===localStorage?P+x:x)};
 try{var F=IDBFactory.prototype,op=F.open,dl=F.deleteDatabase;F.open=function(n,v){return v===undefined?op.call(this,P+n):op.call(this,P+n,v)};F.deleteDatabase=function(n){return dl.call(this,P+n)}}catch(e){}
 })();</script>
 <link rel="manifest" href="org.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="أجهزة المؤسسة">
 <script>window.__HOSTED=1;window.BIP=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.BIP=e});try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.28.0609"</script>
+<script>window.APP_VERSION="2026.11.28.0641"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1226,6 +1227,22 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .as-note{font-size:12px;color:var(--ma-mut,#4A5D66);margin:6px 0 0;line-height:1.6}
 #netBar{position:fixed;z-index:99980;top:0;inset-inline:0;padding:calc(6px + env(safe-area-inset-top)) 12px 6px;background:#B4682A;color:#fff;font-size:12.5px;font-weight:700;text-align:center;direction:rtl;transform:translateY(-100%);transition:transform .3s}
 #netBar.on{transform:none}
+/* ===== دخول المؤسسة ===== */
+#orgLogin{position:fixed;inset:0;z-index:99985;background:radial-gradient(circle at 70% 20%,#174a50,#0B2B30 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;direction:rtl;overflow:auto}
+#orgLogin .ol-card{width:100%;max-width:380px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:26px 22px;color:#fff;display:flex;flex-direction:column;backdrop-filter:blur(8px)}
+#orgLogin .ol-logo{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#2ed3b7,#138F7C);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 10px}
+#orgLogin h1{margin:0;text-align:center;font-size:22px}
+#orgLogin .ol-org{margin:4px 0 18px;text-align:center;color:#D9A441;font-weight:700;font-size:14.5px;min-height:20px}
+#orgLogin label{font-size:13px;color:#BFD8D5;margin:8px 0 6px;font-weight:700}
+#orgLogin input{width:100%!important;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;border-radius:14px;padding:13px 14px;font-size:16px;outline:none}
+#orgLogin input:focus{border-color:#2ed3b7}
+#orgLogin .ol-pw{position:relative}#orgLogin .ol-pw button{position:absolute;left:8px;top:50%;transform:translateY(-50%);border:0;background:none;font-size:18px;cursor:pointer;color:#fff}
+#orgLogin .ol-err{color:#ffb4a8;font-size:13px;min-height:20px;margin:8px 0 4px;text-align:center}
+#orgLogin .ol-go{border:0;border-radius:14px;padding:14px;background:linear-gradient(135deg,#2ed3b7,#19B39C);color:#06322f;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+#orgLogin .ol-go:disabled{opacity:.7}
+#orgLogin .ol-help{color:#9fc2bd;font-size:12px;text-align:center;margin:12px 0 0}
+#orgLogin .ol-foot{color:#7FA9A4;font-size:11.5px;margin-top:16px}
+#orgLogin .ol-pw input{padding-left:44px}
 
 </style>
 </head><body>
@@ -3306,7 +3323,7 @@ topBtn();
 (function(){const st=document.querySelector('.navbtn[data-view="settings"]');if(st&&!$('navBot'))st.insertAdjacentHTML('beforebegin','<button class="navbtn" id="navBot" onclick="openBot()"><span class="ico">🤖</span> بوت تلغرام</button>')})();
 const _go=window.go;window.go=function(v){const r=_go.apply(this,arguments);if(v==='settings')setTimeout(settingsPanel,0);return r};
 function settingsPanel(){const g=document.querySelector('#view-settings .grid2');if(!g||$('cloudPanel'))return;g.insertAdjacentHTML('afterbegin',`<div class="panel" id="xpPanel"><div class="panelhead"><h4>🖨️ طباعة ملفات Excel</h4></div><p class="muted">حجم الورق، الاتجاه، حجم الخط، وتوزيع الأعمدة على الأوراق مع تكرار اسم الجهاز في كل ورقة.</p><button class="btn" onclick="openXPrint()">🖨️ إعدادات الطباعة</button></div>`);g.insertAdjacentHTML('afterbegin',`<div class="panel" id="botPanel"><div class="panelhead"><h4>🤖 بوت تلغرام</h4></div><p class="muted">اطلب من تلغرام: الجرد العام، الضمانات، الكتب الصادرة والواردة، الأجهزة العاطلة، البحث والإضافة والتعديل — ويصلك الملف مباشرة.</p><button class="btn" onclick="openBot()">🤖 إعداد البوت</button></div>`);g.insertAdjacentHTML('afterbegin',`<div class="panel" id="cloudPanel"><div class="panelhead"><h4>☁️ الحفظ الأونلاين والمشاركة</h4></div><p class="muted">${C.session?'مسجّل باسم '+esc(C.session.email||'')+' — '+(C.role==='owner'?'المالك':C.role==='viewer'?'مشاهد':'بانتظار الإضافة'):'احفظ بياناتك على الإنترنت تلقائيًا، وافتحها من أي جهاز، وأضف زملاء للمشاهدة فقط.'}</p><button class="btn" onclick="openCloud()">${C.session?'⚙ إدارة':'☁️ تفعيل الحفظ الأونلاين'}</button></div>`)}
-if(window.__HOSTED&&!C.session)setTimeout(()=>{if(!C.session)openCloud()},700);
+
 if(C.session){setState(C.dirty?'dirty':'ok');(async()=>{try{await refreshRole();setState('ok');if(C.dirty&&C.role==='owner')await push();await pull()}catch(e){fail(e)}})()}else setState('off');
 setInterval(()=>{if(C.session&&document.visibilityState==='visible'){if(C.dirty&&C.role==='owner')push();else pull()}},60000);
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&C.session)pull()});
@@ -4891,11 +4908,44 @@ async function load(){
   if(I===null){bar('⛔ لا تملك صلاحية على هذه المؤسسة أو أنها موقوفة. تواصل مع مسؤول المنظومة.')}}catch(e){}
  return false;
 }
+// ===== شاشة دخول المؤسسة (اسم مستخدم + كلمة سر) =====
+const DOM='@orgs.medtech.local';
+function sess(){try{const c=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'null');return c&&c.session?c:null}catch(e){return null}}
+const urlU=(location.search.match(/[?&]u=([^&#]+)/)||[])[1];
+if(urlU){try{localStorage.setItem('__org_user',decodeURIComponent(urlU))}catch(e){}}
+function loginScreen(){
+ if(sess()||document.getElementById('orgLogin'))return;
+ const u=(()=>{try{return localStorage.getItem('__org_user')||''}catch(e){return ''}})();
+ const el=document.createElement('div');el.id='orgLogin';
+ el.innerHTML=`<div class="ol-card"><div class="ol-logo">✚</div><h1>إدارة الأجهزة الطبية</h1><p class="ol-org" id="olOrg">${E(info()&&info().name||'')}</p>
+ <label>اسم المستخدم</label><input id="olU" dir="ltr" autocapitalize="off" autocomplete="username" spellcheck="false" value="${E(u)}">
+ <label>كلمة السر</label><div class="ol-pw"><input id="olP" type="password" dir="ltr" autocomplete="current-password" onkeydown="if(event.key==='Enter')orgLogin()"><button type="button" onclick="const i=document.getElementById('olP');i.type=i.type==='password'?'text':'password'">👁</button></div>
+ <div class="ol-err" id="olE"></div><button class="ol-go" id="olGo" onclick="orgLogin()">دخول</button>
+ <p class="ol-help">اسم المستخدم وكلمة السر يعطيك إياهما مسؤول المنظومة.</p></div><p class="ol-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`;
+ document.body.appendChild(el);setTimeout(()=>{const f=document.getElementById(u?'olP':'olU');f&&f.focus()},300);
+ fetch(URL_+'/functions/v1/org-api?o='+O+'&action=info').then(r=>r.json()).then(j=>{const t=document.getElementById('olOrg');if(j&&j.name){if(t)t.textContent=j.name+(j.directorate?' — '+j.directorate:'');if(!info())applyName({name:j.name,directorate:j.directorate})}else if(t){t.textContent='⚠️ هذه المؤسسة غير موجودة أو موقوفة';t.style.color='#ffb4a8'}}).catch(()=>{});
+}
+const E=x=>String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+window.orgLogin=async function(){const u=document.getElementById('olU').value.trim().toLowerCase(),p=document.getElementById('olP').value,e=document.getElementById('olE'),b=document.getElementById('olGo');e.textContent='';
+ if(!u||!p){e.textContent='اكتب اسم المستخدم وكلمة السر';return}
+ b.disabled=true;b.textContent='جاري الدخول…';
+ try{const r=await fetch(URL_+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:u.includes('@')?u:u+DOM,password:p})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){e.textContent=/invalid/i.test(JSON.stringify(j))?'اسم المستخدم أو كلمة السر غير صحيحة':'تعذّر الدخول، حاول مرة أخرى';b.disabled=false;b.textContent='دخول';return}
+  const rr=await fetch(URL_+'/rest/v1/rpc/org_role',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+j.access_token,'Content-Type':'application/json'},body:JSON.stringify({p_org:O})});const role=rr.ok?await rr.json():null;
+  if(!role){e.textContent='هذا الحساب لا يتبع هذه المؤسسة، أو أن المؤسسة موقوفة';b.disabled=false;b.textContent='دخول';return}
+  try{localStorage.setItem('__org_user',u)}catch(x){}
+  const C={session:{access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),email:j.user&&j.user.email,uid:j.user&&j.user.id},version:0,dirty:false,role:role,last:null,proj:'jmvbxnmvoqvumsljsqff'};
+  localStorage.setItem('medtech_cloud_v1',JSON.stringify(C));
+  b.textContent='✓ تم — جاري تجهيز البيانات…';setTimeout(()=>location.replace(location.pathname+'?o='+O),400)}
+ catch(x){e.textContent='لا يوجد اتصال بالإنترنت — الدخول أول مرة يحتاج إنترنت';b.disabled=false;b.textContent='دخول'}};
+// زر ☁️ بدون دخول يفتح شاشة الدخول
+const _oc=window.openCloud;window.openCloud=function(){if(!sess())return loginScreen();return _oc&&_oc.apply(this,arguments)};
 function bar(t){let b=document.getElementById('orgBar');if(!b){b=document.createElement('div');b.id='orgBar';document.body.appendChild(b)}b.textContent=t}
 function boot(){
  applyName(info()||{name:'مؤسستك',directorate:'دائرة الصحة'});
  load().then(ok=>{if(!ok){let s=null;try{s=JSON.parse(localStorage.getItem('medtech_cloud_v1')||'null')}catch(e){}
-   if(!s||!s.session)setTimeout(()=>{try{if(!document.querySelector('#lockScreen:not([style*="none"])')||true)window.openCloud&&openCloud()}catch(e){}},1200)}});
+   if(!s||!s.session)loginScreen()}});
  setInterval(()=>{if(!info())load()},15000);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
