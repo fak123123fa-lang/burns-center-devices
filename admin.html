@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B2B30">
+<meta name="robots" content="noindex">
+<title>لوحة التحكم بالمؤسسات — منظومة إدارة الأجهزة الطبية</title>
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{--dk:#0B2B30;--dk2:#123E44;--tl:#0F5C60;--tl2:#138F7C;--gold:#D9A441;--bg:#F3F6F4;--card:#fff;--ink:#14262E;--mut:#5A6B73;--line:#DCE6E3;--red:#C0503A;--amb:#C98A1B;--grn:#1E9E6A}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit}
+.top{background:linear-gradient(135deg,var(--dk),var(--tl));color:#fff;padding:calc(16px + env(safe-area-inset-top)) 18px 70px}
+.top .row{display:flex;align-items:center;gap:12px;max-width:1200px;margin:0 auto}
+.logo{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.top h1{margin:0;font-size:19px;line-height:1.3}.top small{color:#BFD8D5;font-size:12.5px}
+.top .sp{flex:1}
+.ib{border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:12px;padding:9px 12px;cursor:pointer;font-weight:700;font-size:13px}
+.wrap{max-width:1200px;margin:-52px auto 0;padding:0 14px 40px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--card);border-radius:18px;padding:14px;box-shadow:0 6px 18px rgba(11,43,48,.08)}
+.kpi b{display:block;font-size:26px;line-height:1.2;color:var(--tl)}.kpi span{color:var(--mut);font-size:12.5px}
+.bar{display:flex;gap:8px;align-items:center;margin:16px 0 10px;flex-wrap:wrap}
+.bar input,.bar select{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;min-width:0}
+.bar input{flex:1;min-width:160px}
+.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--tl);color:#fff;font-weight:800;cursor:pointer;white-space:nowrap}
+.btn.gold{background:var(--gold);color:var(--ink)}.btn.ghost{background:#E6EFEC;color:var(--tl)}.btn.red{background:#FBE9E5;color:var(--red)}
+.btn:disabled{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.org{background:var(--card);border-radius:20px;padding:16px;box-shadow:0 4px 14px rgba(11,43,48,.06);display:flex;flex-direction:column;gap:10px;border-top:5px solid var(--tl2)}
+.org.main{border-top-color:var(--gold)}.org.off{opacity:.65;border-top-color:#9AA9AE}
+.oh{display:flex;align-items:flex-start;gap:10px}.oh .t{flex:1;min-width:0}.oh h3{margin:0;font-size:16.5px;line-height:1.4}.oh small{color:var(--mut);font-size:12.5px}
+.tag{font-size:11.5px;font-weight:800;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.tag.on{background:#E3F4EC;color:var(--grn)}.tag.off{background:#EEF1F2;color:#6B7A80}.tag.mn{background:#FBF1DC;color:#8A5B07}
+.ready{display:flex;align-items:center;gap:10px}
+.ring{--p:0;width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--c,var(--grn)) calc(var(--p)*1%),#E6EDEB 0);display:flex;align-items:center;justify-content:center;flex:none}
+.ring i{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:13.5px}
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:1}
+.st div{background:#F4F8F6;border-radius:12px;padding:6px 4px;text-align:center}.st b{display:block;font-size:16px}.st span{font-size:11px;color:var(--mut)}
+.st .r b{color:var(--red)}.st .a b{color:var(--amb)}.st .f b{color:#7B4BC2}
+.meta{font-size:12px;color:var(--mut);display:flex;gap:10px;flex-wrap:wrap}
+.acts{display:flex;gap:6px;flex-wrap:wrap}.acts button{flex:1;min-width:80px;border:0;border-radius:11px;padding:9px 6px;background:#EEF4F2;color:var(--tl);font-weight:800;font-size:12.5px;cursor:pointer}
+.acts .p{background:var(--tl);color:#fff}
+.empty{background:#fff;border-radius:20px;padding:30px;text-align:center;color:var(--mut)}
+/* نوافذ */
+.back{position:fixed;inset:0;background:rgba(8,20,24,.5);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.back.on{display:flex}
+.sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom))}
+@media(min-width:700px){.back{align-items:center}.sheet{border-radius:24px}}
+.sheet h2{margin:0 0 12px;font-size:19px}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}.f label{font-size:13px;font-weight:700;color:var(--mut)}
+.f input,.f select,.f textarea{border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:#FAFCFB;width:100%}
+.f small{color:var(--mut);font-size:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sbtns{display:flex;gap:8px;margin-top:6px}.sbtns .btn{flex:1}
+.mem{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}.mem span{flex:1;direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis}
+.mem em{font-style:normal;font-size:11.5px;font-weight:800;border-radius:99px;padding:2px 9px;background:#EEF4F2;color:var(--tl)}
+.mem button{border:0;background:#FBE9E5;color:var(--red);border-radius:9px;padding:5px 9px;cursor:pointer;font-weight:700;font-size:12px}
+.box{background:#F4F8F6;border-radius:14px;padding:12px;font-size:13.5px;line-height:1.8;margin:10px 0;white-space:pre-wrap;word-break:break-word}
+.warn{background:#FCEFE9;color:#8A3B26}
+.login{max-width:420px;margin:-40px auto 0;background:#fff;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(11,43,48,.12)}
+.login h2{margin:0 0 6px}.login p{color:var(--mut);margin:0 0 16px;font-size:13.5px}
+#toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(120px);background:var(--dk);color:#fff;padding:11px 18px;border-radius:14px;font-weight:700;z-index:99;transition:transform .3s;max-width:90vw;text-align:center}
+#toast.on{transform:translateX(-50%)}
+.foot{text-align:center;color:var(--mut);font-size:12px;margin-top:24px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.top h1{font-size:17px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="row"><div class="logo">🏢</div><div><h1>لوحة التحكم بالمؤسسات</h1><small>منظومة إدارة الأجهزة الطبية — مستقلة عن تطبيق المركز</small></div><div class="sp"></div><span id="topBtns"></span></div></div>
+<div class="wrap" id="app"></div>
+<div class="back" id="back" onclick="if(event.target===this)closeS()"><div class="sheet" id="sheet"></div></div>
+<div id="toast"></div>
+<script>
+"use strict";
+const URL_='https://jmvbxnmvoqvumsljsqff.supabase.co',KEY='sb_publishable_hKnkJCFz9MudI2wUrbtaxQ_iBYB3kt3';
+const BASE='https://fak123123fa-lang.github.io/burns-center-devices/';
+const SK='adm_session_v1';
+const $=id=>document.getElementById(id);
+const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S=null,DATA=[],Q='',PF='';
+try{S=JSON.parse(localStorage.getItem(SK)||'null')}catch(e){}
+function toast(t){const x=$('toast');x.textContent=t;x.classList.add('on');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('on'),2600)}
+function saveS(){try{S?localStorage.setItem(SK,JSON.stringify(S)):localStorage.removeItem(SK)}catch(e){}}
+async function req(path,opt={}){
+ const h={apikey:KEY,'Content-Type':'application/json'};if(opt.auth!==false&&S)h.Authorization='Bearer '+S.access_token;
+ let r;try{r=await fetch(URL_+path,{method:opt.method||'GET',headers:h,body:opt.body?JSON.stringify(opt.body):undefined})}catch(e){const er=new Error('لا يوجد اتصال بالإنترنت');er.net=true;throw er}
+ const t=await r.text();let j=null;try{j=t?JSON.parse(t):null}catch(e){j=t}
+ if(!r.ok){const er=new Error((j&&(j.message||j.error_description||j.msg||j.error))||('خطأ '+r.status));er.status=r.status;throw er}return j}
+async function ensure(){if(!S)throw new Error('login');if(S.expires_at&&Date.now()/1000>S.expires_at-60){try{const j=await req('/auth/v1/token?grant_type=refresh_token',{method:'POST',auth:false,body:{refresh_token:S.refresh_token}});setSess(j)}catch(e){S=null;saveS();throw new Error('login')}}}
+function setSess(j){S={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),email:(j.user&&j.user.email)||(S&&S.email)};saveS()}
+const rpc=async(fn,body)=>{await ensure();return req('/rest/v1/rpc/'+fn,{method:'POST',body:body||{}})};
+function err(e){const m=String(e&&e.message||e);
+ if(/user_not_found/.test(m))return 'هذا البريد ليس له حساب بعد';if(/not_admin/.test(m))return 'ليست لديك صلاحية مسؤول المنظومة';if(/confirm_mismatch/.test(m))return 'رمز التأكيد غير مطابق';
+ if(/Invalid login/i.test(m))return 'البريد أو كلمة السر غير صحيحة';return m}
+
+/* ---------- الدخول ---------- */
+function loginView(){
+ $('topBtns').innerHTML='';
+ $('app').innerHTML=`<div class="login"><h2>🔐 دخول المسؤول</h2><p>هذه اللوحة لمسؤول المنظومة فقط. استخدم حساب البرنامج نفسه.</p>
+ <div class="f"><label>البريد الإلكتروني</label><input id="em" type="email" dir="ltr" autocomplete="username" value="${E(S&&S.email||'')}"></div>
+ <div class="f"><label>كلمة السر</label><input id="pw" type="password" dir="ltr" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+ <button class="btn" style="width:100%" id="lgB" onclick="doLogin()">دخول</button></div><p class="foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
+async function doLogin(){const em=$('em').value.trim(),pw=$('pw').value;if(!em||!pw)return toast('اكتب البريد وكلمة السر');$('lgB').disabled=true;
+ try{const j=await req('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email:em,password:pw}});setSess(j);await start()}catch(e){toast(err(e))}finally{const b=$('lgB');if(b)b.disabled=false}}
+function logout(){S=null;saveS();loginView()}
+
+/* ---------- اللوحة ---------- */
+async function start(){
+ $('app').innerHTML='<div class="empty">⏳ جاري التحميل…</div>';
+ try{const ok=await rpc('org_is_admin');if(!ok){$('app').innerHTML=`<div class="login"><h2>⛔ لا توجد صلاحية</h2><p>الحساب ${E(S.email||'')} ليس مسؤولًا عن المنظومة.</p><button class="btn ghost" onclick="logout()">تسجيل خروج</button></div>`;return}
+  $('topBtns').innerHTML=`<button class="ib" onclick="refresh()">🔄</button> <button class="ib" onclick="logout()">خروج</button>`;
+  await refresh()}catch(e){if(String(e.message)==='login')return loginView();$('app').innerHTML=`<div class="empty">⚠️ ${E(err(e))}<br><br><button class="btn" onclick="start()">إعادة المحاولة</button></div>`}}
+async function refresh(){try{DATA=await rpc('org_overview')||[];render()}catch(e){if(String(e.message)==='login')return loginView();toast(err(e))}}
+function pct(o){const n=+o.devices||0;if(!n)return null;return Math.round((n-(+o.broken||0)-(+o.maint||0))*100/n)}
+function ago(t){if(!t)return '—';const d=(Date.now()-new Date(t))/1000;if(d<60)return 'الآن';if(d<3600)return 'قبل '+Math.round(d/60)+' دقيقة';if(d<86400)return 'قبل '+Math.round(d/3600)+' ساعة';return 'قبل '+Math.round(d/86400)+' يوم'}
+function link(o){return o.main?BASE+'app.html':BASE+'org.html?o='+o.id}
+function render(){
+ const orgs=DATA.filter(o=>!o.main),act=orgs.filter(o=>o.active);
+ const all=DATA.filter(o=>o.active),dev=all.reduce((a,o)=>a+(+o.devices||0),0),bad=all.reduce((a,o)=>a+(+o.broken||0)+(+o.maint||0),0),flt=all.reduce((a,o)=>a+(+o.open_faults||0),0);
+ const provs=[...new Set(DATA.map(o=>o.province).filter(Boolean))].sort();
+ const list=DATA.filter(o=>(!PF||o.province===PF)&&(!Q||(o.name+' '+(o.directorate||'')+' '+(o.province||'')+' '+o.members.map(m=>m.email).join(' ')).toLowerCase().includes(Q.toLowerCase())));
+ $('app').innerHTML=`<div class="kpis">
+  <div class="kpi"><b>${act.length}</b><span>مؤسسة فعّالة${orgs.length>act.length?' (+'+(orgs.length-act.length)+' موقوفة)':''}</span></div>
+  <div class="kpi"><b>${dev}</b><span>جهازًا في كل المؤسسات</span></div>
+  <div class="kpi"><b>${dev?Math.round((dev-bad)*100/dev)+'%':'—'}</b><span>متوسط الجاهزية</span></div>
+  <div class="kpi"><b>${flt}</b><span>بلاغًا مفتوحًا</span></div></div>
+ <div class="bar"><input placeholder="🔍 ابحث باسم المؤسسة أو المحافظة أو البريد" value="${E(Q)}" oninput="Q=this.value;render();this.focus();this.setSelectionRange(this.value.length,this.value.length)">
+  <select onchange="PF=this.value;render()"><option value="">كل المحافظات</option>${provs.map(p=>`<option ${p===PF?'selected':''}>${E(p)}</option>`).join('')}</select>
+  <button class="btn gold" onclick="newOrg()">＋ مؤسسة جديدة</button><button class="btn ghost" onclick="exportCsv()">⬇ Excel</button></div>
+ ${list.length?`<div class="grid">${list.map(card).join('')}</div>`:`<div class="empty">${orgs.length?'لا نتائج للبحث':'لا توجد مؤسسات بعد. اضغط «＋ مؤسسة جديدة» لإضافة أول مؤسسة.'}</div>`}
+ <p class="foot">كل مؤسسة لها بياناتها ورابطها المستقل، ولا تؤثر على تطبيق المركز التخصصي للحروق.<br>مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
+function card(o){const p=pct(o),c=p==null?'#9AA9AE':p>=85?'var(--grn)':p>=65?'var(--amb)':'var(--red)';const own=o.members.filter(m=>m.role==='owner').map(m=>m.email);
+ return `<div class="org ${o.main?'main':''} ${o.active?'':'off'}">
+ <div class="oh"><div class="t"><h3>${E(o.name)}</h3><small>${E([o.directorate,o.province].filter(Boolean).join(' • ')||'—')}</small></div>${o.main?'<span class="tag mn">مؤسستك</span>':o.active?'<span class="tag on">فعّالة</span>':'<span class="tag off">موقوفة</span>'}</div>
+ <div class="ready"><div class="ring" style="--p:${p||0};--c:${c}"><i>${p==null?'—':p+'%'}</i></div>
+  <div class="st"><div><b>${+o.devices||0}</b><span>جهاز</span></div><div class="r"><b>${+o.broken||0}</b><span>عاطل</span></div><div class="a"><b>${+o.maint||0}</b><span>صيانة</span></div><div class="f"><b>${+o.open_faults||0}</b><span>بلاغ</span></div></div></div>
+ <div class="meta"><span>🕐 آخر تحديث: ${ago(o.updated_at)}</span>${o.main?'':`<span>👤 ${own.length?E(own.join('، ')):'<b style="color:var(--red)">بلا مالك</b>'}</span><span>👥 ${o.members.length} عضو</span>`}</div>
+ <div class="acts"><button class="p" onclick="openApp('${o.id}')">فتح التطبيق</button><button onclick="shareOrg('${o.id}')">إرسال الرابط</button>${o.main?'':`<button onclick="members('${o.id}')">الأعضاء</button><button onclick="editOrg('${o.id}')">تعديل</button>`}</div></div>`}
+const byId=id=>DATA.find(o=>o.id===id);
+function openApp(id){window.open(link(byId(id)),'_blank')}
+function shareOrg(id){const o=byId(id),L=link(o);const t=`📲 تطبيق إدارة الأجهزة الطبية — ${o.name}\nافتح الرابط واضغط «تثبيت» ليصبح تطبيقًا على هاتفك، ثم سجّل الدخول من ☁️ بالحساب المخصّص لمؤسستك:\n${L}`;
+ sheet(`<h2>🔗 رابط ${E(o.name)}</h2><div class="box" dir="ltr" style="text-align:left">${E(L)}</div><div class="sbtns">${navigator.share?`<button class="btn" onclick='navigator.share({title:"تطبيق إدارة الأجهزة الطبية",text:${JSON.stringify(t)}}).catch(()=>{})'>📤 مشاركة</button>`:''}<button class="btn" style="background:#25D366" onclick='window.open("https://wa.me/?text="+encodeURIComponent(${JSON.stringify(t)}),"_blank")'>💬 واتساب</button><button class="btn ghost" onclick='copy(${JSON.stringify(L)})'>📋 نسخ</button></div><div class="sbtns"><button class="btn ghost" onclick="closeS()">إغلاق</button></div>`)}
+function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('✅ تم النسخ')).catch(()=>toast('انسخ النص يدويًا'))}
+
+/* ---------- إنشاء وتعديل ---------- */
+const PROV=['بغداد/الرصافة','بغداد/الكرخ','البصرة','نينوى','أربيل','النجف الأشرف','كربلاء المقدسة','الديوانية','بابل','واسط','ميسان','ذي قار','المثنى','الأنبار','ديالى','صلاح الدين','كركوك','دهوك','السليمانية','حلبجة'];
+function provSel(v){return `<select id="oP"><option value="">— اختر —</option>${PROV.map(p=>`<option ${p===v?'selected':''}>${p}</option>`).join('')}${v&&!PROV.includes(v)?`<option selected>${E(v)}</option>`:''}</select>`}
+function genPw(){const a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint32Array(10));for(const x of r)s+=a[x%a.length];return 'Med-'+s}
+function newOrg(){sheet(`<h2>＋ مؤسسة جديدة</h2>
+ <div class="f"><label>اسم المؤسسة *</label><input id="oN" placeholder="مثال: مستشفى الديوانية التعليمي"></div>
+ <div class="row2"><div class="f"><label>دائرة الصحة</label><input id="oD" placeholder="دائرة صحة الديوانية"></div><div class="f"><label>المحافظة</label>${provSel('')}</div></div>
+ <div class="f"><label>بريد مسؤول المؤسسة (المالك)</label><input id="oE" type="email" dir="ltr" placeholder="name@example.com"><small>إن لم يكن له حساب يُنشأ له حساب بكلمة سر مؤقتة تُرسلها له.</small></div>
+ <div class="f"><label>ملاحظات</label><textarea id="oT" rows="2"></textarea></div>
+ <div class="sbtns"><button class="btn" id="oB" onclick="createOrg()">إنشاء المؤسسة</button><button class="btn ghost" onclick="closeS()">إلغاء</button></div>`);setTimeout(()=>$('oN').focus(),100)}
+async function createOrg(){const n=$('oN').value.trim(),d=$('oD').value.trim(),p=$('oP').value,em=$('oE').value.trim().toLowerCase(),t=$('oT').value.trim();
+ if(!n)return toast('اكتب اسم المؤسسة');if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return toast('البريد غير صحيح');$('oB').disabled=true;
+ let pw='',created=false;
+ try{if(em){pw=genPw();const r=await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});const j=await r.json().catch(()=>({}));
+   if(!r.ok)throw new Error(j.error==='rate'?'محاولات كثيرة، انتظر دقائق':'تعذّر تجهيز حساب المسؤول');created=!!j.created;if(!created)pw=''}
+  const id=await rpc('org_create',{p_name:n,p_directorate:d,p_province:p,p_owner_email:em||null,p_notes:t||null});
+  await refresh();const L=BASE+'org.html?o='+id;
+  const msg=`📲 تطبيق إدارة الأجهزة الطبية — ${n}\n\nالرابط:\n${L}\n\n${em?`الحساب: ${em}\n${created?`كلمة السر المؤقتة: ${pw}\n(غيّرها بعد أول دخول من ☁️)`:'سجّل الدخول بكلمة السر التي تستخدمها لهذا البريد.'}\n\n`:''}افتح الرابط ← اضغط «تثبيت» ← سجّل الدخول من ☁️ ← ابدأ بإضافة الأجهزة أو استيرادها من Excel.`;
+  sheet(`<h2>✅ أُنشئت المؤسسة</h2><p style="color:var(--mut);margin:0">أرسل هذه الرسالة لمسؤول المؤسسة:</p><div class="box">${E(msg)}</div>${created?'<div class="box warn">🔒 كلمة السر المؤقتة تظهر الآن فقط. أرسلها للمسؤول نفسه مباشرة.</div>':''}
+  <div class="sbtns"><button class="btn" style="background:#25D366" onclick='window.open("https://wa.me/?text="+encodeURIComponent(${JSON.stringify(msg)}),"_blank")'>💬 واتساب</button><button class="btn ghost" onclick='copy(${JSON.stringify(msg)})'>📋 نسخ</button></div><div class="sbtns"><button class="btn ghost" onclick="closeS()">تم</button></div>`)}
+ catch(e){toast(err(e));const b=$('oB');if(b)b.disabled=false}}
+function editOrg(id){const o=byId(id);sheet(`<h2>✏️ تعديل المؤسسة</h2>
+ <div class="f"><label>اسم المؤسسة</label><input id="oN" value="${E(o.name)}"></div>
+ <div class="row2"><div class="f"><label>دائرة الصحة</label><input id="oD" value="${E(o.directorate||'')}"></div><div class="f"><label>المحافظة</label>${provSel(o.province||'')}</div></div>
+ <div class="f"><label>ملاحظات</label><textarea id="oT" rows="2">${E(o.notes||'')}</textarea></div>
+ <div class="f"><label>الحالة</label><select id="oA"><option value="1" ${o.active?'selected':''}>✅ فعّالة — تعمل بشكل طبيعي</option><option value="0" ${o.active?'':'selected'}>⏸ موقوفة — لا يستطيع أعضاؤها الدخول</option></select></div>
+ <div class="f"><label>رمز المؤسسة</label><input value="${E(o.id)}" readonly dir="ltr"></div>
+ <div class="sbtns"><button class="btn" onclick="saveOrg('${id}')">حفظ</button><button class="btn ghost" onclick="closeS()">إلغاء</button></div>
+ <div class="sbtns"><button class="btn red" onclick="delOrg('${id}')">🗑 حذف المؤسسة وكل بياناتها</button></div>`)}
+async function saveOrg(id){try{await rpc('org_update',{p_org:id,p_name:$('oN').value,p_directorate:$('oD').value,p_province:$('oP').value,p_active:$('oA').value==='1',p_notes:$('oT').value||null});closeS();toast('✅ حُفظت');refresh()}catch(e){toast(err(e))}}
+async function delOrg(id){const o=byId(id);const c=prompt(`حذف «${o.name}» نهائيًا مع كل أجهزتها وبلاغاتها.\nلا يمكن التراجع.\n\nللتأكيد اكتب رمز المؤسسة: ${o.id}`);if(c==null)return;
+ try{await rpc('org_delete',{p_org:id,p_confirm:c.trim()});closeS();toast('🗑 حُذفت المؤسسة');refresh()}catch(e){toast(err(e))}}
+
+/* ---------- الأعضاء ---------- */
+function members(id){const o=byId(id);sheet(`<h2>👥 أعضاء ${E(o.name)}</h2>
+ ${o.members.length?o.members.map(m=>`<div class="mem"><em>${m.role==='owner'?'مالك':'مشاهد'}</em><span>${E(m.email)}</span><button onclick="remMem('${id}','${m.user_id}')">إزالة</button></div>`).join(''):'<p style="color:var(--mut)">لا يوجد أعضاء بعد.</p>'}
+ <h3 style="margin:16px 0 8px;font-size:15px">إضافة عضو</h3>
+ <div class="f"><input id="mE" type="email" dir="ltr" placeholder="البريد الإلكتروني"></div>
+ <div class="f"><select id="mR"><option value="viewer">👁 مشاهد — يطّلع فقط</option><option value="owner">👑 مالك — يعدّل ويضيف أعضاء</option></select></div>
+ <div class="f"><label><input type="checkbox" id="mC" checked style="width:auto"> إنشاء حساب بكلمة سر مؤقتة إن لم يكن له حساب</label></div>
+ <div class="sbtns"><button class="btn" id="mB" onclick="addMem('${id}')">إضافة</button><button class="btn ghost" onclick="closeS()">إغلاق</button></div><div id="mOut"></div>`)}
+async function addMem(id){const em=$('mE').value.trim().toLowerCase(),role=$('mR').value;if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return toast('البريد غير صحيح');$('mB').disabled=true;let pw='',created=false;
+ try{if($('mC').checked){pw=genPw();const r=await fetch(URL_+'/functions/v1/burns-signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});const j=await r.json().catch(()=>({}));created=r.ok&&!!j.created}
+  await rpc('org_add_member',{p_org:id,p_email:em,p_role:role});await refresh();members(id);
+  const o=byId(id),msg=`📲 تطبيق إدارة الأجهزة الطبية — ${o.name}\n${link(o)}\n\nالحساب: ${em}${created?`\nكلمة السر المؤقتة: ${pw}\n(غيّرها بعد أول دخول)`:''}`;
+  $('mOut').innerHTML=`<div class="box">${E(msg)}</div><div class="sbtns"><button class="btn" style="background:#25D366" onclick='window.open("https://wa.me/?text="+encodeURIComponent(${JSON.stringify(msg)}),"_blank")'>💬 إرسال</button><button class="btn ghost" onclick='copy(${JSON.stringify(msg)})'>📋 نسخ</button></div>`;toast('✅ أُضيف العضو')}
+ catch(e){toast(err(e));const b=$('mB');if(b)b.disabled=false}}
+async function remMem(id,u){if(!confirm('إزالة هذا العضو من المؤسسة؟'))return;try{await rpc('org_remove_member',{p_org:id,p_user:u});await refresh();members(id);toast('تمت الإزالة')}catch(e){toast(err(e))}}
+
+/* ---------- تصدير ---------- */
+function exportCsv(){const H=['المؤسسة','الدائرة','المحافظة','الحالة','الأجهزة','عاطل','صيانة','الجاهزية %','بلاغات مفتوحة','المالك','الأعضاء','آخر تحديث','الرابط'];
+ const rows=DATA.map(o=>[o.name,o.directorate||'',o.province||'',o.active?'فعّالة':'موقوفة',o.devices,o.broken,o.maint,pct(o)==null?'':pct(o),o.open_faults,o.members.filter(m=>m.role==='owner').map(m=>m.email).join(' / '),o.members.length,o.updated_at?new Date(o.updated_at).toLocaleString('ar-IQ'):'',link(o)]);
+ const csv='﻿'+[H,...rows].map(r=>r.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const b=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='المؤسسات_'+new Date().toISOString().slice(0,10)+'.csv';a.click()}
+
+function sheet(h){$('sheet').innerHTML=h;$('back').classList.add('on')}
+function closeS(){$('back').classList.remove('on')}
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+S?start():loginView();
+</script>
+</body>
+</html>

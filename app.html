@@ -3,7 +3,7 @@
 <head>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-180.png"><meta name="theme-color" content="#0f5f6e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="الأجهزة الطبية">
 <script>window.__HOSTED=1;window.BIP=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.BIP=e});try{if(!localStorage.getItem("medtech_uv20_added_v1"))localStorage.setItem("medtech_uv20_added_v1","1")}catch(e){}</script>
-<script>window.APP_VERSION="2026.11.25.1857"</script>
+<script>window.APP_VERSION="2026.11.28.0609"</script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <title>نظام إدارة الأجهزة الطبية | المركز التخصصي للحروق</title>
@@ -1208,6 +1208,17 @@ body.mapp #mApp.ma-dark{--ma-bg:#0d1520;--ma-card:#152131;--ma-ink:#e9eff5;--ma-
 .ib-mut{font-size:12.5px!important}
 .ib-steps li{display:block;position:relative;padding-inline-start:50px;min-height:48px}
 .ib-steps li>span{position:absolute;inset-inline-start:12px;top:50%;margin-top:-14px}
+/* ===== مشاركة التطبيق ===== */
+.as-wrap{text-align:center}.as-wrap h3{margin:0 0 4px;font-size:19px}.as-sub{margin:0 0 12px;color:var(--ma-mut,#4A5D66);font-size:13.5px}
+.as-qr{width:210px;height:210px;margin:0 auto;background:#fff;border-radius:20px;padding:10px;box-shadow:0 6px 20px rgba(11,43,48,.12)}.as-qr svg,.as-qr img{width:100%;height:100%;display:block}
+.as-name{font-weight:800;margin:10px 0 8px;font-size:14px}
+.as-link input{width:100%!important;border:1px solid var(--ma-line,#d6dde0);border-radius:12px;padding:10px;font-size:12px;background:var(--ma-bg,#f6f8f8);color:inherit;text-align:center}
+.as-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 8px}
+.as-b{border:0;border-radius:14px;padding:12px 8px;font:inherit;font-weight:800;font-size:14px;background:color-mix(in srgb,#0F5C60 10%,transparent);color:#0F5C60;cursor:pointer}
+.as-b.pri{background:#0F5C60;color:#fff}.as-b.wa{background:#25D366;color:#fff}
+.as-note{font-size:12px;color:var(--ma-mut,#4A5D66);margin:6px 0 0;line-height:1.6}
+#netBar{position:fixed;z-index:99980;top:0;inset-inline:0;padding:calc(6px + env(safe-area-inset-top)) 12px 6px;background:#B4682A;color:#fff;font-size:12.5px;font-weight:700;text-align:center;direction:rtl;transform:translateY(-100%);transition:transform .3s}
+#netBar.on{transform:none}
 
 </style>
 </head><body>
@@ -4375,7 +4386,7 @@ let tab=LS.get('mapp_tab','home'),fDept='',fSt='',q='',shown=40,workSeg='faults'
 
 /* ---------------- الهيكل ---------------- */
 function shell(){if($('mApp'))return;const el=document.createElement('div');el.id='mApp';el.innerHTML=`
- <header class="ma-head"><div class="ma-title"><b id="maTitle">الرئيسية</b><small id="maSub"></small></div><button class="ma-ic" onclick="maTheme()" title="الألوان">🎨</button><button class="ma-ic" onclick="maCloud()" id="maCloud" title="الحفظ الأونلاين">☁️</button></header>
+ <header class="ma-head"><div class="ma-title"><b id="maTitle">الرئيسية</b><small id="maSub"></small></div><button class="ma-ic" onclick="appShare()" title="مشاركة التطبيق">🔗</button><button class="ma-ic" onclick="maTheme()" title="الألوان">🎨</button><button class="ma-ic" onclick="maCloud()" id="maCloud" title="الحفظ الأونلاين">☁️</button></header>
  <main class="ma-body" id="maBody"></main>
  <nav class="ma-tabs">${[['home','🏠','الرئيسية'],['devices','🏥','الأجهزة'],['add','＋',''],['work','🔧','العمل'],['more','☰','المزيد']].map(([k,i,t])=>k==='add'?`<button class="ma-fab" onclick="maAdd()" aria-label="إضافة">＋</button>`:`<button data-t="${k}" onclick="maTab('${k}')"><i>${i}</i><span>${t}</span><em class="ma-badge" id="mb-${k}" hidden></em></button>`).join('')}</nav>
  <div class="ma-sheet-back" id="maBack" onclick="if(event.target===this)maClose()"><div class="ma-sheet" id="maSheet"><div class="ma-grab"></div><div id="maSheetIn"></div></div></div>`;
@@ -4646,6 +4657,7 @@ function renderMore(){let pend=0;try{pend=window.MORE?MORE.pending().length:0}ca
  G('البيانات',[['📥','تحديث الأجهزة من Excel','xlsUpdate()'],['📂','استيراد نسخة بيانات (JSON)','maImport()'],['📤','حفظ نسخة من بياناتي','maExport()'],['💾','حفظ نسخة مع الصور','exportWithPhotos()']])+
  G('البلاغات من الملصقات',[['📲','رقم واتساب لاستلام البلاغات',"maEngWa()",(localStorage.getItem('eng_wa')||'').replace(/\D/g,'')?'✓':'']])+
  G('التحديثات',[['🔄','حدّث التطبيق','appCheckUpdate(true)','الإصدار '+E(window.APP_VERSION||'')],['✨','ما الجديد','appWhatsNew()'],['⚙️','التحديث التلقائي عند الفتح','maAutoUpd()',LS.get('app_autoupd','1')!=='0'?'مفعّل':'متوقف']])+
+  G('المشاركة والمؤسسات',[['🔗','مشاركة التطبيق (رابط وباركود)','appShare()'],['🏢','لوحة التحكم بالمؤسسات',"window.open('https://fak123123fa-lang.github.io/burns-center-devices/admin.html','_blank')"]])+
   G('الإعدادات',[['🎨','الألوان والمظهر','maTheme()'],['🤖','الطيار الآلي',"maFull('autopilot')"],['☁️','الحفظ الأونلاين','openCloud()'],['✈️','بوت تلغرام','openBot()'],['📲','تثبيت على الهاتف','openInstall()'],['👤','اسمي في البلاغات',"maMe()",E(LS.get('ma_me',''))],['🔤','حجم الخط','maFont()']])+
  `<button class="ma-full" onclick="setMapp(false)">🧩 فتح النظام الكامل (كل الأقسام)</button><p class="ma-foot">مؤسسة الفرقان البرمجية — رصانة، دقة، أمان</p>`}
 window.maAutoUpd=function(){const on=LS.get('app_autoupd','1')!=='0';LS.set('app_autoupd',on?'0':'1');toast(on?'التحديث التلقائي متوقف — سيظهر لك زر «حدّث الآن» فقط':'✓ التحديث التلقائي مفعّل');renderMore()};
@@ -4776,6 +4788,58 @@ window.instShowBar=function(){try{localStorage.removeItem(LS)}catch(e){};show()}
 // الإظهار عند الفتح (آيفون لا يرسل حدث التثبيت، فنُظهر الزر مباشرة)
 function boot(){setTimeout(()=>{if(IOS||!ANDROID||INAPP)show();else setTimeout(show,2500)},900)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+
+</script>
+<script>
+/* =====================================================================
+   زر مشاركة التطبيق (رابط + باركود + واتساب) + مؤشر العمل بدون إنترنت
+   ===================================================================== */
+(function(){
+const MAIN='https://fak123123fa-lang.github.io/burns-center-devices/app.html';
+function link(){
+ if(window.__ORG) return 'https://fak123123fa-lang.github.io/burns-center-devices/org.html?o='+window.__ORG;
+ return MAIN;
+}
+function title(){try{const b=(window.getBranding&&getBranding())||{};return b.center||'المركز التخصصي للحروق'}catch(e){return ''}}
+function msg(){return '📲 تطبيق إدارة الأجهزة الطبية — '+title()+'\nافتح الرابط واضغط «تثبيت» ليصبح تطبيقًا على هاتفك:\n'+link()+'\n\nبعد الفتح سجّل حسابًا من ☁️ وأرسل بريدك للمسؤول ليضيفك.'}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+window.appShare=function(){
+ const L=link();let qr='';try{const q=window.qrStyledSVG?qrStyledSVG(L,'#0F5C60'):'';qr=/^data:|^blob:|^https?:/.test(q)?'<img alt="باركود التطبيق" src="'+q+'">':q}catch(e){}
+ const h=`<div class="as-wrap"><h3>🔗 مشاركة التطبيق</h3><p class="as-sub">أرسل الرابط لزملائك، أو اجعلهم يمسحون الباركود بكاميرا الهاتف.</p>
+ <div class="as-qr">${qr}</div><div class="as-name">${esc(title())}</div>
+ <div class="as-link"><input dir="ltr" readonly value="${esc(L)}" onclick="this.select()"></div>
+ <div class="as-btns">
+  ${navigator.share?'<button class="as-b pri" onclick="appShareNative()">📤 مشاركة</button>':''}
+  <button class="as-b wa" onclick="appShareWa()">💬 واتساب</button>
+  <button class="as-b" onclick="appShareCopy()">📋 نسخ الرابط</button>
+  <button class="as-b" onclick="appShareQr()">🔳 حفظ الباركود</button>
+ </div>
+ <p class="as-note">🔒 الرابط لا يكشف أي بيانات: يحتاج تسجيل دخول، وأنت من يضيف الأعضاء (مشاهد أو مالك) من ☁️.</p></div>`;
+ if(window.maSheetOpen)maSheetOpen(h);else if(typeof modal==='function')modal('🔗 مشاركة التطبيق',h,'');
+};
+window.appShareNative=function(){navigator.share({title:'تطبيق إدارة الأجهزة الطبية',text:msg().replace(link(),'').trim(),url:link()}).catch(()=>{})};
+window.appShareWa=function(){window.open('https://wa.me/?text='+encodeURIComponent(msg()),'_blank')};
+window.appShareCopy=function(){const t=link();const ok=()=>{try{toast('✅ تم نسخ الرابط')}catch(e){}};
+ if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok).catch(()=>{});else{const i=document.querySelector('.as-link input');i&&i.select();try{document.execCommand('copy');ok()}catch(e){}}};
+window.appShareQr=function(){
+ const el=document.querySelector('.as-qr img,.as-qr svg');if(!el)return;const img=new Image();
+ img.onload=()=>{const c=document.createElement('canvas'),W=900;c.width=W;c.height=W+170;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,90,60,W-180,W-180);
+  x.fillStyle='#0F5C60';x.font='bold 44px Tahoma,Arial';x.textAlign='center';x.direction='rtl';x.fillText('امسح لفتح تطبيق إدارة الأجهزة الطبية',W/2,W-40);
+  x.fillStyle='#4A5D66';x.font='32px Tahoma,Arial';x.fillText(title(),W/2,W+20);x.font='24px Arial';x.fillText(link(),W/2,W+80);
+  c.toBlob(b=>{const f=new File([b],'باركود_التطبيق.png',{type:'image/png'});
+   if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:'باركود التطبيق'}).catch(()=>{});
+   else if(window.downloadBlob)downloadBlob(b,'باركود_التطبيق.png');else{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='باركود_التطبيق.png';a.click()}},'image/png')};
+ img.src=el.tagName==='IMG'?el.src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(el));
+};
+// ===== مؤشر بدون إنترنت =====
+function net(){let b=document.getElementById('netBar');
+ if(navigator.onLine){if(b){b.classList.remove('on');setTimeout(()=>b&&!navigator.onLine||b&&b.remove(),400)}return}
+ if(!b){b=document.createElement('div');b.id='netBar';b.innerHTML='📴 تعمل الآن بدون إنترنت — كل شيء يُحفظ على هاتفك ويُرفع تلقائيًا عند عودة الاتصال';document.body.appendChild(b)}
+ requestAnimationFrame(()=>b.classList.add('on'));}
+window.addEventListener('online',()=>{net();try{toast('📶 عاد الاتصال — جاري رفع التغييرات')}catch(e){}});
+window.addEventListener('offline',net);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(net,800));else setTimeout(net,800);
 })();
 
 </script>

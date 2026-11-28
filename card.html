@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f2a40">
+<meta name="robots" content="noindex">
+<title>بطاقة جهاز طبي</title>
+<style>
+:root{--navy:#0f2a40;--teal:#0d9488;--ink:#132a3b;--muted:#6b7f92;--line:#e2e9f1;--bg:#eef3f8;--card:#fff;--green:#14895c;--red:#d14551;--amber:#c27a0e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+.top{background:linear-gradient(135deg,var(--navy),#16405e 55%,var(--teal));color:#fff;padding:22px 18px 70px;position:relative;overflow:hidden}
+.top:after{content:"";position:absolute;inset:auto -40px -60px auto;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,#ffffff22,transparent 70%)}
+.brand{display:flex;align-items:center;gap:10px;font-size:12.5px;color:#cfe3ee}
+.logo{width:36px;height:36px;border-radius:12px;background:#ffffff22;display:grid;place-items:center;border:1px solid #ffffff33}
+.wrap{max-width:560px;margin:-50px auto 0;padding:0 14px 30px;position:relative;z-index:2}
+.card{background:var(--card);border-radius:24px;box-shadow:0 20px 50px -24px #0a1e3060;overflow:hidden;animation:up .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+.hero{padding:20px 20px 16px;border-bottom:1px solid var(--line)}
+.kicker{font-size:11px;color:var(--teal);font-weight:700;letter-spacing:.3px}
+h1{margin:6px 0 10px;font-size:23px;line-height:1.35;text-align:right;unicode-bidi:plaintext}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:30px;font-size:13px;font-weight:700}
+.chip:before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.ok{background:#14895c1a;color:var(--green)}.bad{background:#d145511a;color:var(--red)}.warn{background:#c27a0e1f;color:var(--amber)}.gray{background:#eef2f6;color:var(--muted)}
+.seq{background:var(--bg);color:var(--ink)}.seq:before{display:none}
+.grid{display:grid;grid-template-columns:1fr 1fr}
+.f{background:var(--card);padding:13px 18px;border-bottom:1px solid var(--line)}.f:nth-child(odd):not(.full){border-left:1px solid var(--line)}
+.f span{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+.f b{font-size:15px;word-break:break-word;display:block;text-align:right;unicode-bidi:plaintext}
+.f.full{grid-column:1/-1}
+.warranty{margin:16px;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.warranty .ic{font-size:26px}
+.warranty b{display:block;font-size:15px}.warranty small{font-size:12.5px;opacity:.85}
+.sec{margin:6px 18px 0;padding:12px 0 8px;font-size:13.5px;color:var(--teal);border-top:1px solid var(--line)}.notes{margin:0 18px 14px;padding:12px 14px;background:var(--bg);border-radius:14px;line-height:1.9;font-size:14px;white-space:pre-wrap}
+.foot{text-align:center;color:var(--muted);font-size:11.5px;line-height:1.8;padding:16px}
+.err{background:#fff;border-radius:20px;padding:30px;text-align:center;box-shadow:0 20px 50px -24px #0a1e3060}
+.btns{display:flex;gap:8px;padding:0 16px 16px}
+.btns button{flex:1;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:12px;font:inherit;font-weight:700;color:var(--ink);cursor:pointer}
+@media print{.btns{display:none}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.rep{margin:14px 18px 18px;border:2px solid #f2c4bf;background:#fff6f5;border-radius:18px;padding:14px}
+.rep h3{margin:0 0 4px;color:#b4372b;font-size:16px}.rep p{margin:0 0 10px;color:#6b7f92;font-size:13px;line-height:1.7}
+.rep input,.rep textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;margin:0 0 8px;background:#fff;color:var(--ink)}
+.rep .ph{display:flex;gap:8px;align-items:center;margin:0 0 10px}.rep .ph label{flex:1;text-align:center;border:1px dashed #d9a7a1;border-radius:12px;padding:11px;cursor:pointer;font-weight:700;color:#b4372b}
+.rep .ph img{width:56px;height:56px;object-fit:cover;border-radius:10px}.rep button.go{width:100%;border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;font-size:16px;background:#c0392b;color:#fff;cursor:pointer}
+.rep button.go:disabled{opacity:.6}.rep .done{text-align:center;padding:10px 0}.rep .done b{display:block;font-size:20px;color:#14895c;margin:6px 0}.hp{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden;inset-inline-start:0}
+.repbtn{display:block;margin:14px 18px 0;width:calc(100% - 36px);border:0;border-radius:16px;padding:15px;font:inherit;font-weight:800;font-size:16px;background:#c0392b;color:#fff;cursor:pointer;box-shadow:0 8px 20px #c0392b33}
+.wabtn{display:block;margin-top:10px;background:#1fa855;color:#fff;text-align:center;font-weight:800;border-radius:14px;padding:14px;text-decoration:none;font-size:16px}.cta{margin:16px 4px 6px;text-align:center;color:#0f6f5f;font-weight:800;font-size:14px}</style>
+</head>
+<body>
+<div class="top"><div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg></div><div><b style="color:#fff;font-size:14px" id="ctr">بطاقة جهاز طبي</b><br>وحدة إدارة الأجهزة الطبية</div></div></div>
+<div class="wrap" id="app"></div>
+<script>var __O=(location.hash.match(/[#&]o=([a-z0-9]{4,40})/)||location.search.match(/[?&]o=([a-z0-9]{4,40})/)||[])[1]||'';
+(function(){
+var app=document.getElementById('app');
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function decode(h){h=h.replace(/^#/,'').replace(/^d=/,'');h=h.replace(/-/g,'+').replace(/_/g,'/');while(h.length%4)h+='=';var bin=atob(h),bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return JSON.parse(new TextDecoder().decode(bytes))}
+function stCls(s){s=String(s||'');return /عاطل|متوقف/.test(s)?'bad':/صالح/.test(s)?'ok':/صيان/.test(s)?'warn':'gray'}
+function warranty(w){if(!w)return {c:'gray',ic:'🛡️',t:'تاريخ الضمان غير مسجل',s:''};var d=new Date(w);if(isNaN(d))return {c:'gray',ic:'🛡️',t:'الضمان حتى: '+w,s:''};var t=new Date();t.setHours(0,0,0,0);var days=Math.ceil((d-t)/864e5);
+ if(days<0)return {c:'bad',ic:'⛔',t:'الضمان منتهي',s:'انتهى في '+w+' (منذ '+Math.abs(days)+' يوم)'};if(days<=60)return {c:'warn',ic:'⏳',t:'الضمان ينتهي قريبًا',s:'ينتهي في '+w+' (بعد '+days+' يوم)'};return {c:'ok',ic:'✅',t:'الضمان ساري',s:'حتى '+w+' (متبقٍ '+days+' يوم)'}}
+try{
+ if(!location.hash||location.hash.length<5){location.replace('app.html');throw 0}
+ function render(d){if(d.ct)document.getElementById('ctr').textContent=d.ct;document.title=(d.n||'جهاز طبي')+' — بطاقة جهاز';
+ var W=warranty(d.w);
+ var G2=[['جهة الشراء',d.pb,1],['رقم عقد التجهيز',d.k],['رقم عقد الضمان',d.wc],['بدء الضمان',d.ws],['انتهاء الضمان',d.w],['مسار المؤسسة',d.pa,1],['دائرة الصحة',d.hd,1]].concat((d.x||[]).map(function(p){return [p[0],p[1],1]})).filter(function(x){return x[1]&&!/^[.\-\s]*$/.test(x[1])});
+ var G3=[['أدخله',d.eb],['تاريخ الإدخال',d.ea],['آخر تعديل بواسطة',d.mb],['تاريخ آخر تعديل',d.ma]].filter(function(x){return x[1]});
+ function grid(a){return '<div class="grid">'+a.map(function(x){return '<div class="f'+(x[2]?' full':'')+'"><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'}
+ var F=[['الرمز',d.c],['الرقم التسلسلي',d.sn,1],['الشركة المصنعة',d.m],['الموديل',d.o],['بلد المنشأ',d.co],['التوافر',d.a],['القسم / الموقع',d.l,1],['تاريخ التنصيب',d.i],['المكتب المجهز',d.sp]].filter(function(x){return x[1]&&!/^[.\-\s]*$/.test(x[1])});
+ app.innerHTML='<div class="card"><div class="hero"><div class="kicker">بطاقة جهاز طبي</div><h1>'+esc(d.n||'جهاز طبي')+'</h1><div class="chips"><span class="chip '+stCls(d.st)+'">'+esc(d.st||'غير محدد')+'</span>'+(d.s?'<span class="chip seq"># '+esc(d.s)+'</span>':'')+(d.mo?'<span class="chip seq">🏛️ الوزاري '+esc(d.mo)+'</span>':'')+'</div></div>'+
+ '<div class="grid">'+F.map(function(x){return '<div class="f'+(x[2]?' full':'')+'"><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'+
+ '<div class="warranty '+W.c+'"><span class="ic">'+W.ic+'</span><div><b>'+W.t+'</b><small>'+esc(W.s)+'</small></div></div>'+
+ (G2.length?'<h3 class="sec">📑 العقود والجهة المالكة</h3>'+grid(G2):'')+(d.nt?'<h3 class="sec">📝 الملاحظات</h3><div class="notes">'+esc(d.nt)+'</div>':'')+(G3.length?'<h3 class="sec">🕓 سجل البيانات</h3>'+grid(G3):'')+(d.id?'<p class="cta">إبلاغك السريع يحل المشكلة بسرعة — لا تتردد وأرسل بلاغك الآن</p><button class="repbtn" id="repOpen">🚨 الإبلاغ عن عطل في هذا الجهاز</button><div id="repBox"></div>':'')+'<div class="btns"><button onclick="window.print()">🖨️ طباعة</button><button id="shareBtn">↗ مشاركة</button></div></div>'+
+ '<div class="foot">'+(d.live?'✓ البيانات محدّثة مباشرة من نظام إدارة الأجهزة الطبية.':d.off?'تعذّر تحميل بيانات الجهاز الآن — يمكنك الإبلاغ عن العطل مباشرة.':'البيانات محفوظة داخل رمز QR نفسه وقت طباعته'+(d.u?' بتاريخ '+esc(d.u):'')+'.<br>للبيانات المحدّثة راجع برنامج إدارة الأجهزة الطبية.')+'</div>';
+ var ro=document.getElementById('repOpen');if(ro)ro.onclick=function(){ro.style.display='none';var b=document.getElementById('repBox');var photo='';
+ b.innerHTML='<div class="rep"><h3>🚨 بلاغ عطل — '+esc(d.n||'')+'</h3><p>يصل البلاغ فورًا إلى مهندس الأجهزة الطبية. اكتب ما لاحظته بوضوح.</p><textarea id="rD" rows="3" maxlength="700" placeholder="ما المشكلة؟ مثال: الجهاز لا يشتغل / إنذار مستمر / الشاشة مطفأة"></textarea><input id="rN" maxlength="60" placeholder="اسمك الكامل (مطلوب)"><input id="rP" inputmode="tel" maxlength="16" dir="ltr" placeholder="رقم هاتفك 07xxxxxxxxx (مطلوب)"><input class="hp" id="rH" tabindex="-1" autocomplete="off"><div class="ph"><label>📷 صوّر العطل وأرفق الصورة (مهم)<input id="rF" type="file" accept="image/*" capture="environment" hidden></label><img id="rI" hidden></div><button class="go" id="rGo">إرسال البلاغ</button><p id="rE" style="color:#b4372b;margin:8px 0 0"></p></div>';
+ try{var sv=JSON.parse(localStorage.getItem('rep_me')||'{}');document.getElementById('rN').value=sv.n||'';document.getElementById('rP').value=sv.p||''}catch(e){}
+ document.getElementById('rD').focus();
+ document.getElementById('rF').onchange=function(e){var f=e.target.files[0];if(!f)return;var img=new Image(),u=URL.createObjectURL(f);img.onload=function(){var m=1100,w=img.width,h=img.height,k=Math.min(1,m/Math.max(w,h));var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);photo=c.toDataURL('image/jpeg',0.72);var pi=document.getElementById('rI');pi.src=photo;pi.hidden=false;URL.revokeObjectURL(u)};img.src=u};
+ function waFb(desc,nm,ph){var t='🚨 بلاغ عطل جهاز طبي\n🏥 '+(d.s?d.s+'. ':'')+(d.n||'')+(d.l?'\n📍 '+d.l:'')+(d.sn?'\n🔢 S/N: '+d.sn:'')+'\n📝 '+desc+(nm?'\n👤 '+nm:'')+(ph?' — 📞 '+ph:'');var u='https://wa.me/'+(d.wa||'')+'?text='+encodeURIComponent(t);var x=document.getElementById('rWa');if(!x){x=document.createElement('a');x.id='rWa';x.className='wabtn';x.target='_blank';x.rel='noopener';document.getElementById('rE').after(x)}x.href=u;x.textContent=d.wa?'📲 أرسل البلاغ عبر واتساب للمهندس':'📲 أرسل البلاغ عبر واتساب';}
+ document.getElementById('rGo').onclick=function(){var btn=this,desc=document.getElementById('rD').value.trim(),E=document.getElementById('rE');E.textContent='';if(desc.length<3){E.textContent='اكتب وصف العطل أولًا';return}
+  var nm=document.getElementById('rN').value.trim(),ph=document.getElementById('rP').value.trim();if(nm.length<3){E.textContent='اكتب اسمك الكامل';document.getElementById('rN').focus();return}var phd=ph.replace(/[٠-٩]/g,function(c){return '٠١٢٣٤٥٦٧٨٩'.indexOf(c)}).replace(/\D/g,'');if(!/^(07\d{9}|9647\d{9})$/.test(phd)){E.textContent='اكتب رقم هاتف صحيح مثل 07801234567';document.getElementById('rP').focus();return}ph=phd;try{localStorage.setItem('rep_me',JSON.stringify({n:nm,p:ph}))}catch(e){}
+  btn.disabled=true;btn.textContent='⏳ جاري الإرسال…';
+  fetch('https://jmvbxnmvoqvumsljsqff.supabase.co/functions/v1/org-api?o='+__O+'&action=report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:d.id,n:d.n,sn:d.sn,desc:desc,name:nm,phone:ph,photo:photo,hp:document.getElementById('rH').value})})
+  .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}},function(){return {ok:false,j:{error:'server'}}})}).then(function(x){if(x.ok&&x.j.ok){b.innerHTML='<div class="rep"><div class="done">✅<b>وصل البلاغ</b>رقم البلاغ: '+esc(x.j.number||'')+'<br>🕐 '+new Date().toLocaleString('ar-IQ',{dateStyle:'medium',timeStyle:'short'})+'<br>شكرًا لك — سيتابعه مهندس الأجهزة الطبية فورًا.</div></div>'}else{var M={no_state:'الخادم لم يستلم بيانات الأجهزة بعد.',device:'هذا الجهاز غير موجود في النظام الأونلاين.',too_many:'وصلت بلاغات كثيرة لهذا الجهاز الآن — انتظر قليلًا.',missing:'اكتب وصف العطل.'};E.textContent=M[x.j.error]||'تعذّر الوصول للخادم الآن.';if(x.j.error!=='missing'&&x.j.error!=='too_many')waFb(desc,nm,ph);btn.disabled=false;btn.textContent='إرسال البلاغ'}})
+  .catch(function(){E.textContent='تعذّر الوصول للخادم الآن.';waFb(desc,nm,ph);btn.disabled=false;btn.textContent='إرسال البلاغ'})}};
+ document.getElementById('shareBtn').onclick=function(){if(navigator.share)navigator.share({title:d.n,url:location.href});else{navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent='✓ نُسخ الرابط'}};
+ }
+ var HS=location.hash;
+ if(/^#i=/.test(HS)){var P=new URLSearchParams(HS.slice(1)),base={id:P.get('i')||'',s:P.get('s')||'',wa:(P.get('w')||'').replace(/\D/g,'')};
+  app.innerHTML='<div class="err"><div style="font-size:40px">⏳</div><h2>جاري تحميل بطاقة الجهاز…</h2></div>';
+  var done=false,fb=function(){if(done)return;done=true;render({id:base.id,s:base.s,n:'جهاز طبي'+(base.s?' رقم '+base.s:''),wa:base.wa,off:1})};var tm=setTimeout(fb,9000);
+  fetch('https://jmvbxnmvoqvumsljsqff.supabase.co/functions/v1/org-api?o='+__O+'&action=card&id='+encodeURIComponent(base.id)).then(function(r){return r.json()}).then(function(j){if(done)return;if(j&&j.d){done=true;clearTimeout(tm);var x=j.d;x.id=base.id;x.wa=x.wa||base.wa;x.live=1;render(x)}else fb()}).catch(fb)}
+ else render(decode(HS));
+}catch(e){app.innerHTML='<div class="err"><div style="font-size:42px">▦</div><h2>بطاقة جهاز طبي</h2><p style="color:#6b7f92;line-height:1.9">هذه الصفحة تعرض بيانات الجهاز عند مسح ملصق QR الخاص به بكاميرا الهاتف.<br>امسح الملصق الملصوق على الجهاز لعرض بطاقته.</p></div>'}
+})();
+</script>
+</body>
+</html>
